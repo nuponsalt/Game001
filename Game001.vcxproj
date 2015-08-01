@@ -92,8 +92,8 @@
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
     <ExecutablePath>$(DXSDK_DIR)Utilities\bin\x86;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\ProgramFiles\iconv-1.9.2.win32\include;D:\ProgramFiles\libxml2-2.7.8.win32\include;D:\ProgramFiles\zlib125\include;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\ProgramFiles\iconv-1.9.2.win32\lib;D:\ProgramFiles\libxml2-2.7.8.win32\lib;D:\ProgramFiles\zlib125\lib;$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|X64'">
     <LinkIncremental>true</LinkIncremental>
@@ -106,7 +106,7 @@
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
     <ExecutablePath>$(DXSDK_DIR)Utilities\bin\x86;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\ProgramFiles\iconv-1.9.2.win32\include;D:\ProgramFiles\libxml2-2.7.8.win32\include;D:\ProgramFiles\zlib125\include;$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(DXSDK_DIR)Lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|X64'">
@@ -150,7 +150,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions> %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>d3dx10d.lib;d3dx9d.lib;dxerr.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3dx10d.lib;d3dx9d.lib;dxerr.lib;dxguid.lib;winmm.lib;comctl32.lib;libxml2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <LargeAddressAware>true</LargeAddressAware>
@@ -159,6 +159,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <UACExecutionLevel>AsInvoker</UACExecutionLevel>
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
+      <AdditionalLibraryDirectories>D:\ProgramFiles\libxml2-2.7.8.win32\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Manifest>
       <EnableDPIAwareness>true</EnableDPIAwareness>
@@ -231,7 +232,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions> %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>d3dx10.lib;d3dx9.lib;dxerr.lib;dxguid.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3dx10.lib;d3dx9.lib;dxerr.lib;dxguid.lib;winmm.lib;comctl32.lib;libxml2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -242,6 +243,7 @@
       <TargetMachine>MachineX86</TargetMachine>
       <UACExecutionLevel>AsInvoker</UACExecutionLevel>
       <DelayLoadDLLs>%(DelayLoadDLLs)</DelayLoadDLLs>
+      <AdditionalLibraryDirectories>D:\ProgramFiles\libxml2-2.7.8.win32\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Manifest>
       <EnableDPIAwareness>true</EnableDPIAwareness>
@@ -393,16 +395,89 @@
     </ClCompile>
     <ClCompile Include="DXUT\Core\DXUTenum.cpp" />
     <ClCompile Include="DXUT\Core\DXUTmisc.cpp" />
-    <ClInclude Include="DXUT\Optional\DXUTcamera.h" />
     <ClInclude Include="DXUT\Optional\DXUTres.h" />
-    <ClCompile Include="DXUT\Optional\DXUTcamera.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Library\Extension.cpp" />
+    <ClCompile Include="Library\Graphics\Animation.cpp" />
+    <ClCompile Include="Library\Graphics\GraphicsManager.cpp" />
+    <ClCompile Include="Library\Graphics\Material.cpp" />
+    <ClCompile Include="Library\Graphics\Mesh.cpp" />
+    <ClCompile Include="Library\Graphics\Renderer\GraphicalShape\GraphicalPlane.cpp" />
+    <ClCompile Include="Library\Graphics\Renderer\GraphicalShape\GraphicalregularPolygonPlane.cpp" />
+    <ClCompile Include="Library\Graphics\Renderer\Layer.cpp" />
+    <ClCompile Include="Library\Graphics\Renderer\Line.cpp" />
+    <ClCompile Include="Library\Graphics\Renderer\ModelRenderer.cpp" />
+    <ClCompile Include="Library\Graphics\Renderer\PointSprite.cpp" />
+    <ClCompile Include="Library\Graphics\Renderer\Sprite.cpp" />
+    <ClCompile Include="Library\Graphics\Shader\HalfLambert\ShaderHalfLambert.cpp" />
+    <ClCompile Include="Library\Graphics\Shader\Lambert\ShaderLambert.cpp" />
+    <ClCompile Include="Library\Graphics\Shader\Particle\Particle.cpp" />
+    <ClCompile Include="Library\Graphics\Shader\Phong\ShaderPhong.cpp" />
+    <ClCompile Include="Library\Graphics\Shader\Shader.cpp" />
+    <ClCompile Include="Library\Graphics\Shader\Toon\ShaderToon.cpp" />
+    <ClCompile Include="Library\Graphics\Text.cpp" />
+    <ClCompile Include="Library\Graphics\Texture.cpp" />
+    <ClCompile Include="Library\Graphics\View\Camera.cpp" />
+    <ClCompile Include="Library\Graphics\View\ViewBehavior.cpp" />
+    <ClCompile Include="Library\Math\Math.cpp" />
+    <ClCompile Include="Library\Math\Matrix.cpp" />
+    <ClCompile Include="Library\Math\Quaternion.cpp" />
+    <ClCompile Include="Library\Math\Transformation.cpp" />
+    <ClCompile Include="Library\Phisycs\BoundingVolume.cpp" />
+    <ClCompile Include="Library\Phisycs\Collision.cpp" />
+    <ClCompile Include="Library\Support\wsb_xml.cpp" />
+    <ClCompile Include="Library\System\Counter.cpp" />
+    <ClCompile Include="Library\System\Debug.cpp" />
+    <ClCompile Include="Library\System\FrameRateCounter.cpp" />
+    <ClCompile Include="Library\System\Timer.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Library\Extension.h" />
+    <ClInclude Include="Library\Graphics\Animation.h" />
+    <ClInclude Include="Library\Graphics\GraphicsManager.h" />
+    <ClInclude Include="Library\Graphics\Material.h" />
+    <ClInclude Include="Library\Graphics\Mesh.h" />
+    <ClInclude Include="Library\Graphics\Renderer\GraphicalShape\GraphicalPlane.h" />
+    <ClInclude Include="Library\Graphics\Renderer\GraphicalShape\GraphicalRegularPolygonPlane.h" />
+    <ClInclude Include="Library\Graphics\Renderer\GraphicBehavior.h" />
+    <ClInclude Include="Library\Graphics\Renderer\Layer.h" />
+    <ClInclude Include="Library\Graphics\Renderer\Line.h" />
+    <ClInclude Include="Library\Graphics\Renderer\ModelRenderer.h" />
+    <ClInclude Include="Library\Graphics\Renderer\PointSprite.h" />
+    <ClInclude Include="Library\Graphics\Renderer\Sprite.h" />
+    <ClInclude Include="Library\Graphics\Shader\HalfLambert\ShaderHalfLambert.h" />
+    <ClInclude Include="Library\Graphics\Shader\Lambert\ShaderLambert.h" />
+    <ClInclude Include="Library\Graphics\Shader\Particle\Particle.h" />
+    <ClInclude Include="Library\Graphics\Shader\Phong\ShaderPhong.h" />
+    <ClInclude Include="Library\Graphics\Shader\Shader.h" />
+    <ClInclude Include="Library\Graphics\Shader\Toon\ShaderToon.h" />
+    <ClInclude Include="Library\Graphics\Text.h" />
+    <ClInclude Include="Library\Graphics\Texture.h" />
+    <ClInclude Include="Library\Graphics\Vertex.h" />
+    <ClInclude Include="Library\Graphics\View\Camera.h" />
+    <ClInclude Include="Library\Graphics\View\ViewBehavior.h" />
+    <ClInclude Include="Library\Library.h" />
+    <ClInclude Include="Library\Math\Math.h" />
+    <ClInclude Include="Library\Math\Matrix.h" />
+    <ClInclude Include="Library\Math\Quaternion.h" />
+    <ClInclude Include="Library\Math\Transformation.h" />
+    <ClInclude Include="Library\Math\Vector.h" />
+    <ClInclude Include="Library\Phisycs\BoundingVolume.h" />
+    <ClInclude Include="Library\Phisycs\Collision.h" />
+    <ClInclude Include="Library\Phisycs\QuadTree.h" />
+    <ClInclude Include="Library\Phisycs\TreeObject.h" />
+    <ClInclude Include="Library\Support\wsb_xml.h" />
+    <ClInclude Include="Library\Support\XMLManager.h" />
+    <ClInclude Include="Library\System\Command.h" />
+    <ClInclude Include="Library\System\Counter.h" />
+    <ClInclude Include="Library\System\Debug.h" />
+    <ClInclude Include="Library\System\FrameRateCounter.h" />
+    <ClInclude Include="Library\System\Timer.h" />
+    <ClInclude Include="Library\Temp\InputComponent.h" />
     <CLInclude Include="resource.h" />
     <ResourceCompile Include="Game001.rc" />
   </ItemGroup>
