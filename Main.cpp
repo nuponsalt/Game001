@@ -23,7 +23,6 @@ bool CALLBACK IsD3D9DeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat, 
     return true;
 }
 
-
 //--------------------------------------------------------------------------------------
 // Before a device is created, modify the device settings as needed
 //--------------------------------------------------------------------------------------
@@ -31,7 +30,6 @@ bool CALLBACK ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* p
 {
     return true;
 }
-
 
 //--------------------------------------------------------------------------------------
 // Create any D3D9 resources that will live through a device reset (D3DPOOL_MANAGED)
@@ -43,7 +41,6 @@ HRESULT CALLBACK OnD3D9CreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURF
     return S_OK;
 }
 
-
 //--------------------------------------------------------------------------------------
 // Create any D3D9 resources that won't live through a device reset (D3DPOOL_DEFAULT) 
 // or that are tied to the back buffer size 
@@ -54,14 +51,13 @@ HRESULT CALLBACK OnD3D9ResetDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFA
     return S_OK;
 }
 
-
 //--------------------------------------------------------------------------------------
 // Handle updates to the scene.  This is called regardless of which D3D API is used
 //--------------------------------------------------------------------------------------
 void CALLBACK OnFrameMove( double fTime, float fElapsedTime, void* pUserContext )
 {
-}
 
+}
 
 //--------------------------------------------------------------------------------------
 // Render the scene using the D3D9 device
@@ -80,7 +76,6 @@ void CALLBACK OnD3D9FrameRender( IDirect3DDevice9* pd3dDevice, double fTime, flo
     }
 }
 
-
 //--------------------------------------------------------------------------------------
 // Handle messages to the application 
 //--------------------------------------------------------------------------------------
@@ -90,22 +85,21 @@ LRESULT CALLBACK MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
     return 0;
 }
 
-
 //--------------------------------------------------------------------------------------
 // Release D3D9 resources created in the OnD3D9ResetDevice callback 
 //--------------------------------------------------------------------------------------
 void CALLBACK OnD3D9LostDevice( void* pUserContext )
 {
-}
 
+}
 
 //--------------------------------------------------------------------------------------
 // Release D3D9 resources created in the OnD3D9CreateDevice callback 
 //--------------------------------------------------------------------------------------
 void CALLBACK OnD3D9DestroyDevice( void* pUserContext )
 {
-}
 
+}
 
 //--------------------------------------------------------------------------------------
 // Initialize everything and go into a render loop
@@ -144,5 +138,4 @@ INT WINAPI wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
 
     return DXUTGetExitCode();
 }
-
 
