@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+  <path>Resource/HLSL/Phong.fx</path>
+  <technique>TShader</technique>
+  <wvp>WVP</wvp>
+  <srctex>SrcTex</srctex>
+  <color>Color</color>
+  <handle>ROT</handle>
+  <handle>LightDir</handle>
+  <handle>EyePos</handle>
+  <handle>Ambient</handle>
+  <handle>Specular</handle>
+  <handle>SpecularPower</handle>
+  <Ambient>0.2</Ambient>
+  <Specular>100.0</Specular>
+  <SpecularPower>1.0</SpecularPower>
+  <LightDirection>
+    <X>0</X>
+    <Y>-40</Y>
+    <Z>70</Z>
+  </LightDirection>
+</root>
+
