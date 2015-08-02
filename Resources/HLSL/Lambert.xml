@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+  <path>Resource/HLSL/Lambert.fx</path>
+  <technique>TShader</technique>
+  <wvp>WVP</wvp>
+  <srctex>SrcTex</srctex>
+  <color>Color</color>
+  <handle>ROT</handle>
+  <handle>Ambient</handle>
+  <handle>LightDir</handle>
+  <handle>EyePos</handle>
+  <handle>fogColor</handle>
+  <handle>fogCoord</handle>
+  <Ambient>0.2</Ambient>
+  <LightDirection>
+    <X>0</X>
+    <Y>-40</Y>
+    <Z>70</Z>
+  </LightDirection>
+  <Fog>
+    <Color>
+      <R>1</R>
+      <G>1</G>
+      <B>1</B>
+    </Color>
+    <Param1>200</Param1>
+    <Param2>3</Param2>
+  </Fog>
+</root>
+

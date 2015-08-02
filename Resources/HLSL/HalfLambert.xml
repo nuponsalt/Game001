@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <path>Resource/HLSL/HalfLambert.fx</path>
+  <technique>TShader</technique>
+  <wvp>WVP</wvp>
+  <srctex>SrcTex</srctex>
+  <color>Color</color>
+  <handle>LightDir</handle>
+  <handle>ROT</handle>
+  <LightDirection>
+    <X>0</X>
+    <Y>-40</Y>
+    <Z>70</Z>
+  </LightDirection>
+</root>
