@@ -108,19 +108,19 @@ namespace KMT {
 		EyePos.Transform(CamMtx);
 		D3DXVec4Normalize((D3DXVECTOR4*)&EyePos, (D3DXVECTOR4*)&EyePos);
 		// シェーダー設定
-		Shader->setTechnique();
+		Shader->SetTechnique();
 		// シェーダーにワールド*ビュー*プロジェクション行列に渡す
-		Shader->setWVPMatrix(WVPMtx);
+		Shader->SetWVPMatrix(WVPMtx);
 		// シェーダー特有の値渡し
-		Shader->applyEffect(RotMtx, EyePos);
+		Shader->ApplyEffect(RotMtx, EyePos);
 
 		HRESULT hr;
 		// 描画処理
 		// シェーダーにカラーを渡す
-		Shader->setColor(vColorRGBA);
+		Shader->SetColor(vColorRGBA);
 		// テクスチャを渡す
 		if(NULL != Texture)
-			Shader->setTexture(Texture->getpd3dTexture());
+			Shader->SetTexture(Texture->getpd3dTexture());
 		// シェーダーの使用開始
 		Shader->BeginShader();
 		// シェーダーのパス開始

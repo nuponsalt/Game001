@@ -8,49 +8,49 @@
 
 namespace KMT {
 
-	CShaderToon::CShaderToon() : CShader("Resource/HLSL/Toon.xml") { }
+	ShaderToon::ShaderToon() : Shader("Resources/HLSL/Toon.xml") { }
 
-	CShaderSP CShaderToon::CreateShader()
+	ShaderSP ShaderToon::CreateShader()
 	{
-		std::string _xmlpath("Resource/HLSL/Toon.xml");
+		std::string xmlPath("Resources/HLSL/Toon.xml");
 
-		CWsbXmlSP xml = CWsbXml::LoadXmlFile(_xmlpath);
-		std::string sdr_path = xml->GetElement("path")->GetString();
-		CShaderSP psdr;
-		std::unordered_map<std::string, CShaderSP>::iterator it = Shaders.find(sdr_path);
+		CWsbXmlSP xml = CWsbXml::LoadXmlFile(xmlPath);
+		std::string path = xml->GetElement("path")->GetString();
+		ShaderSP shader;
+		std::unordered_map<std::string, ShaderSP>::iterator it = _shaders.find(path);
 
 		// 存在したら第二要素を返す
-		if(it != Shaders.end())
+		if(it != _shaders.end())
 		{
-			psdr = (*it).second;
-			return psdr;
+			shader = (*it).second;
+			return shader;
 		}
 		// 存在しなければ新しく生成
-		std::string path = xml->GetElement("ToonTex")->GetString();
-		float dirX = xml->GetElement("LightDirection")->GetElement("X")->GetFloat();
-		float dirY = xml->GetElement("LightDirection")->GetElement("Y")->GetFloat();
-		float dirZ = xml->GetElement("LightDirection")->GetElement("Z")->GetFloat();
+		std::string texturePath = xml->GetElement("ToonTex")->GetString();
+		float directionX = xml->GetElement("LightDirection")->GetElement("X")->GetFloat();
+		float directionY = xml->GetElement("LightDirection")->GetElement("Y")->GetFloat();
+		float directionZ = xml->GetElement("LightDirection")->GetElement("Z")->GetFloat();
 
-		CShaderToon* tsdr = new CShaderToon();
-		tsdr->setLightDirection(dirX, dirY, dirZ);
-		tsdr->ToonTexture = CTexture::CreateFromFile(path, D3DX_DEFAULT);
+		auto shaderToon = new ShaderToon();
+		shaderToon->SetLightDirection(directionX, directionY, directionZ);
+		shaderToon->ToonTexture = CTexture::CreateFromFile(texturePath, D3DX_DEFAULT);
 
-		psdr = CShaderSP(tsdr);
+		shader = ShaderSP(shaderToon);
 
 		// ハッシュマップに挿入
-		Shaders.insert(std::make_pair(sdr_path, psdr));
+		_shaders.insert(std::make_pair(path, shader));
 
-		return psdr;
+		return shader;
 	}
 
-	void CShaderToon::applyEffect(const CMatrix& _rotmtx, const CVector4& _campos)
+	void ShaderToon::ApplyEffect(const CMatrix& rotation, const CVector4& cameraPosition)
 	{
 		// ライト計算用に回転行列を渡す
-		pd3dEffect->SetMatrix(*getpHandle("ROT"), &_rotmtx);
+		_effect->SetMatrix(*GetHandle("ROT"), &rotation);
 		// ライト設定
-		pd3dEffect->SetVector(*getpHandle("LightDir"), (D3DXVECTOR4*)&LightDirection);
+		_effect->SetVector(*GetHandle("LightDir"), (D3DXVECTOR4*)&_lightDirection);
 		// トゥーンテクスチャの設定
-		pd3dEffect->SetTexture(*getpHandle("ToonTex"), ToonTexture->getpd3dTexture());		
+		_effect->SetTexture(*GetHandle("ToonTex"), ToonTexture->getpd3dTexture());		
 	}
 
 }

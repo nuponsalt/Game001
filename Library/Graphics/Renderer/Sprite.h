@@ -27,7 +27,7 @@ namespace KMT {
 		~CSprite();
 
 		// テクスチャの設定
-		void setTexture(const CTextureSP &_texture);
+		void SetTexture(const CTextureSP &_texture);
 		//* 生成 *//
 		static CSpriteSP CreateSprite();
 		// 一枚テクスチャ

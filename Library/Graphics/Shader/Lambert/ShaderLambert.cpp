@@ -9,64 +9,63 @@
 namespace KMT {
 
 	//------------------------------------------------------------------------------------------------------------------------------------
-	// CShaderLambert
+	// ShaderLambert
 	//------------------------------------------------------------------------------------------------------------------------------------
-	CShaderLambert::CShaderLambert() : CShader("Resource/HLSL/Lambert.xml") { }
+	ShaderLambert::ShaderLambert() : Shader("Resources/HLSL/Lambert.xml") { }
 
-	CShaderSP CShaderLambert::CreateShader()
+	ShaderSP ShaderLambert::CreateShader()
 	{
-		std::string _xmlpath("Resource/HLSL/Lambert.xml");
+		std::string xmlPath("Resources/HLSL/Lambert.xml");
 
-		CWsbXmlSP xml = CWsbXml::LoadXmlFile(_xmlpath);
-		std::string sdr_path = xml->GetElement("path")->GetString();
-		CShaderSP psdr;
-		std::unordered_map<std::string, CShaderSP>::iterator it = Shaders.find(sdr_path);
+		CWsbXmlSP xml = CWsbXml::LoadXmlFile(xmlPath);
+		std::string path = xml->GetElement("path")->GetString();
+		ShaderSP shader;
+		std::unordered_map<std::string, ShaderSP>::iterator it = _shaders.find(path);
 
 		// 存在したら第二要素を返す
-		if(it != Shaders.end())
+		if(it != _shaders.end())
 		{
-			psdr = (*it).second;
-			return psdr;
+			shader = (*it).second;
+			return shader;
 		}
 		// 存在しなければ新しくロード
-		psdr = CShaderSP(new CShaderLambert());
+		shader = ShaderSP(new ShaderLambert());
 
-		float dirX = xml->GetElement("LightDirection")->GetElement("X")->GetFloat();
-		float dirY = xml->GetElement("LightDirection")->GetElement("Y")->GetFloat();
-		float dirZ = xml->GetElement("LightDirection")->GetElement("Z")->GetFloat();
+		float directionX = xml->GetElement("LightDirection")->GetElement("X")->GetFloat();
+		float directionY = xml->GetElement("LightDirection")->GetElement("Y")->GetFloat();
+		float directionZ = xml->GetElement("LightDirection")->GetElement("Z")->GetFloat();
 
 		float ambient = xml->GetElement("Ambient")->GetFloat();
 
-		psdr->setAmbient(ambient);
-		psdr->setLightDirection(dirX, dirY, dirZ);
-		psdr->setFogColor(CVector4(
+		shader->SetAmbient(ambient);
+		shader->SetLightDirection(directionX, directionY, directionZ);
+		shader->SetFogColor(CVector4(
 			xml->GetElement("Fog")->GetElement("Color")->GetElement("R")->GetFloat(), 
 			xml->GetElement("Fog")->GetElement("Color")->GetElement("G")->GetFloat(), 
 			xml->GetElement("Fog")->GetElement("Color")->GetElement("B")->GetFloat(),
 			1));
-		psdr->setfogCoord(
+		shader->SetFogRange(
 			xml->GetElement("Fog")->GetElement("Param1")->GetFloat(), 
 			xml->GetElement("Fog")->GetElement("Param2")->GetFloat()
 			);
 
 		// ハッシュマップに挿入
-		Shaders.insert(std::make_pair(sdr_path, psdr));
+		_shaders.insert(std::make_pair(path, shader));
 
-		return psdr;
+		return shader;
 	}
 
-	void CShaderLambert::applyEffect(const CMatrix &_rotmtx, const CVector4& _campos)
+	void ShaderLambert::ApplyEffect(const CMatrix &rotation, const CVector4& cameraPosition)
 	{
 		// ライト計算用に回転行列を渡す
-		pd3dEffect->SetMatrix(*getpHandle("ROT"), &_rotmtx);
+		_effect->SetMatrix(*GetHandle("ROT"), &rotation);
 		// 環境光設定
-		pd3dEffect->SetVector(*getpHandle("Ambient"), &D3DXVECTOR4(Ambient, Ambient, Ambient, 1.0f));
+		_effect->SetVector(*GetHandle("Ambient"), &D3DXVECTOR4(_ambient, _ambient, _ambient, 1.0f));
 		// ライト設定(平行光源)
-		pd3dEffect->SetVector(*getpHandle("LightDir"), (D3DXVECTOR4*)&LightDirection);
+		_effect->SetVector(*GetHandle("LightDir"), (D3DXVECTOR4*)&_lightDirection);
 		// フォグ設定
-		pd3dEffect->SetVector(*getpHandle("fogColor"), (D3DXVECTOR4*)&fogColor);
-		pd3dEffect->SetVector(*getpHandle("fogCoord"), (D3DXVECTOR4*)&fogCoord);
-
+		_effect->SetVector(*GetHandle("fogColor"), (D3DXVECTOR4*)&_fogColor);
+		_effect->SetVector(*GetHandle("fogCoord"), (D3DXVECTOR4*)&_fogRange);
 	}
 
 }

@@ -17,11 +17,11 @@ namespace KMT {
 
 	class CGraphicBehavior;
 
-	class CShader;
-	typedef std::shared_ptr<CShader> CShaderSP;
-	typedef std::weak_ptr<CShader> CShaderWP;
+	class Shader;
+	typedef std::shared_ptr<Shader> ShaderSP;
+	typedef std::weak_ptr<Shader> ShaderWP;
 
-	class CShader
+	class Shader
 	{
 	public :
 		enum BEGINorEND
@@ -39,70 +39,70 @@ namespace KMT {
 		};
 
 		// デストラクタ
-		~CShader();
+		~Shader();
 		
 		// 破棄
-		static void Destroy(std::string _name = "all");
+		static void Destroy(std::string name = "all");
 
 		//* 取得 *//
 		// エフェクト
-		inline LPD3DXEFFECT getpd3dEffect() { return pd3dEffect; }
+		inline LPD3DXEFFECT GetEffect() { return _effect; }
 		// ハンドル
-		inline D3DXHANDLE* getpWVP() { return &pWVP; }	// ワールド * ビュー * プロジェクション
-		D3DXHANDLE* getpHandle(const std::string &_path);	// 指定して取得
+		inline D3DXHANDLE* GetWVP() { return &_wvp; }	// ワールド * ビュー * プロジェクション
+		D3DXHANDLE* GetHandle(const std::string &path);	// 指定して取得
 		
 		//* シェーダー設定 *//
 		// アクティブなテクニックをシェーダーに設定
-		void setTechnique() const;
+		void SetTechnique() const;
 		// ワールド * ビュー * プロジェクション 行列をシェーダーに設定
-		void setWVPMatrix(const CMatrix& wvp) const;
+		void SetWVPMatrix(const CMatrix& wvp) const;
 		// カラーをシェーダーに設定
-		void setColor(const CVector4& color) const;
+		void SetColor(const CVector4& color) const;
 		// テクスチャをシェーダーに設定
-		void setTexture(const LPDIRECT3DTEXTURE9 texture) const;
+		void SetTexture(const LPDIRECT3DTEXTURE9 texture) const;
 		// シェーダーの使用開始
 		void BeginShader() const;
 		// シェーダーの使用終了
 		void EndShader() const;
 		// パスの使用
-		void BeginPass(const bool isAddBlend);
+		void BeginPass(const bool addsBlend);
 		// パスの終了
 		void EndPass();
 		// 特有のシェーダー設定(純粋仮想関数)
-		// _rotmtx : 回転行列
-		// _campos : カメラの視点の座標
-		virtual void applyEffect(const CMatrix &_rotmtx, const CVector4& _campos) = 0;
+		// rotation : 回転行列
+		// cameraPosition : カメラの視点の座標
+		virtual void ApplyEffect(const CMatrix &rotation, const CVector4& cameraPosition) = 0;
 
 		//* パラメーター設定 *//
 		// ライトの座標
-		inline void setLightDirection(CVector4 _dir) { LightDirection = _dir; }
-		inline void setLightDirection(const float _x, const float _y, const float _z) { LightDirection = CVector4(_x, _y, _z, 0.0f);	}
+		inline void SetLightDirection(CVector4 direction) { _lightDirection = direction; }
+		inline void SetLightDirection(const float x, const float y, const float z) { _lightDirection = CVector4(x, y, z, 0.0f); }
 		// 環境光
-		inline void setAmbient(const float _ambient) { Ambient = _ambient; }
+		inline void SetAmbient(const float ambient) { _ambient = ambient; }
 		// スペキュラー範囲
-		inline void setSpecular(const float _specular) { Specular = _specular; }
+		inline void SetSpecular(const float specular) { _specular = specular; }
 		// スペキュラー強度
-		inline void setSpecularPower(const float _specularpower) { SpecularPower = _specularpower; }
+		inline void SetSpecularPower(const float specularPower) { _specularPower = specularPower; }
 		// フォグカラー
-		inline void setFogColor(const CVector4& _fogcolor) { fogColor = _fogcolor; }
+		inline void SetFogColor(const CVector4& fogColor) { _fogColor = fogColor; }
 		// フォグのパラメーターの設定
-		inline void setfogCoord(const float param1, const float param2) { fogCoord = CVector4(param1, param2, 0, 0); }
+		inline void SetFogRange(const float param1, const float param2) { _fogRange = CVector4(param1, param2, 0, 0); }
 
 	protected :
 		// 使用するシェーダーファイル名
-		std::string	FilePath;
+		std::string	_path;
 		// 環境光
-		float Ambient;
+		float _ambient;
 		// 平行光源
-		CVector4 LightDirection;
+		CVector4 _lightDirection;
 		// スペキュラーの範囲
-		float Specular;
+		float _specular;
 		// スペキュラーの強度
-		float SpecularPower;
+		float _specularPower;
 		// フォグカラー
-		CVector4 fogColor;
+		CVector4 _fogColor;
 		// フォグの範囲
-		CVector4 fogCoord;
+		CVector4 _fogRange;
 
 		// シェーダーのタイプの列挙型
 		enum ShaderType_
@@ -115,48 +115,48 @@ namespace KMT {
 			SHADER_TYPEMAX
 		};
 		// シェーダーのタイプ
-		size_t Type;
+		size_t _type;
 
 		// エフェクトの設定と問い合わせ、およびテクニックの選択
 		// 統括するポインタ
 		// シェーダ本体
-		LPD3DXEFFECT pd3dEffect;
+		LPD3DXEFFECT _effect;
 		// テクニック
-		D3DXHANDLE	pTechnique;
+		D3DXHANDLE _technique;
 		// ワールド x ビュー x プロジェクション
-		D3DXHANDLE	pWVP;
+		D3DXHANDLE _wvp;
 		// ディフューズ色
-		D3DXHANDLE pColor;
+		D3DXHANDLE _color;
 		// テクスチャ
-		D3DXHANDLE pSrcTex;
+		D3DXHANDLE _sourceTexture;
 		// シェーダーに渡すハンドルを登録したハッシュマップ
-		std::unordered_map<std::string, D3DXHANDLE> handles;
+		std::unordered_map<std::string, D3DXHANDLE> _handles;
 		// シェーダー管理ハッシュマップ配列
-		static std::unordered_map<std::string, CShaderSP> Shaders;
+		static std::unordered_map<std::string, ShaderSP> _shaders;
 
 		// コンストラクタ
-		CShader();
-		CShader(std::string _xmlpath);
+		Shader();
+		Shader(std::string xmlPath);
 
 	};
+	
+	class ShaderNormal;
+	typedef std::shared_ptr<ShaderNormal> ShaderNormalSP;
+	typedef std::weak_ptr<ShaderNormal> ShaderNormalWP;
 
-	class CShaderNormal;
-	typedef std::shared_ptr<CShaderNormal> CShaderNormalSP;
-	typedef std::weak_ptr<CShaderNormal> CShaderNormalWP;
-
-	class CShaderNormal : public CShader
+	class ShaderNormal : public Shader
 	{
 	public :
 		// デストラクタ
-		~CShaderNormal() { }
+		~ShaderNormal() { }
 		// シェーダー生成
-		static CShaderSP CreateShader();
+		static ShaderSP CreateShader();
 		// モデルに対するエフェクト適用
-		void applyEffect(const CMatrix& _rotmtx, const CVector4& _campos);
+		void ApplyEffect(const CMatrix& _rotmtx, const CVector4& _campos);
 
 	private :
 		// コンストラクタ
-		CShaderNormal();
+		ShaderNormal();
 
 	};
 

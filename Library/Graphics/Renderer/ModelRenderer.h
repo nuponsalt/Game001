@@ -26,7 +26,7 @@ namespace KMT {
 		virtual ~CModelRenderer(){ Textures.clear(); }
 		
 		// ê∂ê¨
-		static CModelRendererSP CreateFromX(const std::string &_path, const CShaderSP &_shader);
+		static CModelRendererSP CreateFromX(const std::string &_path, const ShaderSP &_shader);
 		// ï`âÊ
 		virtual void Render(const CCamera* camera);		
 

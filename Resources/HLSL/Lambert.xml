@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <root>
-  <path>Resource/HLSL/Lambert.fx</path>
+  <path>Resources/HLSL/Lambert.fx</path>
   <technique>TShader</technique>
   <wvp>WVP</wvp>
   <srctex>SrcTex</srctex>
