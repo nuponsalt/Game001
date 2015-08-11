@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <root>
-  <path>Resource/HLSL/Phong.fx</path>
+  <path>Resources/HLSL/Phong.fx</path>
   <technique>TShader</technique>
   <wvp>WVP</wvp>
   <srctex>SrcTex</srctex>

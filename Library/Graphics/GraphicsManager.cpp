@@ -31,15 +31,15 @@ namespace KMT {
 		// シェーダーの初期読み込み
 
 		//* シェーディング無設定 *//
-		CShaderNormal::CreateShader();
+		ShaderNormal::CreateShader();
 		//* ランバート拡散反射シェーディング *//
-		CShaderLambert::CreateShader();
+		ShaderLambert::CreateShader();
 		//* ハーフランバートシェーダー *//
-		CShaderHalfLambert::CreateShader();
+		ShaderHalfLambert::CreateShader();
 		//* フォンシェーダー *//
-		CShaderPhong::CreateShader();
+		ShaderPhong::CreateShader();
 		//* トゥーンシェーダー *//
-		CShaderToon::CreateShader();
+		ShaderToon::CreateShader();
 	}
 	
 	void CGraphicsManager::Destroy()
@@ -49,7 +49,7 @@ namespace KMT {
 		// 深度バッファのサーフェイスを解放
 		SAFE_RELEASE(pd3dBackDepthSurface);
 		// シェーダーの開放
-		CShader::Destroy();
+		Shader::Destroy();
 		// テクスチャの開放
 		CTexture::Destroy();
 	}

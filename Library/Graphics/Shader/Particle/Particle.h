@@ -9,15 +9,15 @@ namespace KMT {
 	typedef std::shared_ptr<CShaderParticle> CShaderParticleSP;
 	typedef std::weak_ptr<CShaderParticle> CShaderPartcleWP;
 
-	class CShaderParticle : public CShader
+	class CShaderParticle : public Shader
 	{
 	public :
 		// デストラクタ
 		~CShaderParticle() { }
 		// シェーダー生成
-		static CShaderSP CreateShader();
+		static ShaderSP CreateShader();
 		// モデルに対するエフェクト適用
-		void applyEffect(const CMatrix& _rotmtx, const CVector4& _campos);
+		void ApplyEffect(const CMatrix& _rotmtx, const CVector4& _campos);
 
 	private :
 		// コンストラクタ

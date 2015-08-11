@@ -8,23 +8,23 @@ namespace KMT {
 	class CTexture;
 	typedef std::shared_ptr<CTexture> CTextureSP;
 
-	class CShaderToon : public CShader
+	class ShaderToon : public Shader
 	{
 	public :
 		// デストラクタ
-		~CShaderToon() { }
+		~ShaderToon() { }
 	
 		// シェーダー生成
-		static CShaderSP CreateShader();
+		static ShaderSP CreateShader();
 		// モデルに対するエフェクト設定
-		void applyEffect(const CMatrix& _rotmtx, const CVector4& _campos);
+		void ApplyEffect(const CMatrix& _rotmtx, const CVector4& _campos);
 	
 	private :
 		// トゥーンテクスチャー
 		CTextureSP ToonTexture;
 
 		// コンストラクタ
-		CShaderToon();
+		ShaderToon();
 	
 	protected :
 	};

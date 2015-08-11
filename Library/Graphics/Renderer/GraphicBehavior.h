@@ -14,8 +14,8 @@ namespace KMT {
 
 	//* 前方宣言 *//
 	class CCamera;
-	class CShader;
-	typedef std::shared_ptr<CShader> CShaderSP;
+	class Shader;
+	typedef std::shared_ptr<Shader> ShaderSP;
 
 	class CGraphicBehavior;
 	typedef std::shared_ptr<CGraphicBehavior> CGraphicBehaviorSP;
@@ -48,11 +48,11 @@ namespace KMT {
 
 		//* 設定 *//
 		// シェーダー
-		inline void setShader(CShaderSP sdr) { Shader = sdr; }
+		inline void setShader(ShaderSP sdr) { Shader = sdr; }
 		// カリングモード
 		inline void setd3dCull(const _D3DCULL _d3dCull) { d3dCull = _d3dCull; }
 		// テクスチャ
-		inline void setTexture(const CTextureSP& _ptex) { Textures.push_back(_ptex); }
+		inline void SetTexture(const CTextureSP& _ptex) { Textures.push_back(_ptex); }
 		
 		//* std::listのsort使用関数 *//
 		static inline bool comp(const CGraphicBehaviorWP riLeft, const CGraphicBehaviorWP riRight)
@@ -77,7 +77,7 @@ namespace KMT {
 		// メッシュ
 		CMeshSP Mesh;
 		// シェーダー
-		CShaderSP Shader;
+		ShaderSP Shader;
 		// 描画時のカリングモード保存変数
 		_D3DCULL d3dCull;
 		

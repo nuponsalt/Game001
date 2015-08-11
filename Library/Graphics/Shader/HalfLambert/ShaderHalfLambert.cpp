@@ -11,47 +11,47 @@
 namespace KMT {
 
 	//------------------------------------------------------------------------------------------------------------------------------------
-	// CShaderHalfLambert
+	// ShaderHalfLambert
 	//------------------------------------------------------------------------------------------------------------------------------------
-	CShaderHalfLambert::CShaderHalfLambert() : CShader("Resource/HLSL/HalfLambert.xml")
+	ShaderHalfLambert::ShaderHalfLambert() : Shader("Resources/HLSL/HalfLambert.xml")
 	{}
 
-	CShaderSP CShaderHalfLambert::CreateShader()
+	ShaderSP ShaderHalfLambert::CreateShader()
 	{
-		std::string _xmlpath("Resource/HLSL/HalfLambert.xml") ;
+		std::string xmlPath("Resources/HLSL/HalfLambert.xml") ;
 		
-		CWsbXmlSP xml = CWsbXml::LoadXmlFile(_xmlpath);
-		std::string sdr_path = xml->GetElement("path")->GetString();
-		CShaderSP psdr ;
-		std::unordered_map<std::string, CShaderSP>::iterator it = Shaders.find(sdr_path);
+		CWsbXmlSP xml = CWsbXml::LoadXmlFile(xmlPath);
+		std::string path = xml->GetElement("path")->GetString();
+		ShaderSP shader ;
+		std::unordered_map<std::string, ShaderSP>::iterator it = _shaders.find(path);
 		
 		// 存在したら第二要素を返す
-		if(it != Shaders.end())
+		if(it != _shaders.end())
 		{
-			psdr = (*it).second ;
-			return psdr ;
+			shader = (*it).second ;
+			return shader ;
 		}
 		// 存在しなければ新しくロード
-		psdr = CShaderSP(new CShaderHalfLambert());
+		shader = ShaderSP(new ShaderHalfLambert());
 		
-		float dirX = xml->GetElement("LightDirection")->GetElement("X")->GetFloat();
-		float dirY = xml->GetElement("LightDirection")->GetElement("Y")->GetFloat();
-		float dirZ = xml->GetElement("LightDirection")->GetElement("Z")->GetFloat();
+		float directionX = xml->GetElement("LightDirection")->GetElement("X")->GetFloat();
+		float directionY = xml->GetElement("LightDirection")->GetElement("Y")->GetFloat();
+		float directionZ = xml->GetElement("LightDirection")->GetElement("Z")->GetFloat();
 		
-		psdr->setLightDirection(dirX, dirY, dirZ);
+		shader->SetLightDirection(directionX, directionY, directionZ);
 
 		// ハッシュマップに挿入
-		Shaders.insert(std::make_pair(sdr_path, psdr));
+		_shaders.insert(std::make_pair(path, shader));
 
-		return psdr;
+		return shader;
 	}
 
-	void CShaderHalfLambert::applyEffect(const CMatrix &_rotmtx, const CVector4& _campos)
+	void ShaderHalfLambert::ApplyEffect(const CMatrix &rotation, const CVector4& cameraPosition)
 	{
 		// ライト計算用に回転行列を渡す
-		pd3dEffect->SetMatrix(*getpHandle("ROT"), &_rotmtx);
+		_effect->SetMatrix(*GetHandle("ROT"), &rotation);
 		// ライト設定(平行光源)
-		pd3dEffect->SetVector(*getpHandle("LightDir"), (D3DXVECTOR4*)&LightDirection);
+		_effect->SetVector(*GetHandle("LightDir"), (D3DXVECTOR4*)&_lightDirection);
 	}
 
 }

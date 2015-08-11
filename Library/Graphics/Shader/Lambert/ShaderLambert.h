@@ -4,19 +4,19 @@
 
 namespace KMT {
 	
-	class CShaderLambert : public CShader
+	class ShaderLambert : public Shader
 	{
 	public :
 		// デストラクタ
-		~CShaderLambert() { }
+		~ShaderLambert() { }
 		// シェーダー生成
-		static CShaderSP CreateShader();
+		static ShaderSP CreateShader();
 		// モデルに対するエフェクト設定
-		void applyEffect(const CMatrix& _rotmtx, const CVector4& _campos);
+		void ApplyEffect(const CMatrix& rotation, const CVector4& cameraPosition);
 	
 	private :
 		// コンストラクタ
-		CShaderLambert();
+		ShaderLambert();
 
 	};
 

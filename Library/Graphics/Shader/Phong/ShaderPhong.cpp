@@ -7,58 +7,58 @@
 
 namespace KMT {
 
-	CShaderPhong::CShaderPhong() : CShader("Resource/HLSL/Phong.xml") { }
+	ShaderPhong::ShaderPhong() : Shader("Resources/HLSL/Phong.xml") { }
 
-	CShaderSP CShaderPhong::CreateShader()
+	ShaderSP ShaderPhong::CreateShader()
 	{
-		std::string _xmlpath("Resource/HLSL/Phong.xml");
+		std::string xmlPath("Resources/HLSL/Phong.xml");
 
-		CWsbXmlSP xml = CWsbXml::LoadXmlFile(_xmlpath);
-		std::string sdr_path = xml->GetElement("path")->GetString();
-		CShaderSP psdr;
-		std::unordered_map<std::string, CShaderSP>::iterator it = Shaders.find(sdr_path);
+		CWsbXmlSP xml = CWsbXml::LoadXmlFile(xmlPath);
+		std::string path = xml->GetElement("path")->GetString();
+		ShaderSP shader;
+		std::unordered_map<std::string, ShaderSP>::iterator it = _shaders.find(path);
 
 		// 存在したら第二要素を返す
-		if(it != Shaders.end())
+		if(it != _shaders.end())
 		{
-			psdr = (*it).second;
-			return psdr;
+			shader = (*it).second;
+			return shader;
 		}
 		// 存在しなければ新しく生成
-		psdr = CShaderSP(new CShaderPhong());
+		shader = ShaderSP(new ShaderPhong());
 
-		float dirX = xml->GetElement("LightDirection")->GetElement("X")->GetFloat();
-		float dirY = xml->GetElement("LightDirection")->GetElement("Y")->GetFloat();
-		float dirZ = xml->GetElement("LightDirection")->GetElement("Z")->GetFloat();
+		float directionX = xml->GetElement("LightDirection")->GetElement("X")->GetFloat();
+		float directionY = xml->GetElement("LightDirection")->GetElement("Y")->GetFloat();
+		float directionZ = xml->GetElement("LightDirection")->GetElement("Z")->GetFloat();
 		float ambient = xml->GetElement("Ambient")->GetFloat();
 		float specular = xml->GetElement("Specular")->GetFloat();
 		float specularpow = xml->GetElement("SpecularPower")->GetFloat();
 
-		psdr->setAmbient(ambient);
-		psdr->setLightDirection(dirX, dirY, dirZ);
-		psdr->setSpecular(specular);
-		psdr->setSpecularPower(specularpow);
+		shader->SetAmbient(ambient);
+		shader->SetLightDirection(directionX, directionY, directionZ);
+		shader->SetSpecular(specular);
+		shader->SetSpecularPower(specularpow);
 
 		// ハッシュマップに挿入
-		Shaders.insert(std::make_pair(sdr_path, psdr));
+		_shaders.insert(std::make_pair(path, shader));
 
-		return psdr;
+		return shader;
 	}
 
-	void CShaderPhong::applyEffect(const CMatrix& _rotmtx, const CVector4& _campos)
+	void ShaderPhong::ApplyEffect(const CMatrix& rotation, const CVector4& cameraPosition)
 	{
 		// ライト計算用に回転行列を渡す
-		pd3dEffect->SetMatrix(*getpHandle("ROT"), &_rotmtx);
+		_effect->SetMatrix(*GetHandle("ROT"), &rotation);
 		// 環境光設定
-		pd3dEffect->SetVector(*getpHandle("Ambient"), &D3DXVECTOR4(Ambient, Ambient, Ambient, 1.0f));
+		_effect->SetVector(*GetHandle("Ambient"), &D3DXVECTOR4(_ambient, _ambient, _ambient, 1.0f));
 		// スペキュラー範囲設定
-		pd3dEffect->SetFloat(*getpHandle("Specular"), Specular);
+		_effect->SetFloat(*GetHandle("Specular"), _specular);
 		// スペキュラー強度設定
-		pd3dEffect->SetFloat(*getpHandle("SpecularPower"), SpecularPower);
+		_effect->SetFloat(*GetHandle("SpecularPower"), _specularPower);
 		// カメラ設定
-		pd3dEffect->SetVector(*getpHandle("EyePos"), (D3DXVECTOR4*)&_campos);
+		_effect->SetVector(*GetHandle("EyePos"), (D3DXVECTOR4*)&cameraPosition);
 		// ライト設定(平行光源)
-		pd3dEffect->SetVector(*getpHandle("LightDir"), (D3DXVECTOR4*)&LightDirection);
+		_effect->SetVector(*GetHandle("LightDir"), (D3DXVECTOR4*)&_lightDirection);
 	}
 
 }

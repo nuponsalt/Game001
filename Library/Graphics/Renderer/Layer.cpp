@@ -75,7 +75,7 @@ namespace KMT {
 		pRenderTag->Camera2D->setAspect(aspect);
 		// 板ポリにテクスチャをセット
 		if(pRenderTag->board->getptextures().size() < 1)
-			pRenderTag->board->setTexture(pRenderTag->Texture);
+			pRenderTag->board->SetTexture(pRenderTag->Texture);
 		// レンダリングリストの作成
 		for(int i = 0; i < RENDER_STATE_MAX; i++)
 		{

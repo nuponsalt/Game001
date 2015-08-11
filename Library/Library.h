@@ -54,8 +54,8 @@
 #include "System/Counter.h"
 // ˆø—p
 #include "Support/wsb_xml.h"
-#include "Support/JoyPadManager.h"
-#include "Support/sound.h"
-#include "Support/sound_manager.h"
+//#include "Support/JoyPadManager.h"
+//#include "Support/sound.h"
+//#include "Support/sound_manager.h"
 // Šg’£
 #include "Extension.h"

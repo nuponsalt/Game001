@@ -4,20 +4,20 @@
 
 namespace KMT {
 
-	class CShaderPhong : public CShader
+	class ShaderPhong : public Shader
 	{
 	public :
 		// デストラクタ
-		~CShaderPhong() { }
+		~ShaderPhong() { }
 
 		// 生成
-		static CShaderSP CreateShader();
+		static ShaderSP CreateShader();
 		// モデルに対するエフェクト適用
-		void applyEffect(const CMatrix& _rotmtx, const CVector4& _campos);
+		void ApplyEffect(const CMatrix& rotation, const CVector4& cameraPosition);
 
 	private :
 		// コンストラクタ
-		CShaderPhong();
+		ShaderPhong();
 
 	protected :
 	};

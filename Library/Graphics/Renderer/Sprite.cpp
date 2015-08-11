@@ -16,7 +16,7 @@ namespace KMT {
 		SAFE_RELEASE( pd3dSprite ) ;
 	}
 
-	void CSprite::setTexture(const CTextureSP &_ptexture) 
+	void CSprite::SetTexture(const CTextureSP &_ptexture) 
 	{
 		Texture = _ptexture ;
 	}

@@ -55,7 +55,7 @@ namespace KMT
 			}
 		}
 		// シェーダー設定
-		Shader = CShaderNormal::CreateShader();
+		Shader = ShaderNormal::CreateShader();
 		// メッシュを生成する
 		LPD3DXMESH _mesh;
 		if (FAILED(D3DXCreateMeshFVF(2, 4, D3DXMESH_MANAGED, CVertex::FVF, CGraphicsManager::pd3dDevice, &_mesh)))
@@ -129,14 +129,14 @@ namespace KMT
 		// イメージサイズに合わせて板ポリゴンを生成
 		(size_x == 0 && size_y == 0) ? GenerateBoard(_path, (int)ImageSize.x, (int)ImageSize.y, Texture) : GenerateBoard(_path, size_x, size_y, Texture);
 		// テクスチャーを挿入
-		setTexture(Texture);
+		SetTexture(Texture);
 	}
 
 	void CGraphicalPlane::LoadTexture (const CTextureSP& _tex,const int& x_num, const int &y_num, const int &size_x, const int &size_y)
 	{
 		Texture = _tex;
 		(size_x == 0 && size_y == 0) ? GenerateBoard(_tex->getFilePath(), (int)ImageSize.x, (int)ImageSize.y, Texture) : GenerateBoard(_tex->getFilePath(), size_x, size_y, Texture);
-		setTexture(Texture);
+		SetTexture(Texture);
 	}
 
 	CGraphicalPlaneSP CGraphicalPlane::CreateFromTexture(const std::string &_path, const int &x_num, const int &y_num, const int &size_x, const int &size_y)
@@ -226,11 +226,11 @@ namespace KMT
 		EyePos.Transform(CamMtx);
 		D3DXVec4Normalize((D3DXVECTOR4*)&EyePos, (D3DXVECTOR4*)&EyePos);
 		// シェーダ設定
-		Shader->setTechnique();
+		Shader->SetTechnique();
 		// シェーダにワールド * ビュー * プロジェクション行列を渡す
-		Shader->setWVPMatrix(WVPMtx);
+		Shader->SetWVPMatrix(WVPMtx);
 		// シェーダー特有の値の設定
-		Shader->applyEffect(RotMtx, EyePos);
+		Shader->ApplyEffect(RotMtx, EyePos);
 
 		HRESULT hr;
 		// 3D モデルのパーツ分ループして描画
@@ -244,12 +244,11 @@ namespace KMT
 			{
 				LPDIRECT3DTEXTURE9 p_tex = Textures[i]->getpd3dTexture();
 				// シェーダにカラーを渡す
-				Shader->setColor(vColorRGBA);
-				Shader->setTexture(p_tex);
-			} else 
-			{
-				Shader->setColor(vec4);
-			}
+				Shader->SetColor(vColorRGBA);
+				Shader->SetTexture(p_tex);
+			}else
+				Shader->SetColor(vec4);
+
 			// シェーダの使用開始
 			Shader->BeginShader();
 			// シェーダのパス設定

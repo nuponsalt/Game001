@@ -10,141 +10,140 @@
 namespace KMT {
 
 	// static Object
-	std::unordered_map<std::string, CShaderSP>	CShader::Shaders;
+	std::unordered_map<std::string, ShaderSP>	Shader::_shaders;
 	
 	//-----------------------------------------------------------------------------------------------------------
-	// CShader
+	// Shader
 	//-----------------------------------------------------------------------------------------------------------
 
-	CShader::CShader() : Ambient(0), Specular(0), SpecularPower(0), Type(0) { }
-
-	CShader::CShader(std::string _xmlpath)
+	Shader::Shader() : _ambient(0), _specular(0), _specularPower(0), _type(0) { }
+	
+	Shader::Shader(std::string xmlPath)
 	{	
-		CWsbXmlSP xml = CWsbXml::LoadXmlFile(_xmlpath);
-		std::string sdr_path = xml->GetElement( "path" )->GetString();
+		CWsbXmlSP xml = CWsbXml::LoadXmlFile(xmlPath);
+		std::string path = xml->GetElement("path")->GetString();
 
-		FilePath = sdr_path;
+		_path = path;
 
-		WCHAR buff_name[256] = {0};
-		DXconvAnsiToWide( buff_name, sdr_path.c_str(), (sdr_path.length()+1) );
+		WCHAR bufferName[256] = {0};
+		DXconvAnsiToWide(bufferName, path.c_str(), (path.length()+1));
 		
 		// シェーダ ファイルのロード
-		LPD3DXBUFFER pCompilationErrors = NULL;
+		LPD3DXBUFFER compilationErrors = NULL;
 
 		HRESULT hr = D3DXCreateEffectFromFile( 
 					CGraphicsManager::pd3dDevice, 
-					buff_name, 
+					bufferName, 
 					NULL, 
 					NULL, 
 					D3DXSHADER_DEBUG, 
 					NULL, 
-					&pd3dEffect, 
-					&pCompilationErrors
+					&_effect, 
+					&compilationErrors
 					);
 
 		// ロードに失敗した場合
 		if(FAILED(hr))
 		{
-			if(pCompilationErrors)	
-				DXUTOutputDebugStringA((LPCSTR)pCompilationErrors->GetBufferPointer());
+			if(compilationErrors)	
+				DXUTOutputDebugStringA((LPCSTR)compilationErrors->GetBufferPointer());
 			
-			SAFE_RELEASE(pCompilationErrors);
+			SAFE_RELEASE(compilationErrors);
 			return;
 		}
 		// ハンドルの読み込み
-		pTechnique = pd3dEffect->GetTechniqueByName(xml->GetElement("technique")->GetString().c_str());
-		pWVP = pd3dEffect->GetParameterByName(NULL, xml->GetElement("wvp")->GetString().c_str());
-		pColor = pd3dEffect->GetParameterByName(NULL, xml->GetElement("color")->GetString().c_str());
-		pSrcTex = pd3dEffect->GetParameterByName(NULL, xml->GetElement("srctex")->GetString().c_str());
+		_technique = _effect->GetTechniqueByName(xml->GetElement("technique")->GetString().c_str());
+		_wvp = _effect->GetParameterByName(NULL, xml->GetElement("wvp")->GetString().c_str());
+		_color = _effect->GetParameterByName(NULL, xml->GetElement("color")->GetString().c_str());
+		_sourceTexture = _effect->GetParameterByName(NULL, xml->GetElement("srctex")->GetString().c_str());
 
 		// 他、ロード
-		for(int i = 0; i < xml->GetElementNum("handle"); i++)
+		for (int i = 0; i < xml->GetElementNum("handle"); i++)
 		{
 			// XMLからKeyを読み込みロードする
-			D3DXHANDLE sdr_temp 
-				= pd3dEffect->GetParameterByName(NULL, xml->GetElement("handle", i)->GetString().c_str());
-			handles.insert(std::make_pair(xml->GetElement("handle", i)->GetString() , sdr_temp));
+			D3DXHANDLE shaderTemporary = _effect->GetParameterByName(NULL, xml->GetElement("handle", i)->GetString().c_str());
+			_handles.insert(std::make_pair(xml->GetElement("handle", i)->GetString(), shaderTemporary));
 		}
 	}
 
-	CShader::~CShader()
+	Shader::~Shader()
 	{
-		SAFE_RELEASE(pd3dEffect);
+		SAFE_RELEASE(_effect);
 	}
 	
-	void CShader::Destroy(std::string _name)
+	void Shader::Destroy(std::string _name)
 	{
 		// イテレータを用意
 		// イテレータをハッシュマップの先頭にセット
-		std::unordered_map< std::string, CShaderSP >::iterator it = Shaders.begin();
+		std::unordered_map< std::string, ShaderSP >::iterator it = _shaders.begin();
 
 		// 全部解放
 		if(_name == "all")
 		{
-			while(it != Shaders.end())
+			while(it != _shaders.end())
 			{
 				(*it).second.reset();
-				Shaders.erase(it++);
+				_shaders.erase(it++);
 			}
 		}
 		// テクスチャを１つだけ解放
 		else
 		{
-			it = Shaders.find(_name);
-			if(it != Shaders.end())
+			it = _shaders.find(_name);
+			if(it != _shaders.end())
 			{
 				(*it).second.reset();
-				Shaders.erase(it);
+				_shaders.erase(it);
 			}
 		}
 	}
 
-	void CShader::setTechnique() const
+	void Shader::SetTechnique() const
 	{
-		pd3dEffect->SetTechnique(pTechnique);
+		_effect->SetTechnique(_technique);
 	}
 
-	void CShader::setWVPMatrix(const CMatrix& wvp) const
+	void Shader::SetWVPMatrix(const CMatrix& wvp) const
 	{
-		pd3dEffect->SetMatrix(pWVP, (D3DXMATRIX*)&wvp);
+		_effect->SetMatrix(_wvp, (D3DXMATRIX*)&wvp);
 	}
 
-	void CShader::setColor(const CVector4& color) const
+	void Shader::SetColor(const CVector4& color) const
 	{
-		pd3dEffect->SetVector(pColor, (D3DXVECTOR4*)&color);
+		_effect->SetVector(_color, (D3DXVECTOR4*)&color);
 	}
 
-	void CShader::setTexture(const LPDIRECT3DTEXTURE9 texture) const
+	void Shader::SetTexture(const LPDIRECT3DTEXTURE9 texture) const
 	{
-		pd3dEffect->SetTexture(pSrcTex, texture);
+		_effect->SetTexture(_sourceTexture, texture);
 	}
 
-	void CShader::BeginShader() const
+	void Shader::BeginShader() const
 	{
-		pd3dEffect->Begin(NULL, 0);
+		_effect->Begin(NULL, 0);
 	}
 
-	void CShader::EndShader() const
+	void Shader::EndShader() const
 	{
-		pd3dEffect->End();
+		_effect->End();
 	}
 
-	void CShader::BeginPass(const bool isAddBlend)
+	void Shader::BeginPass(const bool addsBlend)
 	{
-		pd3dEffect->BeginPass(isAddBlend);
+		_effect->BeginPass(addsBlend);
 	}
 
-	void CShader::EndPass()
+	void Shader::EndPass()
 	{
-		pd3dEffect->EndPass();
+		_effect->EndPass();
 	}
 
-	D3DXHANDLE* CShader::getpHandle(const std::string &_path) 
+	D3DXHANDLE* Shader::GetHandle(const std::string &path) 
 	{
 		// イテレータを用意
-		std::unordered_map<std::string, D3DXHANDLE>::iterator it = handles.find(_path);
+		std::unordered_map<std::string, D3DXHANDLE>::iterator it = _handles.find(path);
 
-		if(it != handles.end())
+		if(it != _handles.end())
 			return &(*it).second;
 		// 見つからない場合(ここに来た場合エラー発生)
 		return NULL;
@@ -153,32 +152,32 @@ namespace KMT {
 	//-----------------------------------------------------------------------------------------------------------
 	// CShaderNormal
 	//-----------------------------------------------------------------------------------------------------------
-	CShaderNormal::CShaderNormal() : CShader("Resource/HLSL/Normal.xml")
+	ShaderNormal::ShaderNormal() : Shader("Resources/HLSL/Normal.xml")
 	{ }
 
-	CShaderSP CShaderNormal::CreateShader()
+	ShaderSP ShaderNormal::CreateShader()
 	{
-		std::string _xmlpath("Resource/HLSL/Normal.xml");
+		std::string _xmlpath("Resources/HLSL/Normal.xml");
 		
 		CWsbXmlSP xml = CWsbXml::LoadXmlFile(_xmlpath);
-		std::string sdr_path = xml->GetElement("path")->GetString();
+		std::string path = xml->GetElement("path")->GetString();
 		
-		std::unordered_map<std::string, CShaderSP>::iterator it = Shaders.find(sdr_path);
-		CShaderSP psdr;
+		std::unordered_map<std::string, ShaderSP>::iterator it = _shaders.find(path);
+		ShaderSP shader;
 		// 存在したら第二要素を返す
-		if(it != Shaders.end())
+		if(it != _shaders.end())
 		{
-			psdr = (*it).second;
-			return psdr;
+			shader = (*it).second;
+			return shader;
 		}
 		// 存在しなければ新しくロード
-		psdr = CShaderSP(new CShaderNormal());
+		shader = ShaderSP(new ShaderNormal());
 		// ハッシュマップに挿入
-		Shaders.insert(std::make_pair(sdr_path, psdr));
-		return psdr;
+		_shaders.insert(std::make_pair(path, shader));
+		return shader;
 	}
 
-	void CShaderNormal::applyEffect(const CMatrix& _rotmtx, const CVector4& _campos)
+	void ShaderNormal::ApplyEffect(const CMatrix& rotation, const CVector4& cameraPosition)
 	{
 		return;
 	}

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <root>
-  <path>Resource/HLSL/Toon.fx</path>
+  <path>Resources/HLSL/Toon.fx</path>
   <technique>TShader</technique>
   <wvp>WVP</wvp>
   <srctex>SrcTex</srctex>
@@ -8,7 +8,7 @@
   <handle>ROT</handle>
   <handle>LightDir</handle>
   <handle>ToonTex</handle>
-  <ToonTex>Resource/Texture/Shader/ToonMap.jpg</ToonTex>
+  <ToonTex>Resources/Texture/Shader/ToonMap.jpg</ToonTex>
   <LightDirection>
     <X>0</X>
     <Y>-40</Y>

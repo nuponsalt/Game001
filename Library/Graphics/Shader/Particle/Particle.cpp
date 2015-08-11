@@ -5,32 +5,32 @@
 
 namespace KMT {
 
-	CShaderParticle::CShaderParticle() : CShader("Resource/HLSL/Particle.xml")
+	CShaderParticle::CShaderParticle() : Shader("Resources/HLSL/Particle.xml")
 	{ }
 
-	CShaderSP CShaderParticle::CreateShader()
+	ShaderSP CShaderParticle::CreateShader()
 	{
-		std::string _xmlpath("Resource/HLSL/Particle.xml");
+		std::string xmlPath("Resources/HLSL/Particle.xml");
 
-		CWsbXmlSP xml = CWsbXml::LoadXmlFile(_xmlpath);
-		std::string sdr_path = xml->GetElement("path")->GetString();
+		CWsbXmlSP xml = CWsbXml::LoadXmlFile(xmlPath);
+		std::string path = xml->GetElement("path")->GetString();
 
-		std::unordered_map<std::string, CShaderSP>::iterator it = Shaders.find(sdr_path);
-		CShaderSP psdr;
+		std::unordered_map<std::string, ShaderSP>::iterator it = _shaders.find(path);
+		ShaderSP shader;
 		// 存在したら第二要素を返す
-		if(it != Shaders.end())
+		if(it != _shaders.end())
 		{
-			psdr = (*it).second;
-			return psdr;
+			shader = (*it).second;
+			return shader;
 		}
 		// 存在しなければ新しくロード
-		psdr = CShaderSP(new CShaderParticle());
+		shader = ShaderSP(new CShaderParticle());
 		// ハッシュマップに挿入
-		Shaders.insert(std::make_pair(sdr_path, psdr));
-		return psdr;
+		_shaders.insert(std::make_pair(path, shader));
+		return shader;
 	}
 
-	void CShaderParticle::applyEffect(const CMatrix& _rotmtx, const CVector4& _campos)
+	void CShaderParticle::ApplyEffect(const CMatrix& _rotmtx, const CVector4& _campos)
 	{
 		return;
 	}

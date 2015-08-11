@@ -42,7 +42,7 @@ namespace KMT {
 	//		}
 	//	}
 	//	// シェーダー設定
-	//	Shader = CShader::Create();
+	//	Shader = Shader::Create();
 	//	// メッシュ情報読み込み
 	//	LPD3DXMESH _mesh;
 	//	// 頂点数は面数+中心頂点でできる
