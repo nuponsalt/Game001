@@ -31,7 +31,7 @@ namespace KMT {
 		// シェーダーの初期読み込み
 
 		//* シェーディング無設定 *//
-		ShaderNormal::CreateShader();
+		ShaderNormal::Create();
 		//* ランバート拡散反射シェーディング *//
 		ShaderLambert::Create();
 		//* ハーフランバートシェーダー *//
