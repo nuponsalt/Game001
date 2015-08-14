@@ -6,8 +6,8 @@
 namespace KMT {
 
 	class ShaderParticle;
-	typedef std::shared_ptr<ShaderParticle> CShaderParticleSP;
-	typedef std::weak_ptr<ShaderParticle> CShaderPartcleWP;
+	typedef std::shared_ptr<ShaderParticle> ShaderParticleSP;
+	typedef std::weak_ptr<ShaderParticle> ShaderPartcleWP;
 
 	class ShaderParticle : public Shader
 	{
