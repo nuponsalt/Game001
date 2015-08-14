@@ -5,10 +5,10 @@
 
 namespace KMT {
 
-	CShaderParticle::CShaderParticle() : Shader("Resources/HLSL/Particle.xml")
+	ShaderParticle::ShaderParticle() : Shader("Resources/HLSL/Particle.xml")
 	{ }
 
-	ShaderSP CShaderParticle::CreateShader()
+	ShaderSP ShaderParticle::Create()
 	{
 		std::string xmlPath("Resources/HLSL/Particle.xml");
 
@@ -24,13 +24,13 @@ namespace KMT {
 			return shader;
 		}
 		// 存在しなければ新しくロード
-		shader = ShaderSP(new CShaderParticle());
+		shader = ShaderSP(new ShaderParticle());
 		// ハッシュマップに挿入
 		_shaders.insert(std::make_pair(path, shader));
 		return shader;
 	}
 
-	void CShaderParticle::ApplyEffect(const CMatrix& _rotmtx, const CVector4& _campos)
+	void ShaderParticle::ApplyEffect(const CMatrix& rotation, const CVector4& cameraPosition)
 	{
 		return;
 	}

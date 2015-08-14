@@ -13,7 +13,7 @@ namespace KMT {
 	//------------------------------------------------------------------------------------------------------------------------------------
 	ShaderLambert::ShaderLambert() : Shader("Resources/HLSL/Lambert.xml") { }
 
-	ShaderSP ShaderLambert::CreateShader()
+	ShaderSP ShaderLambert::Create()
 	{
 		std::string xmlPath("Resources/HLSL/Lambert.xml");
 
