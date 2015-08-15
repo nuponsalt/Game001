@@ -21,31 +21,31 @@ namespace KMT {
 	{
 	public :
 		// 画像のどの範囲を描画するか
-		RECT rect;
+		RECT _rect;
 		
 		// デストラクタ
 		~CSprite();
 
 		// テクスチャの設定
-		void SetTexture(const CTextureSP &_texture);
+		void SetTexture(const CTextureSP &texture);
 		//* 生成 *//
-		static CSpriteSP CreateSprite();
+		static CSpriteSP Create();
 		// 一枚テクスチャ
 		// _path : テクスチャーのファイルパス
-		static CSpriteSP CreateFromFile(const std::string &_path);
+		static CSpriteSP CreateFromFile(const std::string &path);
 		// アニメーションテクスチャ
-		// _path : テクスチャーのファイルパス
-		// _w_num : 横分割
-		// _h_num : 縦分割
-		static CSpriteSP CreateFromFile(const std::string &_path, const int &_w_num, const int &_h_num);
+		// path : テクスチャーのファイルパス
+		// width : 横分割
+		// height : 縦分割
+		static CSpriteSP CreateFromFile(const std::string& path, const int &width, const int &height);
 		//* 描画 *//
 		void Render(const CCamera* camera = NULL);
 		
 	private :
 		// DirectX3Dスプライト
-		LPD3DXSPRITE pd3dSprite;
+		LPD3DXSPRITE _sprite;
 		// 反転用二次元ベクトル
-		CVector2 vTurn;
+		CVector2 _turnVector;
 		
 		// コンストラクタ
 		CSprite();
