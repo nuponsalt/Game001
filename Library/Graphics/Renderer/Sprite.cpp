@@ -4,39 +4,39 @@
 
 namespace KMT {
 
-	CSprite::CSprite() : vTurn(1, 1)
+	CSprite::CSprite() : _turnVector(1, 1)
 	{
 		// スプライトの生成
-		D3DXCreateSprite(CGraphicsManager::pd3dDevice, &pd3dSprite) ;
+		D3DXCreateSprite(CGraphicsManager::pd3dDevice, &_sprite) ;
 	}
 
 	CSprite::~CSprite()
 	{
 		Texture.reset() ;
-		SAFE_RELEASE( pd3dSprite ) ;
+		SAFE_RELEASE( _sprite ) ;
 	}
 
-	void CSprite::SetTexture(const CTextureSP &_ptexture) 
+	void CSprite::SetTexture(const CTextureSP &texture) 
 	{
-		Texture = _ptexture ;
+		Texture = texture ;
 	}
 
-	CSpriteSP CSprite::CreateFromFile(const std::string &_path)
+	CSpriteSP CSprite::CreateFromFile(const std::string &path)
 	{
-		CSpriteSP _obj(new CSprite()) ;
+		CSpriteSP obj(new CSprite()) ;
 		// テクスチャを設定
-		_obj->LoadTextureAndAnimation(_path) ;
+		obj->LoadTextureAndAnimation(path) ;
 
-		return _obj ;
+		return obj ;
 	}
 
-	CSpriteSP CSprite::CreateFromFile(const std::string &_path, const int &_w_num, const int &_h_num) 
+	CSpriteSP CSprite::CreateFromFile(const std::string &path, const int &width, const int &height) 
 	{
-		CSpriteSP _obj(new CSprite()) ;
+		CSpriteSP obj(new CSprite()) ;
 		// テクスチャの設定
-		_obj->LoadTextureAndAnimation(_path, _w_num, _h_num) ;
+		obj->LoadTextureAndAnimation(path, width, height) ;
 
-		return _obj ;
+		return obj ;
 	}
 
 	void CSprite::Render(const CCamera* camera)
@@ -52,7 +52,7 @@ namespace KMT {
 		// トランスレーション( 平行移動 ) 行列の作成
 		D3DXMatrixTranslation(&PosMtx, Position.x, Position.y, Position.z);
 		// スケール( 拡縮 ) 行列の作成
-		D3DXMatrixScaling(&SclMtx, vTurn.x * Scale.x, vTurn.y * Scale.y, 1.0f);
+		D3DXMatrixScaling(&SclMtx, _turnVector.x * Scale.x, _turnVector.y * Scale.y, 1.0f);
 		// ローテーション( 回転 ) 行列の作成 
 		// ※ 今回は 2Dなので Z回転のみ
 		D3DXMatrixRotationZ(&RotMtx, D3DXToRadian(vRotation.z));
@@ -61,14 +61,14 @@ namespace KMT {
 		// スケール * ローテーション * トランスレーション の順で行う
 		WldMtx = SclMtx * RotMtx * PosMtx;
 		// スプライトにワールド行列を設定
-		pd3dSprite->SetTransform(&WldMtx);
+		_sprite->SetTransform(&WldMtx);
 
 		HRESULT hr;
 		// Render the scene
 		if(SUCCEEDED( DXUTGetD3D9Device()->BeginScene()))
 		{		
 			// スプライトの描画準備
-			pd3dSprite->Begin(D3DXSPRITE_ALPHABLEND); // 半透明、不透明のときは０を渡す
+			_sprite->Begin(D3DXSPRITE_ALPHABLEND); // 半透明、不透明のときは０を渡す
 			//----------------------------------------------------------------------------------
 			//
 			// 加算ブレンドの設定
@@ -86,7 +86,7 @@ namespace KMT {
 			}*/
 
 			// スプライトの描画命令
-			pd3dSprite->Draw(
+			_sprite->Draw(
 				// 描画に使用するテクスチャ
 				Texture->getpd3dTexture(),
 				// 画像の描画範囲
@@ -99,7 +99,7 @@ namespace KMT {
 				D3DCOLOR_ARGB((int)(vColorRGBA.w * 255), (int)(vColorRGBA.x * 255), (int)(vColorRGBA.y * 255), (int)(vColorRGBA.z * 255)));
 
 			// 加算切り替え
-			pd3dSprite->End();
+			_sprite->End();
 			// 描画終了
 			V(CGraphicsManager::pd3dDevice->EndScene());
 		}
