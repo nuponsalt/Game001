@@ -9,12 +9,6 @@
 #include "../Library/Library.h"
 using namespace KMT;
 
-CLayerSP layer = NULL;
-CCameraSP Camera3D = NULL;
-CCameraSP Camera2D = NULL;
-
-CGRendererSP object = NULL;
-
 //--------------------------------------------------------------------------------------
 // Rejects any D3D9 devices that aren't acceptable to the app by returning false
 //--------------------------------------------------------------------------------------
@@ -46,21 +40,6 @@ bool CALLBACK ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* p
 HRESULT CALLBACK OnD3D9CreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,
                                      void* pUserContext )
 {
-	CGraphicsManager::Initialize(pd3dDevice);
-
-	layer = CLayer::CreateLayer(1280, 720);
-	layer->board->Position.y = 0.0f;
-
-	object = CGRenderer::CreateFromX("Resources/Model/Ground/Ground.x", KMT::ShaderPhong::Create());
-	object->Position = CVector3(0, -10, 0);
-	object->Scale = CVector3(1, 1, 1);
-	object->qRotation = CQuaternion(KMT::CVector3(0, 1, 0), 180);
-
-	layer->AddObject(object, RenderState::RENDER_NORMAL);
-
-	Camera3D = layer->Camera3D;
-	Camera2D = layer->Camera2D;
-
     return S_OK;
 }
 
@@ -97,10 +76,7 @@ void CALLBACK OnD3D9FrameRender( IDirect3DDevice9* pd3dDevice, double fTime, flo
     //{
     //    V( pd3dDevice->EndScene() );
     //}
-	CGraphicsManager::setRenderTargetToBackBuffer();
-	layer->Render();
-	CGraphicsManager::setRenderTargetToBackBuffer();
-	layer->board->Render(Camera2D.get());
+	
 }
 
 //--------------------------------------------------------------------------------------
@@ -126,10 +102,6 @@ void CALLBACK OnD3D9LostDevice( void* pUserContext )
 void CALLBACK OnD3D9DestroyDevice( void* pUserContext )
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-
-	object.reset();
-	layer.reset();
-	CGraphicsManager::Destroy();
 }
 
 //--------------------------------------------------------------------------------------
