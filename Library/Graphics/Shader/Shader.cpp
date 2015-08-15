@@ -155,7 +155,7 @@ namespace KMT {
 	ShaderNormal::ShaderNormal() : Shader("Resources/HLSL/Normal.xml")
 	{ }
 
-	ShaderSP ShaderNormal::CreateShader()
+	ShaderSP ShaderNormal::Create()
 	{
 		std::string _xmlpath("Resources/HLSL/Normal.xml");
 		
