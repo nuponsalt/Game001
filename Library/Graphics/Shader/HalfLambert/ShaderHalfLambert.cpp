@@ -16,7 +16,7 @@ namespace KMT {
 	ShaderHalfLambert::ShaderHalfLambert() : Shader("Resources/HLSL/HalfLambert.xml")
 	{}
 
-	ShaderSP ShaderHalfLambert::CreateShader()
+	ShaderSP ShaderHalfLambert::Create()
 	{
 		std::string xmlPath("Resources/HLSL/HalfLambert.xml") ;
 		

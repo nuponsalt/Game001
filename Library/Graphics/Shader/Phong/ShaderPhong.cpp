@@ -9,7 +9,7 @@ namespace KMT {
 
 	ShaderPhong::ShaderPhong() : Shader("Resources/HLSL/Phong.xml") { }
 
-	ShaderSP ShaderPhong::CreateShader()
+	ShaderSP ShaderPhong::Create()
 	{
 		std::string xmlPath("Resources/HLSL/Phong.xml");
 

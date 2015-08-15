@@ -10,7 +10,7 @@ namespace KMT {
 		// デストラクタ
 		~ShaderLambert() { }
 		// シェーダー生成
-		static ShaderSP CreateShader();
+		static ShaderSP Create();
 		// モデルに対するエフェクト設定
 		void ApplyEffect(const CMatrix& rotation, const CVector4& cameraPosition);
 	

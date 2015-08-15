@@ -55,7 +55,7 @@ namespace KMT
 			}
 		}
 		// シェーダー設定
-		Shader = ShaderNormal::CreateShader();
+		Shader = ShaderNormal::Create();
 		// メッシュを生成する
 		LPD3DXMESH _mesh;
 		if (FAILED(D3DXCreateMeshFVF(2, 4, D3DXMESH_MANAGED, CVertex::FVF, CGraphicsManager::pd3dDevice, &_mesh)))

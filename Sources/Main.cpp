@@ -51,7 +51,7 @@ HRESULT CALLBACK OnD3D9CreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURF
 	layer = CLayer::CreateLayer(1280, 720);
 	layer->board->Position.y = 0.0f;
 
-	object = CGRenderer::CreateFromX("Resources/Model/Ground/Ground.x", KMT::ShaderPhong::CreateShader());
+	object = CGRenderer::CreateFromX("Resources/Model/Ground/Ground.x", KMT::ShaderPhong::Create());
 	object->Position = CVector3(0, -10, 0);
 	object->Scale = CVector3(1, 1, 1);
 	object->qRotation = CQuaternion(KMT::CVector3(0, 1, 0), 180);

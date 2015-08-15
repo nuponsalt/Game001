@@ -15,13 +15,13 @@ namespace KMT {
 		~ShaderToon() { }
 	
 		// シェーダー生成
-		static ShaderSP CreateShader();
+		static ShaderSP Create();
 		// モデルに対するエフェクト設定
-		void ApplyEffect(const CMatrix& _rotmtx, const CVector4& _campos);
+		void ApplyEffect(const CMatrix& rotation, const CVector4& cameraPosition);
 	
 	private :
 		// トゥーンテクスチャー
-		CTextureSP ToonTexture;
+		CTextureSP _toonTexture;
 
 		// コンストラクタ
 		ShaderToon();

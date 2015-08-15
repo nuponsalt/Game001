@@ -150,9 +150,9 @@ namespace KMT {
 		// デストラクタ
 		~ShaderNormal() { }
 		// シェーダー生成
-		static ShaderSP CreateShader();
+		static ShaderSP Create();
 		// モデルに対するエフェクト適用
-		void ApplyEffect(const CMatrix& _rotmtx, const CVector4& _campos);
+		void ApplyEffect(const CMatrix& rotation, const CVector4& cameraPosition);
 
 	private :
 		// コンストラクタ

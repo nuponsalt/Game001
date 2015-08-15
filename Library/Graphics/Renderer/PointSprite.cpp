@@ -47,7 +47,7 @@ namespace KMT {
 		// テクスチャのロード
 		Texture = CTexture::CreateFromFile(path, D3DX_FILTER_NONE);
 		// シェーダーを設定
-		Shader = CShaderParticle::CreateShader();
+		Shader = ShaderParticle::Create();
 	}
 
 	CPointSprite::~CPointSprite()

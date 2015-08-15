@@ -31,15 +31,15 @@ namespace KMT {
 		// シェーダーの初期読み込み
 
 		//* シェーディング無設定 *//
-		ShaderNormal::CreateShader();
+		ShaderNormal::Create();
 		//* ランバート拡散反射シェーディング *//
-		ShaderLambert::CreateShader();
+		ShaderLambert::Create();
 		//* ハーフランバートシェーダー *//
-		ShaderHalfLambert::CreateShader();
+		ShaderHalfLambert::Create();
 		//* フォンシェーダー *//
-		ShaderPhong::CreateShader();
+		ShaderPhong::Create();
 		//* トゥーンシェーダー *//
-		ShaderToon::CreateShader();
+		ShaderToon::Create();
 	}
 	
 	void CGraphicsManager::Destroy()
