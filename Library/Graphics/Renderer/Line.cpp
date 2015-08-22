@@ -6,26 +6,26 @@
 
 namespace KMT {
 
-	CLineSP CLine::Create(const CVector3& _posA, const CVector3& _posB, DWORD _color)
+	LineSP Line::Create(const CVector3& positionA, const CVector3& positionB, DWORD color)
 	{
 		// 生成する
-		CLine* pobj = new CLine();
+		Line* object = new Line();
 
 		// 頂点データの作成
-		pobj->Vertices[0].x = _posA.x;
-		pobj->Vertices[0].y = _posA.y;
-		pobj->Vertices[0].z = _posA.z;
-		pobj->Vertices[0].color = _color;
+		object->_vertices[0]._x = positionA.x;
+		object->_vertices[0]._y = positionA.y;
+		object->_vertices[0]._z = positionA.z;
+		object->_vertices[0]._color = color;
 
-		pobj->Vertices[1].x = _posB.x;
-		pobj->Vertices[1].y = _posB.y;
-		pobj->Vertices[1].z = _posB.z;
-		pobj->Vertices[1].color = _color;
+		object->_vertices[1]._x = positionB.x;
+		object->_vertices[1]._y = positionB.y;
+		object->_vertices[1]._z = positionB.z;
+		object->_vertices[1]._color = color;
 
-		return CLineSP(pobj);
+		return LineSP(object);
 	}
 
-	void CLine::Render(const CCamera* _camera)
+	void Line::Render(const CCamera* _camera)
 	{
 		HRESULT hr;
 
@@ -62,7 +62,7 @@ namespace KMT {
 			// Render the scene
 			if(SUCCEEDED(CGraphicsManager::pd3dDevice->BeginScene()))
 			{
-				CGraphicsManager::pd3dDevice->DrawPrimitiveUP(D3DPT_LINESTRIP, 1, Vertices, sizeof(LineVertex));   
+				CGraphicsManager::pd3dDevice->DrawPrimitiveUP(D3DPT_LINESTRIP, 1, _vertices, sizeof(LineVertex));   
 				V(CGraphicsManager::pd3dDevice->EndScene());
 			}
 

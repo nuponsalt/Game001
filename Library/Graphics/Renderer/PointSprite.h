@@ -10,11 +10,11 @@ namespace KMT {
 	typedef struct tag_POINTSPRITE
 	{
 		// 頂点座標
-		CVector3 Position;
+		CVector3 _position;
 		// ポイントスプライトサイズ
-		float PSize;
+		float _size;
 		// 頂点カラー
-		DWORD Color;
+		DWORD _color;
 
 		// 頂点フォーマット定義
 		static const WORD FVF = (D3DFVF_XYZ | D3DFVF_PSIZE | D3DFVF_DIFFUSE);
@@ -22,64 +22,64 @@ namespace KMT {
 	}POINTSPRITE, *pPOINTSPRITE;
 
 	// エミッター
-	class CEmitter
+	class Emitter
 	{
 	public :
 		// 座標
-		CVector3 Position;
+		CVector3 _position;
 		// 放出方向ベクトル
-		std::vector<CVector3> Directions;
+		std::vector<CVector3> _directions;
 		// 速度
-		std::vector<float> Speeds;
+		std::vector<float> _speeds;
 		// 加速度
-		float acceleration;
+		float _acceleration;
 
 		// パーティクルの寿命
-		int Span;
+		int _span;
 
 		// 描画フラグ
-		bool isRender;
+		bool _renders;
 
 		// コンストラクタ
-		CEmitter() : Span(0), isRender(false) { }
+		Emitter() : _span(0), _renders(false) { }
 		// デストラクタ
-		~CEmitter() { } 
+		~Emitter() { } 
 
 	};
 
-	class CPointSprite;
-	typedef std::shared_ptr<CPointSprite> CPointSpriteSP;
+	class PointSprite;
+	typedef std::shared_ptr<PointSprite> PointSpriteSP;
 
 	// ポイントスプライト(パーティクル)
-	class CPointSprite : public CGraphicBehavior
+	class PointSprite : public GraphicBehavior
 	{
 	public :
 		// デストラクタ
-		virtual ~CPointSprite();
+		virtual ~PointSprite();
 
 		// ポイントスプライト生成
-		static CPointSpriteSP CreatePointSprite(const std::string& path, const WORD numPoint, const float size = 1);
+		static PointSpriteSP Create(const std::string& path, const WORD pointNumber, const float size = 1);
 		// 描画
 		void Render(const CCamera* camera);
 
 	private :
 		// 頂点バッファ
-		LPDIRECT3DVERTEXBUFFER9 pd3dVertexBuffer;
+		LPDIRECT3DVERTEXBUFFER9 _vertexBuffer;
 		// テクスチャ
-		CTextureSP Texture;
+		CTextureSP _texture;
 		// エミッター配列(std::vector)
-		CEmitter* EmitterData;
+		Emitter* _emitterData;
 
 		// 頂点1つの大きさ
-		float pointSize;
+		float _pointSize;
 		// 頂点数
-		WORD pointNumber;
+		WORD _pointNumber;
 
 		// コンストラクタ
 		// path : 貼り付けるテクスチャパス
-		// numPoint : ポイント数
+		// pointNumber : ポイント数
 		// size : ポイントサイズ
-		CPointSprite(const std::string& path, const WORD numPoint, const float size = 1);
+		PointSprite(const std::string& path, const WORD pointNumber, const float size = 1);
 
 	};
 

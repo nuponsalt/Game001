@@ -6,42 +6,42 @@
 
 namespace KMT {
 
-	CLayer::CLayer() : pd3dTextureSurface(NULL), pd3dDepthSurface(NULL) { }
+	Layer::Layer() : _textureSurface(NULL), _depthSurface(NULL) { }
 
-	CLayer::~CLayer()
+	Layer::~Layer()
 	{
 		// サーフェイスの開放
-		SAFE_RELEASE(pd3dTextureSurface);
+		SAFE_RELEASE(_textureSurface);
 		// ステンシルパッファ
-		SAFE_RELEASE(pd3dDepthSurface);
+		SAFE_RELEASE(_depthSurface);
 		// 板ポリの解放
-		board.reset();
+		_board.reset();
 		// カメラの解放
-		Camera3D.reset();
-		Camera2D.reset();
+		_camera3D.reset();
+		_camera2D.reset();
 
 		// レンダリングリストを解放
 		//-----------------------------------------
 		for(int i = 0; i < RENDER_STATE_MAX; i++)
 		{
-			render_lists[i]->clear();
+			_renderLists[i]->clear();
 		}
-		for(size_t i = 0; i < render_lists.size(); i++)
+		for(size_t i = 0; i < _renderLists.size(); i++)
 		{
-			SAFE_DELETE(render_lists[i]);
+			SAFE_DELETE(_renderLists[i]);
 		}
-		render_lists.clear();
+		_renderLists.clear();
 	}
 
-	CLayerSP CLayer::CreateLayer(size_t width, size_t height)
+	LayerSP Layer::Create(size_t width, size_t height)
 	{
-		CLayerSP pRenderTag = CLayerSP(new CLayer);
+		LayerSP object = LayerSP(new Layer);
 
 		// テクスチャの生成
-		pRenderTag->Texture = CTexture::CreateEmpty(width, height);
+		object->_texture = CTexture::CreateEmpty(width, height);
 
 		// サーフェイスの取得
-		if (FAILED(pRenderTag->Texture->getpd3dTexture()->GetSurfaceLevel(0, &pRenderTag->pd3dTextureSurface)))
+		if (FAILED(object->_texture->getpd3dTexture()->GetSurfaceLevel(0, &object->_textureSurface)))
 		{
 			// サーフェイス取得失敗
 			// エラーに対応するコード
@@ -49,50 +49,50 @@ namespace KMT {
 
 		// ステンシルバッファの作成
 		if (FAILED(CGraphicsManager::pd3dDevice->CreateDepthStencilSurface( 
-			pRenderTag->Texture->getd3dImageInfo().Width,
-			pRenderTag->Texture->getd3dImageInfo().Height,
+			object->_texture->getd3dImageInfo().Width,
+			object->_texture->getd3dImageInfo().Height,
 			D3DFMT_D16, 
 			D3DMULTISAMPLE_NONE, 
 			0, 
 			TRUE, 
-			&pRenderTag->pd3dDepthSurface, 
+			&object->_depthSurface, 
 			NULL)))
 		{
 			// ステンシルバッファの作成に失敗
 			// エラーに対応するコードをここに書く
 		}
 
-		pRenderTag->Camera3D = CCamera::Create();
-		pRenderTag->Camera3D->setEye(0, 0, -10.0f);
+		object->_camera3D = CCamera::Create();
+		object->_camera3D->setEye(0, 0, -10.0f);
 
-		pRenderTag->Camera2D = CCamera::Create();
-		float angle = pRenderTag->Camera2D->getAngle();
-		pRenderTag->Camera2D->setEye(0, 0, -(SCREEN_HEIGHT / (2.0f * tan(angle / 2.0f))));
+		object->_camera2D = CCamera::Create();
+		float angle = object->_camera2D->getAngle();
+		object->_camera2D->setEye(0, 0, -(SCREEN_HEIGHT / (2.0f * tan(angle / 2.0f))));
 		// 板ポリ生成
-		pRenderTag->board = CGraphicalPlane::Create(width, height);
+		object->_board = GraphicalPlane::Create(width, height);
 		float aspect = (float)width / height;
-		pRenderTag->Camera3D->setAspect(aspect);
-		pRenderTag->Camera2D->setAspect(aspect);
+		object->_camera3D->setAspect(aspect);
+		object->_camera2D->setAspect(aspect);
 		// 板ポリにテクスチャをセット
-		if(pRenderTag->board->getptextures().size() < 1)
-			pRenderTag->board->SetTexture(pRenderTag->Texture);
+		if(object->_board->GetTextures().size() < 1)
+			object->_board->SetTexture(object->_texture);
 		// レンダリングリストの作成
 		for(int i = 0; i < RENDER_STATE_MAX; i++)
 		{
-			std::list<CGraphicBehaviorWP> *list = new std::list<CGraphicBehaviorWP>();
-			pRenderTag->render_lists.push_back(list);
+			std::list<GraphicBehaviorWP> *list = new std::list<GraphicBehaviorWP>();
+			object->_renderLists.push_back(list);
 		}
 
-		return pRenderTag;
+		return object;
 	}
 
-	void CLayer::Render()
+	void Layer::Render()
 	{
 		// ステンシルバッファをセット
-		CGraphicsManager::pd3dDevice->SetDepthStencilSurface(pd3dDepthSurface);
+		CGraphicsManager::pd3dDevice->SetDepthStencilSurface(_depthSurface);
 
 		// レンダリングターゲットをセット
-		CGraphicsManager::pd3dDevice->SetRenderTarget(0, pd3dTextureSurface);
+		CGraphicsManager::pd3dDevice->SetRenderTarget(0, _textureSurface);
 
 		// サーフェイスをクリア
 		CGraphicsManager::pd3dDevice->Clear(0,
@@ -102,47 +102,45 @@ namespace KMT {
 			1.0f,
 			0);
 
-
 		// カメラの更新
-		Camera3D->updateView();
-		Camera2D->updateView();
+		_camera3D->updateView();
+		_camera2D->updateView();
 
-		std::unordered_map<size_t, std::list<CGraphicBehaviorWP>*>::iterator hmit;
+		//std::unordered_map<size_t, std::list<GraphicBehaviorWP>*>::iterator mapIterator;
 
 		// 2Dソート
-		render_lists[RENDER_BACK2D]->sort(CGraphicBehavior::comp2D);
-		render_lists[RENDER_FRONT2D]->sort(CGraphicBehavior::comp2D);
+		_renderLists[RENDER_BACK2D]->sort(GraphicBehavior::Compaire2D);
+		_renderLists[RENDER_FRONT2D]->sort(GraphicBehavior::Compaire2D);
 
 		// リストアクセス用イテレータ
-		std::list<CGraphicBehaviorWP>::iterator it;
-
+		std::list<GraphicBehaviorWP>::iterator listIterator;
 		// 3Dソート
 		//-------------------------------------------------
 		for(int i = 0; i < 2; i++)
 		{
-			it = render_lists[RENDER_NORMAL + i]->begin();
+			listIterator = _renderLists[RENDER_NORMAL + i]->begin();
 
-			while(it != render_lists[RENDER_NORMAL + i]->end())
+			while(listIterator != _renderLists[RENDER_NORMAL + i]->end())
 			{
 				// すでにデリートされていた場合リストから除外してスキップ
-				if((*it).lock() == NULL)
+				if((*listIterator).lock() == NULL)
 				{
-					it = render_lists[RENDER_NORMAL + i]->erase(it);
+					listIterator = _renderLists[RENDER_NORMAL + i]->erase(listIterator);
 					continue;
 				}
 
 				// カメラからの距離を計算
-				CVector3 campos = Camera3D->getEye();
-				CVector3 vec = (*it).lock()->Position - campos;
-				(*it).lock()->CameraDistance = vec.Length();
+				CVector3 cameraPosition = _camera3D->getEye();
+				CVector3 length = (*listIterator).lock()->Position - cameraPosition;
+				(*listIterator).lock()->_cameraDistance = length.Length();
 
-				++it;
+				++listIterator;
 			}
 		}
 
 		// ソート
-		render_lists[RENDER_NORMAL]->sort(CGraphicBehavior::comp);
-		render_lists[RENDER_ALPHA]->sort(CGraphicBehavior::compBack);
+		_renderLists[RENDER_NORMAL]->sort(GraphicBehavior::Compaire);
+		_renderLists[RENDER_ALPHA]->sort(GraphicBehavior::CompaireBack);
 		//-------------------------------------------------------
 
 		// レンダリングーリストの中身をすべて描画
@@ -165,22 +163,22 @@ namespace KMT {
 				? CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE)
 				: CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 
-			it = render_lists[i]->begin();
+			listIterator = _renderLists[i]->begin();
 			
-			while(it != render_lists[i]->end())
+			while(listIterator != _renderLists[i]->end())
 			{
 				// すでにデリートされていた場合リストから除外してスキップ
-				if((*it).lock() == NULL)
+				if((*listIterator).lock() == NULL)
 				{
-					it = render_lists[i]->erase(it);
+					listIterator = _renderLists[i]->erase(listIterator);
 					continue ;
 				}
 				// カメラ選択
-				CCameraSP camera = (i == RENDER_BACK2D || i == RENDER_FRONT2D) ? Camera2D : Camera3D;
+				CCameraSP camera = (i == RENDER_BACK2D || i == RENDER_FRONT2D) ? _camera2D : _camera3D;
 				// 描画
-				(*it).lock()->Render(camera.get());
+				(*listIterator).lock()->Render(camera.get());
 				// 次のイテレータへ
-				it ++;
+				listIterator ++;
 			}
 		}
 	}

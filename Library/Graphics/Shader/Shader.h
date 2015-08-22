@@ -15,7 +15,7 @@
 
 namespace KMT {
 
-	class CGraphicBehavior;
+	class GraphicBehavior;
 
 	class Shader;
 	typedef std::shared_ptr<Shader> ShaderSP;

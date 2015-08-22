@@ -7,37 +7,37 @@ namespace KMT {
 
 	// ラインの頂点を定義
 	typedef struct LineVertex {
-		float x, y, z;
-		DWORD color;
+		float _x, _y, _z;
+		DWORD _color;
 
 		// コンストラクタ
 		LineVertex() { }
-		LineVertex(CVector3 _v, DWORD _color) : x(_v.x), y(_v.y), z(_v.z), color(_color) { }
+		LineVertex(CVector3 v, DWORD color) : _x(v.x), _y(v.y), _z(v.z), _color(color) { }
 
 	}*pLineVertex;
 
-	class CLine;
-	typedef std::shared_ptr<CLine> CLineSP;
-	typedef std::weak_ptr<CLine> CLineWP;
+	class Line;
+	typedef std::shared_ptr<Line> LineSP;
+	typedef std::weak_ptr<Line> LineWP;
 
 	// ライン描画
-	class CLine : public CGraphicBehavior
+	class Line : public GraphicBehavior
 	{
 	public :
 		// デストラクタ
-		~CLine() { }
+		~Line() { }
 		// 生成
-		static CLineSP Create(const CVector3& _posA, const CVector3& _posB, DWORD _color);
+		static LineSP Create(const CVector3& positionA, const CVector3& positionB, DWORD color);
 
 		// 描画
-		void Render(const CCamera* _camera);
+		void Render(const CCamera* camera);
 
 	private :
 		// ラインの頂点
-		LineVertex Vertices[2];
+		LineVertex _vertices[2];
 
 		// コンストラクタ
-		CLine() { }
+		Line() { }
 
 	protected :
 	};

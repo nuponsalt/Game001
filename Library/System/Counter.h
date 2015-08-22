@@ -31,7 +31,7 @@ namespace KMT {
 		// 基点座標の取得関数
 		inline const CVector3 getPosition() const { return Position; }
 		
-		inline CSpriteSP getImage() const { return Image; }
+		inline SpriteSP getImage() const { return Image; }
 		/* 設定 */
 		// 座標
 		inline void setPosition(const CVector3& _position){ Position = _position; }
@@ -51,7 +51,7 @@ namespace KMT {
 		static const int MAX_NUM = 10;
 
 		// 数字画像
-		CSpriteSP Image;
+		SpriteSP Image;
 		// 描画する際の基点座標
 		CVector3 Position;
 		// 描画間隔

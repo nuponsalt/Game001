@@ -9,7 +9,7 @@
 
 namespace KMT {
 
-	enum FACE_GENERATE_TYPE
+	enum FaceGenerateType
 	{
 		// 面ごとに3頂点
 		TRI_VTX,
@@ -17,34 +17,34 @@ namespace KMT {
 		POLYNUM_VTX
 	};
 
-	class CGraphicalRegularPolygonPlane;
-	typedef std::shared_ptr<CGraphicalRegularPolygonPlane> CGraphicalRegularPolygonPlaneSP, CRegPolyPlaneSP;
+	class GraphicalRegularPolygonPlane;
+	typedef std::shared_ptr<GraphicalRegularPolygonPlane> GraphicalRegularPolygonPlaneSP, RegPolyPlaneSP;
 	
-	class CGraphicalRegularPolygonPlane : public CGraphicBehavior
+	class GraphicalRegularPolygonPlane : public GraphicBehavior
 	{
 	public :
 		// サイズ
-		CVector3 Size ;
+		CVector3 _size ;
 
 		// デストラクタ
-		~CGraphicalRegularPolygonPlane(){}
+		~GraphicalRegularPolygonPlane(){}
 		// 生成
-		// _radius : 横幅サイズ
-		// _facenum : 縦幅サイズ
-		// _type : 面生成タイプ
-		// _texture : テクスチャー
-		static CRegPolyPlaneSP Create(const int &_radius, const int &_facenum, const FACE_GENERATE_TYPE &_type, const CTextureSP &_texture = NULL);
+		// radius : 横幅サイズ
+		// faceNumber : 縦幅サイズ
+		// type : 面生成タイプ
+		// texture : テクスチャー
+		static RegPolyPlaneSP Create(const int &radius, const int &faceNumber, const FaceGenerateType &type, const CTextureSP &texture = NULL);
 	
 	private :
-		CVector3 TextureSize ;
+		CVector3 _textureSize ;
 
 		// コンストラクタ
-		CGraphicalRegularPolygonPlane();
+		GraphicalRegularPolygonPlane();
 		// 正多角形板ポリゴンの作成(正三角形以上)
-		// _radius : 半径
-		// _facenum : 面数(3で正三角形,数が増えるほど円に近くなる)
-		// _texture : テクスチャー
-		bool GenerateRegularPolygonBoard(const int &_radius, const int &_facenum, const FACE_GENERATE_TYPE &_type, const CTextureSP &_texture = NULL);
+		// radius : 半径
+		// faceNumber : 面数(3で正三角形,数が増えるほど円に近くなる)
+		// texture : テクスチャー
+		bool GenerateRegularPolygonBoard(const int &radius, const int &faceNumber, const FaceGenerateType &type, const CTextureSP &texture = NULL);
 	};
 
 }

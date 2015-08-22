@@ -9,7 +9,7 @@ namespace KMT {
 	void CCounter::LoadFromFile(const std::string& _path)
 	{
 		if(Image == NULL)
-			Image = CSprite::CreateFromFile(_path, DIV_X_NUM, DIV_Y_NUM);
+			Image = Sprite::CreateFromFile(_path, DIV_X_NUM, DIV_Y_NUM);
 	}
 
 	CCounterSP CCounter::CreateCounter()
