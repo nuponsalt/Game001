@@ -16,6 +16,7 @@
 
 #include "../../Extension.h"
 
+
 namespace KMT {
 
 	enum RenderState
@@ -27,46 +28,46 @@ namespace KMT {
 		RENDER_STATE_MAX
 	};
 
-	class CLayer;
-	typedef std::shared_ptr<CLayer> CLayerSP;
-	typedef std::weak_ptr<CLayer> CLayerWP;
+	class Layer;
+	typedef std::shared_ptr<Layer> LayerSP;
+	typedef std::weak_ptr<Layer> LayerWP;
 
-	class CLayer
+	class Layer
 	{
 	public :
 		// カメラ
-		CCameraSP Camera3D;
-		CCameraSP Camera2D;
+		CCameraSP _camera3D;
+		CCameraSP _camera2D;
 		// 板ポリモデル
-		CGPlaneSP board;
+		GPlaneSP _board;
 
 		// デストラクタ
-		~CLayer();
+		~Layer();
 
 		// 生成
-		static CLayerSP CreateLayer(size_t width, size_t height);
+		static LayerSP Create(size_t width, size_t height);
 		// レンダリングリストの中身をすべて描画
 		void Render();
 		// レンダリングリストにオブジェクトを追加する
-		// _obj 追加するオブジェクト
-		// _list どのレンダリングリストに追加するか
-		inline void AddObject(CGraphicBehaviorWP obj, RenderState list)
+		// object 追加するオブジェクト
+		// list どのレンダリングリストに追加するか
+		inline void Add(GraphicBehaviorWP object, RenderState list) 
 		{
-			render_lists[list]->push_back(obj);
+			_renderLists[list]->push_back(object);
 		}
 
 	private :
 		// レンダリングリスト(描画リストのハッシュマップ)
-		std::vector<std::list<CGraphicBehaviorWP>*> render_lists;
+		std::vector<std::list<GraphicBehaviorWP>*> _renderLists;
 		// レンダリング対象のテクスチャ
-		CTextureSP Texture;
+		CTextureSP _texture;
 		// 上記レンダリング対象のテクスチャのサーフェイス
-		LPDIRECT3DSURFACE9 pd3dTextureSurface;
+		LPDIRECT3DSURFACE9 _textureSurface;
 		// レンダリング対象のテクスチャ用深度バッファ
-		LPDIRECT3DSURFACE9 pd3dDepthSurface;
+		LPDIRECT3DSURFACE9 _depthSurface;
 
 		// コンストラクタ
-		CLayer();
+		Layer();
 
 	};
 

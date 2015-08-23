@@ -7,39 +7,39 @@
 
 namespace KMT {
 
-	CModelRenderer::CModelRenderer() { }
+	ModelRenderer::ModelRenderer() { }
 
-	void CModelRenderer::LoadFromX(const std::string &_path)
+	void ModelRenderer::LoadFromX(const std::string &path)
 	{
 		//-------------------------------------------------------------------------
 		// X ファイル とテクスチャのロード
-		Mesh = CMesh::CreateFromX(_path);
+		_mesh = CMesh::CreateFromX(path);
 		// マテリアル情報の取得
-		D3DXMATERIAL *p_materials = (D3DXMATERIAL*)(Mesh->getpd3dMaterialBuffer()->GetBufferPointer());
+		D3DXMATERIAL *materials = (D3DXMATERIAL*)(_mesh->getpd3dMaterialBuffer()->GetBufferPointer());
 		// テクスチャのロード
 		std::stringstream ss;
 		WCHAR wc_buff[255] = { 0 };
-		CTextureSP tex;
-		for(size_t i = 0; i < Mesh->getMaterialNum(); i++){
+		CTextureSP texture;
+		for(size_t i = 0; i < _mesh->getMaterialNum(); i++){
 			memset(wc_buff, 0, sizeof(WCHAR)*255);
 			ss.str("");
 			// 特定の部分でテクスチャが存在しない場合
-			if(NULL == p_materials[i].pTextureFilename){
-				tex = NULL;
-				Textures.push_back(tex);
-				D3DCOLORVALUE v = p_materials[i].MatD3D.Diffuse;
+			if(NULL == materials[i].pTextureFilename){
+				texture = NULL;
+				_textures.push_back(texture);
+				D3DCOLORVALUE value = materials[i].MatD3D.Diffuse;
 				// マテリアルから色情報を取得
-				D3DXVECTOR4 col = D3DXVECTOR4(v.r, v.g, v.b, v.a);
-				DiffuseColors.push_back(col);
+				D3DXVECTOR4 color = D3DXVECTOR4(value.r, value.g, value.b, value.a);
+				_diffuseColors.push_back(color);
 				continue;
 			}
 			//
-			DiffuseColors.push_back(D3DXVECTOR4(0,0,0,0));
+			_diffuseColors.push_back(D3DXVECTOR4(0,0,0,0));
 			// テクスチャのパスを自動的に生成
 			//------------------------------------------------
 
 			// ファイルパスの前部分を格納する
-			std::string b_path;
+			std::string frontPath;
 			// Xファイルのパスから必要部分だけ抜き出す
 
 			// "/" "\\"を検索しパスの区切りの最後の部分を検索する
@@ -47,69 +47,69 @@ namespace KMT {
 			// Xファイルのあるフォルダのパスまでを抜き取る
 
 			// パスの最後の"/"を検索
-			std::size_t index = _path.find_last_of("/");
+			std::size_t index = path.find_last_of("/");
 			if(index != std::string::npos)
 			{
-				b_path = _path.substr(0, index + 1);
+				frontPath = path.substr(0, index + 1);
 			}
 			// 該当なしなら"\\"で再検索
 			else
 			{
-				index = _path.find_last_of("\\");
+				index = path.find_last_of("\\");
 				if(index != std::string::npos)
 				{
 					// パスの区切りが"\\"のときは"\\"の部分をはずしかわりに"/"をつける
-					b_path = _path.substr(0, index);
-					b_path += "/";
+					frontPath = path.substr(0, index);
+					frontPath += "/";
 				}
 			}
 
 			// Xファイルに記述されているテクスチャのパスの最後の部分だけを抜き出し前部分に追加
 			//----------------------------------------------------
-			std::string temp_str;
-			temp_str = p_materials[i].pTextureFilename;
+			std::string temp;
+			temp = materials[i].pTextureFilename;
 			// パスの最後の"/"を検索
-			index = temp_str.find_last_of("/");
+			index = temp.find_last_of("/");
 			if(index != std::string::npos)
 			{
 				std::string str1;
-				str1 = temp_str.substr(index + 1);
-				b_path += str1;
+				str1 = temp.substr(index + 1);
+				frontPath += str1;
 			}
 			// 該当なしなら"\\"で再検索
 			else{
-				index = temp_str.find_last_of("\\");
+				index = temp.find_last_of("\\");
 				if(index != std::string::npos)
 				{
 					std::string str1;
-					str1 = temp_str.substr(index + 1);
-					b_path += str1;
+					str1 = temp.substr(index + 1);
+					frontPath += str1;
 				}
 				// 該当なしならそのまま追加
 				else{
-					b_path += temp_str;
+					frontPath += temp;
 				}
 			}
 			// 独自テクスチャクラスとして生成
-			tex = CTexture::CreateFromFile(b_path, D3DX_DEFAULT);
+			texture = CTexture::CreateFromFile(frontPath, D3DX_DEFAULT);
 
-			Textures.push_back(tex);
+			_textures.push_back(texture);
 		}
 	}
 
-	CGRendererSP CModelRenderer::CreateFromX(const std::string &_path, const ShaderSP &_shader)
+	GRendererSP ModelRenderer::CreateFromX(const std::string &path, const ShaderSP &shader)
 	{
-		CGRendererSP pgraph(new CModelRenderer());
+		GRendererSP object(new ModelRenderer());
 		// シェーダー設定
-		pgraph->setShader(_shader);
-		pgraph->LoadFromX(_path);
+		object->SetShader(shader);
+		object->LoadFromX(path);
 
-		return CGRendererSP(pgraph);
+		return GRendererSP(object);
 	}
 
-	void CModelRenderer::Render(const CCamera* camera)
+	void ModelRenderer::Render(const CCamera* camera)
 	{
-		if(!isRender)
+		if(!_renders)
 			return;
 		// ワールド行列設定
 		CMatrix SclMtx, RotMtx, PosMtx, WldMtx, WVPMtx;
@@ -133,7 +133,7 @@ namespace KMT {
 		}
 		// 位置
 		D3DXMatrixTranslation(&PosMtx, Position.x, Position.y, Position.z);
-		CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_CULLMODE, d3dCull);
+		CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_CULLMODE, _cullingState);
 		// デバッグ用
 		//CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 		// シェーダを使用する場合カメラのビュー行列(0)、プロジェクション行列(1)をワールド行列に合成
@@ -151,42 +151,42 @@ namespace KMT {
 		EyePos.Transform(CamMtx);
 		D3DXVec4Normalize((D3DXVECTOR4*)&EyePos, (D3DXVECTOR4*)&EyePos);
 		// シェーダ設定
-		Shader->SetTechnique();
+		_shader->SetTechnique();
 		// シェーダにワールド * ビュー * プロジェクション行列を渡す
-		Shader->SetWVPMatrix(WVPMtx);
+		_shader->SetWVPMatrix(WVPMtx);
 		// シェーダー特有の値の設定
-		Shader->ApplyEffect(RotMtx, EyePos);
+		_shader->ApplyEffect(RotMtx, EyePos);
 		
 		HRESULT hr;
 		// 3D モデルのパーツ分ループして描画
-		for(size_t i = 0 ; i < Mesh->getMaterialNum(); i++)
+		for(size_t i = 0 ; i < _mesh->getMaterialNum(); i++)
 		{
 			// テクスチャが存在しない場合のカラー
-			D3DXVECTOR4 vec4 = D3DXVECTOR4(1.0,1.0,1.0,1.0);
+			D3DXVECTOR4 color = D3DXVECTOR4(1.0,1.0,1.0,1.0);
 			// 格パーツに対応するテクスチャを設定
 			// シェーダにテクスチャを渡す
-			if(NULL != Textures[i])
+			if(NULL != _textures[i])
 			{
-				LPDIRECT3DTEXTURE9 p_tex = Textures[i]->getpd3dTexture();
+				LPDIRECT3DTEXTURE9 texture = _textures[i]->getpd3dTexture();
 				// シェーダにカラーを渡す
-				Shader->SetColor(vColorRGBA);
-				Shader->SetTexture(p_tex);
+				_shader->SetColor(vColorRGBA);
+				_shader->SetTexture(texture);
 			}else
-				Shader->SetColor(vec4);
+				_shader->SetColor(color);
 			// シェーダの使用開始
-			Shader->BeginShader();
+			_shader->BeginShader();
 			// シェーダのパス設定
-			Shader->BeginPass(isAddBlend);
+			_shader->BeginPass(isAddBlend);
 			// パーツの描画	
 			if(SUCCEEDED(CGraphicsManager::pd3dDevice->BeginScene()))
 			{
-				Mesh->getpd3dMesh()->DrawSubset(i); 
+				_mesh->getpd3dMesh()->DrawSubset(i); 
 				V(CGraphicsManager::pd3dDevice->EndScene());
 			}
 			// パス終了
-			Shader->EndPass();
+			_shader->EndPass();
 			// シェーダ終了
-			Shader->EndShader();
+			_shader->EndShader();
 		}
 	}
 	

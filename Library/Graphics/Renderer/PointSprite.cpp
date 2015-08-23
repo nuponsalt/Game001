@@ -10,65 +10,65 @@ namespace KMT {
 
 #define FRAND()	((float)rand() / 32768.0f)
 
-	CPointSprite::CPointSprite(const std::string& path, const WORD numPoint, const float size) : pointNumber(numPoint), pointSize(size)
+	PointSprite::PointSprite(const std::string& path, const WORD pointNumber, const float size) : _pointNumber(pointNumber), _pointSize(size)
 	{
-		Path = path;
+		_path = path;
 
-		d3dCull = D3DCULL_NONE;
+		_cullingState = D3DCULL_NONE;
 
 		// 頂点バッファの作成
 		if(FAILED(CGraphicsManager::pd3dDevice->CreateVertexBuffer(
-			sizeof(POINTSPRITE) * pointNumber, 
+			sizeof(POINTSPRITE) * _pointNumber, 
 			D3DUSAGE_NPATCHES | D3DUSAGE_POINTS | D3DUSAGE_DYNAMIC, 
 			POINTSPRITE::FVF,
 			D3DPOOL_DEFAULT,
-			&pd3dVertexBuffer,
+			&_vertexBuffer,
 			NULL
 			)))
 			MessageBox(NULL, TEXT("POINTSPRITE's VertexBuffer Create Err"), NULL, MB_OK | MB_ICONSTOP);
 
 		// 頂点情報の初期化
-		pPOINTSPRITE pPS;
-		if(FAILED(pd3dVertexBuffer->Lock(sizeof(POINTSPRITE), sizeof(POINTSPRITE) * pointNumber, (void**)&pPS, D3DLOCK_DISCARD)))
+		pPOINTSPRITE pointSprite;
+		if(FAILED(_vertexBuffer->Lock(sizeof(POINTSPRITE), sizeof(POINTSPRITE) * _pointNumber, (void**)&pointSprite, D3DLOCK_DISCARD)))
 			MessageBox(NULL, TEXT("POINTSPRITE's VertexBuffer Lock Err"), NULL, MB_OK | MB_ICONSTOP);
 
-		for(int i = 0; i < pointNumber - 1; i++)
+		for(int i = 0; i < _pointNumber - 1; i++)
 		{
-			pPS[i].Position = CVector3(0, 0, 0);
-			pPS[i].PSize = size;
-			pPS[i].Color = 0;
+			pointSprite[i]._position = CVector3(0, 0, 0);
+			pointSprite[i]._size = size;
+			pointSprite[i]._color = 0;
 		}
 
-		pd3dVertexBuffer->Unlock();
+		_vertexBuffer->Unlock();
 
 		// エミッターデータの生成
-		EmitterData = new CEmitter();
+		_emitterData = new Emitter();
 
 		// テクスチャのロード
-		Texture = CTexture::CreateFromFile(path, D3DX_FILTER_NONE);
+		_texture = CTexture::CreateFromFile(path, D3DX_FILTER_NONE);
 		// シェーダーを設定
-		Shader = ShaderParticle::Create();
+		_shader = ShaderParticle::Create();
 	}
 
-	CPointSprite::~CPointSprite()
+	PointSprite::~PointSprite()
 	{
-		SAFE_RELEASE(pd3dVertexBuffer);
-		Texture.reset();
+		SAFE_RELEASE(_vertexBuffer);
+		_texture.reset();
 
 		// エミッターデータの解放
-		SAFE_DELETE(EmitterData);
+		SAFE_DELETE(_emitterData);
 		
 	}
 
-	CPointSpriteSP CPointSprite::CreatePointSprite(const std::string& path, const WORD numPoint, const float size)
+	PointSpriteSP PointSprite::Create(const std::string& path, const WORD pointNumber, const float size)
 	{
-		return CPointSpriteSP(new CPointSprite(path, numPoint, size));
+		return PointSpriteSP(new PointSprite(path, pointNumber, size));
 	}
 
-	void CPointSprite::Render(const CCamera* camera)
+	void PointSprite::Render(const CCamera* camera)
 	{
 		// 描画するか否か
-		if(!isRender)
+		if(!_renders)
 			return;
 
 		// ワールド行列設定
@@ -108,23 +108,23 @@ namespace KMT {
 		EyePos.Transform(CamMtx);
 		D3DXVec4Normalize((D3DXVECTOR4*)&EyePos, (D3DXVECTOR4*)&EyePos);
 		// シェーダー設定
-		Shader->SetTechnique();
+		_shader->SetTechnique();
 		// シェーダーにワールド*ビュー*プロジェクション行列に渡す
-		Shader->SetWVPMatrix(WVPMtx);
+		_shader->SetWVPMatrix(WVPMtx);
 		// シェーダー特有の値渡し
-		Shader->ApplyEffect(RotMtx, EyePos);
+		_shader->ApplyEffect(RotMtx, EyePos);
 
 		HRESULT hr;
 		// 描画処理
 		// シェーダーにカラーを渡す
-		Shader->SetColor(vColorRGBA);
+		_shader->SetColor(vColorRGBA);
 		// テクスチャを渡す
-		if(NULL != Texture)
-			Shader->SetTexture(Texture->getpd3dTexture());
+		if(NULL != _texture)
+			_shader->SetTexture(_texture->getpd3dTexture());
 		// シェーダーの使用開始
-		Shader->BeginShader();
+		_shader->BeginShader();
 		// シェーダーのパス開始
-		Shader->BeginPass(isAddBlend);
+		_shader->BeginPass(isAddBlend);
 		// パーティクルの使用を有効にする
 		CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_POINTSPRITEENABLE, TRUE);
 		CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_POINTSCALEENABLE, TRUE);
@@ -134,22 +134,22 @@ namespace KMT {
 		CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
 		CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 		// 頂点の設定
-		CGraphicsManager::pd3dDevice->SetStreamSource(0, pd3dVertexBuffer, 0, sizeof(POINTSPRITE));
+		CGraphicsManager::pd3dDevice->SetStreamSource(0, _vertexBuffer, 0, sizeof(POINTSPRITE));
 		CGraphicsManager::pd3dDevice->SetFVF(POINTSPRITE::FVF);
 		// カリングを設定
-		CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_CULLMODE, d3dCull);
+		CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_CULLMODE, _cullingState);
 
 		if(SUCCEEDED(CGraphicsManager::pd3dDevice->BeginScene()))
 		{
-			CGraphicsManager::pd3dDevice->DrawPrimitive(D3DPT_POINTLIST, 0, pointNumber);
+			CGraphicsManager::pd3dDevice->DrawPrimitive(D3DPT_POINTLIST, 0, _pointNumber);
 			V(CGraphicsManager::pd3dDevice->EndScene());
 		}
 		// パス終了
-		Shader->EndPass();
+		_shader->EndPass();
 		// Zバッファ設定のリセット
 		CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 		// シェーダー終了
-		Shader->EndShader();
+		_shader->EndShader();
 	}
 
 }

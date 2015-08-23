@@ -13,27 +13,27 @@ namespace KMT {
 
 	class CCamera;
 
-	class CModelRenderer;
-	typedef std::shared_ptr<CModelRenderer> CModelRendererSP, CGRendererSP;
-	typedef std::weak_ptr<CModelRenderer> CModelRendererWP, CGRendererWP;
+	class ModelRenderer;
+	typedef std::shared_ptr<ModelRenderer> ModelRendererSP, GRendererSP;
+	typedef std::weak_ptr<ModelRenderer> ModelRendererWP, GRendererWP;
 
-	typedef class CModelRenderer : public CGraphicBehavior
+	typedef class ModelRenderer : public GraphicBehavior
 	{
 	public :
 		// コンストラクタ
-		CModelRenderer();
+		ModelRenderer();
 		// デストラクタ
-		virtual ~CModelRenderer(){ Textures.clear(); }
+		virtual ~ModelRenderer(){ _textures.clear(); }
 		
 		// 生成
-		static CModelRendererSP CreateFromX(const std::string &_path, const ShaderSP &_shader);
+		static ModelRendererSP CreateFromX(const std::string &path, const ShaderSP &shader);
 		// 描画
 		virtual void Render(const CCamera* camera);		
 
 	private :		
 		// Xファイル読込
-		void LoadFromX(const std::string &_path);
+		void LoadFromX(const std::string &path);
 
-	}CGRenderer;
+	}GRenderer;
 
 }

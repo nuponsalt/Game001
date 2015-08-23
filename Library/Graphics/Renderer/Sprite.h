@@ -13,31 +13,31 @@
 
 namespace KMT {
 
-	class CSprite ;
-	typedef std::shared_ptr<CSprite> CSpriteSP ;
-	typedef std::weak_ptr<CSprite> CSpriteWP ;
+	class Sprite ;
+	typedef std::shared_ptr<Sprite> SpriteSP ;
+	typedef std::weak_ptr<Sprite> SpriteWP ;
 
-	class CSprite : public CGraphicBehavior, public CAnimation
+	class Sprite : public GraphicBehavior, public CAnimation
 	{
 	public :
 		// 画像のどの範囲を描画するか
 		RECT _rect;
 		
 		// デストラクタ
-		~CSprite();
+		~Sprite();
 
 		// テクスチャの設定
 		void SetTexture(const CTextureSP &texture);
 		//* 生成 *//
-		static CSpriteSP Create();
+		static SpriteSP Create();
 		// 一枚テクスチャ
-		// _path : テクスチャーのファイルパス
-		static CSpriteSP CreateFromFile(const std::string &path);
+		// path : テクスチャーのファイルパス
+		static SpriteSP CreateFromFile(const std::string &path);
 		// アニメーションテクスチャ
 		// path : テクスチャーのファイルパス
 		// width : 横分割
 		// height : 縦分割
-		static CSpriteSP CreateFromFile(const std::string& path, const int &width, const int &height);
+		static SpriteSP CreateFromFile(const std::string& path, const int &width, const int &height);
 		//* 描画 *//
 		void Render(const CCamera* camera = NULL);
 		
@@ -48,7 +48,7 @@ namespace KMT {
 		CVector2 _turnVector;
 		
 		// コンストラクタ
-		CSprite();
+		Sprite();
 
 	};
 
