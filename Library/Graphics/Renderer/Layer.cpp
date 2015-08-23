@@ -109,8 +109,8 @@ namespace KMT {
 		//std::unordered_map<size_t, std::list<GraphicBehaviorWP>*>::iterator mapIterator;
 
 		// 2Dソート
-		_renderLists[RENDER_BACK2D]->sort(GraphicBehavior::Compaire2D);
-		_renderLists[RENDER_FRONT2D]->sort(GraphicBehavior::Compaire2D);
+		_renderLists[RENDER_BACK2D]->sort(GraphicBehavior::Compare2D);
+		_renderLists[RENDER_FRONT2D]->sort(GraphicBehavior::Compare2D);
 
 		// リストアクセス用イテレータ
 		std::list<GraphicBehaviorWP>::iterator listIterator;
@@ -139,8 +139,8 @@ namespace KMT {
 		}
 
 		// ソート
-		_renderLists[RENDER_NORMAL]->sort(GraphicBehavior::Compaire);
-		_renderLists[RENDER_ALPHA]->sort(GraphicBehavior::CompaireBack);
+		_renderLists[RENDER_NORMAL]->sort(GraphicBehavior::Compare);
+		_renderLists[RENDER_ALPHA]->sort(GraphicBehavior::CompareBack);
 		//-------------------------------------------------------
 
 		// レンダリングーリストの中身をすべて描画

@@ -42,9 +42,9 @@ namespace KMT {
 		// テクスチャベクター配列
 		inline std::vector<CTextureSP> GetTextures() { return _textures; }
 		// テクスチャベクター配列(直接インデックス指定)
-		inline CTextureSP GetTexturesArray(size_t nAry) { return _textures[nAry]; }
+		inline CTextureSP GetTexturesElement(size_t index) { return _textures[index]; }
 		// 拡散反射色(ディフューズ色)
-		inline CVector4 GetDiffuseColors(size_t nAry) { return _diffuseColors[nAry]; }
+		inline CVector4 GetDiffuseColors(size_t index) { return _diffuseColors[index]; }
 
 		//* 設定 *//
 		// シェーダー
@@ -55,15 +55,15 @@ namespace KMT {
 		inline void SetTexture(const CTextureSP& texture) { _textures.push_back(texture); }
 		
 		//* std::listのsort使用関数 *
-		static inline bool Compaire(const GraphicBehaviorWP riLeft, const GraphicBehaviorWP riRight)
+		static inline bool Compare(const GraphicBehaviorWP riLeft, const GraphicBehaviorWP riRight)
 		{
 			return (riRight.lock()->_cameraDistance < riLeft.lock()->_cameraDistance);
 		}
-		static inline bool CompaireBack(const GraphicBehaviorWP riLeft, const GraphicBehaviorWP riRight)
+		static inline bool CompareBack(const GraphicBehaviorWP riLeft, const GraphicBehaviorWP riRight)
 		{
 			return (riRight.lock()->_cameraDistance < riLeft.lock()->_cameraDistance);
 		}
-		static inline bool Compaire2D(const GraphicBehaviorWP riLeft, const GraphicBehaviorWP riRight)
+		static inline bool Compare2D(const GraphicBehaviorWP riLeft, const GraphicBehaviorWP riRight)
 		{
 			return (riRight.lock()->Position.z > riLeft.lock()->Position.z);
 		}
