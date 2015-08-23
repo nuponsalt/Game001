@@ -17,53 +17,53 @@ namespace KMT {
 	class Shader;
 	typedef std::shared_ptr<Shader> ShaderSP;
 
-	class CGraphicBehavior;
-	typedef std::shared_ptr<CGraphicBehavior> CGraphicBehaviorSP;
-	typedef std::weak_ptr<CGraphicBehavior> CGraphicBehaviorWP;
+	class GraphicBehavior;
+	typedef std::shared_ptr<GraphicBehavior> GraphicBehaviorSP;
+	typedef std::weak_ptr<GraphicBehavior> GraphicBehaviorWP;
 
-	class CGraphicBehavior : public CTransformation, public CMaterial
+	class GraphicBehavior : public CTransformation, public CMaterial
 	{
 	public :
 		// ソート用の値
-		float CameraDistance;
+		float _cameraDistance;
 		// 描画フラグ
-		bool isRender;
+		bool _renders;
 		// ビルボードフラグ
-		bool isBillBoard;
+		bool _isBillBoard;
 
 		// コンストラクタ
-		CGraphicBehavior() : CameraDistance(0), isRender(true), isBillBoard(false), d3dCull(D3DCULL_CCW){ }
+		GraphicBehavior() : _cameraDistance(0), _renders(true), _isBillBoard(false), _cullingState(D3DCULL_CCW){ }
 		// デストラクタ
-		virtual ~CGraphicBehavior() { }
+		virtual ~GraphicBehavior() { }
 
 		//* 取得 *//
 		// メッシュ
-		inline CMeshSP getpMesh() { return Mesh; }
+		inline CMeshSP GetMesh() { return _mesh; }
 		// テクスチャベクター配列
-		inline std::vector<CTextureSP> getptextures() { return Textures; }
+		inline std::vector<CTextureSP> GetTextures() { return _textures; }
 		// テクスチャベクター配列(直接インデックス指定)
-		inline CTextureSP getptexturesArray(size_t nAry) { return Textures[nAry]; }
+		inline CTextureSP GetTexturesElement(size_t index) { return _textures[index]; }
 		// 拡散反射色(ディフューズ色)
-		inline CVector4 getDiffuseColors(size_t nAry) { return DiffuseColors[nAry]; }
+		inline CVector4 GetDiffuseColors(size_t index) { return _diffuseColors[index]; }
 
 		//* 設定 *//
 		// シェーダー
-		inline void setShader(ShaderSP sdr) { Shader = sdr; }
+		inline void SetShader(ShaderSP shader) { _shader = shader; }
 		// カリングモード
-		inline void setd3dCull(const _D3DCULL _d3dCull) { d3dCull = _d3dCull; }
+		inline void SetCullingState(const _D3DCULL cullingState) { _cullingState = cullingState; }
 		// テクスチャ
-		inline void SetTexture(const CTextureSP& _ptex) { Textures.push_back(_ptex); }
+		inline void SetTexture(const CTextureSP& texture) { _textures.push_back(texture); }
 		
-		//* std::listのsort使用関数 *//
-		static inline bool comp(const CGraphicBehaviorWP riLeft, const CGraphicBehaviorWP riRight)
+		//* std::listのsort使用関数 *
+		static inline bool Compare(const GraphicBehaviorWP riLeft, const GraphicBehaviorWP riRight)
 		{
-			return (riRight.lock()->CameraDistance < riLeft.lock()->CameraDistance);
+			return (riRight.lock()->_cameraDistance < riLeft.lock()->_cameraDistance);
 		}
-		static inline bool compBack(const CGraphicBehaviorWP riLeft, const CGraphicBehaviorWP riRight)
+		static inline bool CompareBack(const GraphicBehaviorWP riLeft, const GraphicBehaviorWP riRight)
 		{
-			return (riRight.lock()->CameraDistance < riLeft.lock()->CameraDistance);
+			return (riRight.lock()->_cameraDistance < riLeft.lock()->_cameraDistance);
 		}
-		static inline bool comp2D(const CGraphicBehaviorWP riLeft, const CGraphicBehaviorWP riRight)
+		static inline bool Compare2D(const GraphicBehaviorWP riLeft, const GraphicBehaviorWP riRight)
 		{
 			return (riRight.lock()->Position.z > riLeft.lock()->Position.z);
 		}
@@ -73,18 +73,18 @@ namespace KMT {
 	private :
 	protected :
 		// ファイルパス
-		std::string Path;
+		std::string _path;
 		// メッシュ
-		CMeshSP Mesh;
+		CMeshSP _mesh;
 		// シェーダー
-		ShaderSP Shader;
+		ShaderSP _shader;
 		// 描画時のカリングモード保存変数
-		_D3DCULL d3dCull;
+		_D3DCULL _cullingState;
 		
 		// テクスチャー配列(std::vector)
-		std::vector<CTextureSP> Textures;
+		std::vector<CTextureSP> _textures;
 		// 頂点カラー配列(std::vector)
-		std::vector<CVector4> DiffuseColors;
+		std::vector<CVector4> _diffuseColors;
 
 	};
 

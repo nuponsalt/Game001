@@ -4,45 +4,45 @@
 
 namespace KMT {
 
-	CSprite::CSprite() : _turnVector(1, 1)
+	Sprite::Sprite() : _turnVector(1, 1)
 	{
 		// スプライトの生成
 		D3DXCreateSprite(CGraphicsManager::pd3dDevice, &_sprite) ;
 	}
 
-	CSprite::~CSprite()
+	Sprite::~Sprite()
 	{
 		Texture.reset() ;
 		SAFE_RELEASE( _sprite ) ;
 	}
 
-	void CSprite::SetTexture(const CTextureSP &texture) 
+	void Sprite::SetTexture(const CTextureSP &texture) 
 	{
 		Texture = texture ;
 	}
 
-	CSpriteSP CSprite::CreateFromFile(const std::string &path)
+	SpriteSP Sprite::CreateFromFile(const std::string &path)
 	{
-		CSpriteSP obj(new CSprite()) ;
+		SpriteSP object(new Sprite()) ;
 		// テクスチャを設定
-		obj->LoadTextureAndAnimation(path) ;
+		object->LoadTextureAndAnimation(path) ;
 
-		return obj ;
+		return object ;
 	}
 
-	CSpriteSP CSprite::CreateFromFile(const std::string &path, const int &width, const int &height) 
+	SpriteSP Sprite::CreateFromFile(const std::string &path, const int &width, const int &height) 
 	{
-		CSpriteSP obj(new CSprite()) ;
+		SpriteSP object(new Sprite()) ;
 		// テクスチャの設定
-		obj->LoadTextureAndAnimation(path, width, height) ;
+		object->LoadTextureAndAnimation(path, width, height) ;
 
-		return obj ;
+		return object ;
 	}
 
-	void CSprite::Render(const CCamera* camera)
+	void Sprite::Render(const CCamera* camera)
 	{
 		// 描画するか
-		if(!isRender)
+		if(!_renders)
 			return;
 		//---------------------------------------------------------------------------------
 		//

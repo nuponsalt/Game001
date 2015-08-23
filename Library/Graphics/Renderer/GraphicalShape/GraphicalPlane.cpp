@@ -9,174 +9,174 @@
 #include <sstream>
 
 using namespace KMT;
-static void getBillBoardRotation(CVector3* _BillPos, CVector3* _TargetPos, CMatrix* _Rot )
+static void GetBillBoardRotation(CVector3* billBoardPosition, CVector3* targetPosition, CMatrix* rotation )
 {
-	D3DXMatrixIdentity((D3DXMATRIX*)_Rot);
-	D3DXMatrixLookAtLH(_Rot, (D3DXVECTOR3*)_TargetPos, (D3DXVECTOR3*)_BillPos, &D3DXVECTOR3(0, 1, 0));
+	D3DXMatrixIdentity((D3DXMATRIX*)rotation);
+	D3DXMatrixLookAtLH(rotation, (D3DXVECTOR3*)targetPosition, (D3DXVECTOR3*)billBoardPosition, &D3DXVECTOR3(0, 1, 0));
 
-	_Rot->_41 = 0;
-	_Rot->_42 = 0;
-	_Rot->_43 = 0;
+	rotation->_41 = 0;
+	rotation->_42 = 0;
+	rotation->_43 = 0;
 
-	D3DXMatrixInverse(_Rot, NULL, _Rot);
+	D3DXMatrixInverse(rotation, NULL, rotation);
 }
 
 namespace KMT
 {
 	// static parameters
-	size_t CGraphicalPlane::CreateCount = 0;
+	size_t GraphicalPlane::_createCount = 0;
 
-	CGraphicalPlane::CGraphicalPlane() : TextureSize(1.0f, 1.0f, 0.0f), PreviousNumber(0)
+	GraphicalPlane::GraphicalPlane() : _textureSize(1.0f, 1.0f, 0.0f), _previousNumber(0)
 	{}
 
-	bool CGraphicalPlane::GenerateBoard(const std::string& _path, const int &_width, const int &_height, const CTextureSP &_texture)
+	bool GraphicalPlane::GenerateBoard(const std::string& path, const int &width, const int &height, const CTextureSP &texture)
 	{
 		// キーネーム設定
 		std::stringstream ss("");
 		// ファイルパス→生成番号→幅高さの順で追加
-		ss << _path << ++CreateCount << _width << _height;
+		ss << path << ++_createCount << width << height;
 		std::string name = ss.str();
 		// メッシュインスタンスの生成
-		Mesh = CMesh::Create(name);
+		_mesh = CMesh::Create(name);
 		// サイズを記録
-		Size.x = (float)_width ;
-		Size.y = (float)_height ;
-		//Size.z = 0 ;
+		_size.x = (float)width ;
+		_size.y = (float)height ;
+		//_size.z = 0 ;
 		// テクスチャ指定がある場合そのサイズを取得
-		if(_texture != NULL)
+		if(texture != NULL)
 		{
-			while(UINT(TextureSize.x) < Texture->getd3dImageInfo().Width)
+			while(UINT(_textureSize.x) < Texture->getd3dImageInfo().Width)
 			{
-				TextureSize.x *= 2;
+				_textureSize.x *= 2;
 			}
-			while(UINT(TextureSize.y) < Texture->getd3dImageInfo().Height)
+			while(UINT(_textureSize.y) < Texture->getd3dImageInfo().Height)
 			{
-				TextureSize.y *= 2;
+				_textureSize.y *= 2;
 			}
 		}
 		// シェーダー設定
-		Shader = ShaderNormal::Create();
+		_shader = ShaderNormal::Create();
 		// メッシュを生成する
-		LPD3DXMESH _mesh;
-		if (FAILED(D3DXCreateMeshFVF(2, 4, D3DXMESH_MANAGED, CVertex::FVF, CGraphicsManager::pd3dDevice, &_mesh)))
+		LPD3DXMESH mesh;
+		if (FAILED(D3DXCreateMeshFVF(2, 4, D3DXMESH_MANAGED, CVertex::FVF, CGraphicsManager::pd3dDevice, &mesh)))
 			return false;
 
 		//頂点データの作成
-		CVertex* pV;
-		_mesh->LockVertexBuffer(0, (void**)&pV);
+		CVertex* vertex;
+		mesh->LockVertexBuffer(0, (void**)&vertex);
 		for (int y = 0 ; y < 2 ; y++) {
 			for (int x = 0 ; x < 2 ; x++) {
-				float x1 = (float)(x * _width - ((float)_width / 2));
-				float y1 = (float)(y * _height - ((float)_height / 2));
-				int idx = y * 2 + x;
-				pV[idx].Position.x = x1;
-				pV[idx].Position.y = y1;
-				pV[idx].Position.z = 0;
-				pV[idx].Normal.x = 0;
-				pV[idx].Normal.y = 0;
-				pV[idx].Normal.z = 1;
-				if( _texture == NULL )
+				float x1 = (float)(x * width - ((float)width / 2));
+				float y1 = (float)(y * height - ((float)height / 2));
+				int index = y * 2 + x;
+				vertex[index].Position.x = x1;
+				vertex[index].Position.y = y1;
+				vertex[index].Position.z = 0;
+				vertex[index].Normal.x = 0;
+				vertex[index].Normal.y = 0;
+				vertex[index].Normal.z = 1;
+				if( texture == NULL )
 				{
-					pV[idx].UV.x = (float)x * 1.0f;
-					pV[idx].UV.y = 1.0f - ((float)y * 1.0f);
+					vertex[index].UV.x = (float)x * 1.0f;
+					vertex[index].UV.y = 1.0f - ((float)y * 1.0f);
 				}
 			}
 		}
-		if(_texture)
+		if(texture)
 		{
-			pV[0].UV.x = (float)Rects[Number].left / Texture->getd3dImageInfo().Width;
-			pV[0].UV.y = (float)Rects[Number].bottom / Texture->getd3dImageInfo().Height;
-			pV[1].UV.x = (float)Rects[Number].right / Texture->getd3dImageInfo().Width;
-			pV[1].UV.y = (float)Rects[Number].bottom / Texture->getd3dImageInfo().Height;
-			pV[2].UV.x = (float)Rects[Number].left / Texture->getd3dImageInfo().Width;
-			pV[2].UV.y = (float)Rects[Number].top / Texture->getd3dImageInfo().Height;
-			pV[3].UV.x = (float)Rects[Number].right / Texture->getd3dImageInfo().Width;
-			pV[3].UV.y = (float)Rects[Number].top / Texture->getd3dImageInfo().Height;
+			vertex[0].UV.x = (float)Rects[Number].left / Texture->getd3dImageInfo().Width;
+			vertex[0].UV.y = (float)Rects[Number].bottom / Texture->getd3dImageInfo().Height;
+			vertex[1].UV.x = (float)Rects[Number].right / Texture->getd3dImageInfo().Width;
+			vertex[1].UV.y = (float)Rects[Number].bottom / Texture->getd3dImageInfo().Height;
+			vertex[2].UV.x = (float)Rects[Number].left / Texture->getd3dImageInfo().Width;
+			vertex[2].UV.y = (float)Rects[Number].top / Texture->getd3dImageInfo().Height;
+			vertex[3].UV.x = (float)Rects[Number].right / Texture->getd3dImageInfo().Width;
+			vertex[3].UV.y = (float)Rects[Number].top / Texture->getd3dImageInfo().Height;
 		}
-		_mesh->UnlockVertexBuffer();
+		mesh->UnlockVertexBuffer();
 		//インデックスデータの作成
-		WORD *pIndex;
-		_mesh->LockIndexBuffer(0, (void **)&pIndex);
-		pIndex[0] = 0;
-		pIndex[1] = 2;
-		pIndex[2] = 1;
-		pIndex[3] = 1;
-		pIndex[4] = 2;
-		pIndex[5] = 3;
-		_mesh->UnlockIndexBuffer();
-	    Mesh->setpd3dMesh(_mesh);
+		WORD *index;
+		mesh->LockIndexBuffer(0, (void **)&index);
+		index[0] = 0;
+		index[1] = 2;
+		index[2] = 1;
+		index[3] = 1;
+		index[4] = 2;
+		index[5] = 3;
+		mesh->UnlockIndexBuffer();
+	    _mesh->setpd3dMesh(mesh);
 
 		return true;
 	}
 
-	CGraphicalPlaneSP CGraphicalPlane::Create(const int &_width, const int &_height, const CTextureSP &_texture)
+	GraphicalPlaneSP GraphicalPlane::Create(const int &width, const int &height, const CTextureSP &texture)
 	{
-		CGraphicalPlane *_obj = new CGraphicalPlane();
-		++CreateCount;
+		GraphicalPlane *object = new GraphicalPlane();
+		++_createCount;
 		std::stringstream ss;
 		ss.str("");
-		ss << CreateCount;
+		ss << _createCount;
 		std::string str = ss.str().c_str();
 
-		_obj->GenerateBoard(str, _width, _height, _texture);
-		return CGraphicalPlaneSP(_obj);
+		object->GenerateBoard(str, width, height, texture);
+		return GraphicalPlaneSP(object);
 	}
 
-	void CGraphicalPlane::LoadTexture(const std::string &_path, const int &x_num, const int &y_num, const int &size_x, const int &size_y)
+	void GraphicalPlane::LoadTexture(const std::string &path, const int &divisionX, const int &divisionY, const int &sizeX, const int &sizeY)
 	{
 		// リソースからテクスチャを生成
-		LoadTextureAndAnimation(_path, x_num, y_num, D3DX_DEFAULT);
+		LoadTextureAndAnimation(path, divisionX, divisionY, D3DX_DEFAULT);
 		// イメージサイズに合わせて板ポリゴンを生成
-		(size_x == 0 && size_y == 0) ? GenerateBoard(_path, (int)ImageSize.x, (int)ImageSize.y, Texture) : GenerateBoard(_path, size_x, size_y, Texture);
+		(sizeX == 0 && sizeY == 0) ? GenerateBoard(path, (int)ImageSize.x, (int)ImageSize.y, Texture) : GenerateBoard(_path, sizeX, sizeY, Texture);
 		// テクスチャーを挿入
 		SetTexture(Texture);
 	}
 
-	void CGraphicalPlane::LoadTexture (const CTextureSP& _tex,const int& x_num, const int &y_num, const int &size_x, const int &size_y)
+	void GraphicalPlane::LoadTexture (const CTextureSP& texture,const int& divisionX, const int &divisionY, const int &sizeX, const int &sizeY)
 	{
-		Texture = _tex;
-		(size_x == 0 && size_y == 0) ? GenerateBoard(_tex->getFilePath(), (int)ImageSize.x, (int)ImageSize.y, Texture) : GenerateBoard(_tex->getFilePath(), size_x, size_y, Texture);
+		Texture = texture;
+		(sizeX == 0 && sizeY == 0) ? GenerateBoard(texture->getFilePath(), (int)ImageSize.x, (int)ImageSize.y, Texture) : GenerateBoard(texture->getFilePath(), sizeX, sizeY, Texture);
 		SetTexture(Texture);
 	}
 
-	CGraphicalPlaneSP CGraphicalPlane::CreateFromTexture(const std::string &_path, const int &x_num, const int &y_num, const int &size_x, const int &size_y)
+	GraphicalPlaneSP GraphicalPlane::CreateFromTexture(const std::string &path, const int &divisionX, const int &divisionY, const int &sizeX, const int &sizeY)
 	{
 		// イメージサイズに合わせて板ポリを生成
-		CGraphicalPlane *_obj = new CGraphicalPlane();
+		GraphicalPlane *object = new GraphicalPlane();
 		// テクスチャ生成
-		_obj->LoadTexture(_path, x_num, y_num, size_x, size_y);
+		object->LoadTexture(path, divisionX, divisionY, sizeX, sizeY);
 		// 作成したオブジェクトを返す
-		return CGraphicalPlaneSP(_obj);
+		return GraphicalPlaneSP(object);
 	}
 
-	CGraphicalPlaneSP CGraphicalPlane::CreateFromTexture(const CTextureSP &_tex, const int &x_num, const int &y_num, const int &size_x, const int &size_y)
+	GraphicalPlaneSP GraphicalPlane::CreateFromTexture(const CTextureSP &texture, const int &divisionX, const int &divisionY, const int &sizeX, const int &sizeY)
 	{
-		CGraphicalPlane* _obj = new CGraphicalPlane();
-		_obj->LoadTexture(_tex, x_num, y_num, size_x, size_y);
-		// 
-		return CGraphicalPlaneSP(_obj);
+		GraphicalPlane* object = new GraphicalPlane();
+		object->LoadTexture(texture, divisionX, divisionY, sizeX, sizeY);
+
+		return GraphicalPlaneSP(object);
 	}
 
-	void CGraphicalPlane::Render(const CCamera* camera) 
+	void GraphicalPlane::Render(const CCamera* camera) 
 	{
 		// 描画しないならここで関数終了
-		if(!isRender)
+		if(!_renders)
 			return;
 		// 分割読み込みした場合の画像範囲選択
-		if(PreviousNumber != Number)
+		if(_previousNumber != Number)
 		{
-			CVertex* pV;
-			Mesh->getpd3dMesh()->LockVertexBuffer( 0, (void**)&pV );
-			pV[0].UV.x = (float)Rects[Number].left / Textures[0]->getd3dImageInfo().Width;
-			pV[0].UV.y = (float)Rects[Number].bottom / Textures[0]->getd3dImageInfo().Height;
-			pV[1].UV.x = (float)Rects[Number].right / Textures[0]->getd3dImageInfo().Width;
-			pV[1].UV.y = (float)Rects[Number].bottom / Textures[0]->getd3dImageInfo().Height;
-			pV[2].UV.x = (float)Rects[Number].left / Textures[0]->getd3dImageInfo().Width;
-			pV[2].UV.y = (float)Rects[Number].top / Textures[0]->getd3dImageInfo().Height;
-			pV[3].UV.x = (float)Rects[Number].right / Textures[0]->getd3dImageInfo().Width;
-			pV[3].UV.y = (float)Rects[Number].top / Textures[0]->getd3dImageInfo().Height;
-			Mesh->getpd3dMesh()->UnlockIndexBuffer();
-			PreviousNumber = Number;
+			CVertex* vertex;
+			_mesh->getpd3dMesh()->LockVertexBuffer( 0, (void**)&vertex );
+			vertex[0].UV.x = (float)Rects[Number].left		/	_textures[0]->getd3dImageInfo().Width;
+			vertex[0].UV.y = (float)Rects[Number].bottom	/	_textures[0]->getd3dImageInfo().Height;
+			vertex[1].UV.x = (float)Rects[Number].right		/	_textures[0]->getd3dImageInfo().Width;
+			vertex[1].UV.y = (float)Rects[Number].bottom	/	_textures[0]->getd3dImageInfo().Height;
+			vertex[2].UV.x = (float)Rects[Number].left		/	_textures[0]->getd3dImageInfo().Width;
+			vertex[2].UV.y = (float)Rects[Number].top		/	_textures[0]->getd3dImageInfo().Height;
+			vertex[3].UV.x = (float)Rects[Number].right		/	_textures[0]->getd3dImageInfo().Width;
+			vertex[3].UV.y = (float)Rects[Number].top		/	_textures[0]->getd3dImageInfo().Height;
+			_mesh->getpd3dMesh()->UnlockIndexBuffer();
+			_previousNumber = Number;
 		}
 		// ワールド行列設定
 		CMatrix SclMtx, RotMtx, PosMtx, WldMtx, WVPMtx;
@@ -200,15 +200,15 @@ namespace KMT
 			break;
 		}
 		// ビルボードの場合
-		if(isBillBoard)
+		if(_isBillBoard)
 		{
-			CVector3 campos = camera->getEye() ;
-			getBillBoardRotation(&Position, &campos, &RotMtx);
+			CVector3 cameraPosition = camera->getEye() ;
+			GetBillBoardRotation(&Position, &cameraPosition, &RotMtx);
 		}
 		// 位置
 		D3DXMatrixTranslation(&PosMtx, Position.x, Position.y, Position.z);
 		// カリングを設定
-		CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_CULLMODE, d3dCull);
+		CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_CULLMODE, _cullingState);
 		// デバッグ用
 		//CGraphicsManager::pd3dDevice->SetRenderState( D3DRS_FILLMODE, D3DFILL_WIREFRAME );
 		// シェーダを使用する場合カメラのビュー行列(0)、プロジェクション行列(1)をワールド行列に合成
@@ -226,43 +226,43 @@ namespace KMT
 		EyePos.Transform(CamMtx);
 		D3DXVec4Normalize((D3DXVECTOR4*)&EyePos, (D3DXVECTOR4*)&EyePos);
 		// シェーダ設定
-		Shader->SetTechnique();
+		_shader->SetTechnique();
 		// シェーダにワールド * ビュー * プロジェクション行列を渡す
-		Shader->SetWVPMatrix(WVPMtx);
+		_shader->SetWVPMatrix(WVPMtx);
 		// シェーダー特有の値の設定
-		Shader->ApplyEffect(RotMtx, EyePos);
+		_shader->ApplyEffect(RotMtx, EyePos);
 
 		HRESULT hr;
 		// 3D モデルのパーツ分ループして描画
-		for(size_t i = 0 ; i < Mesh->getMaterialNum(); i++)
+		for(size_t i = 0 ; i < _mesh->getMaterialNum(); i++)
 		{
 			// テクスチャが存在しない場合のカラー
 			D3DXVECTOR4 vec4 = D3DXVECTOR4(1.0,1.0,1.0,1.0);
 			// 格パーツに対応するテクスチャを設定
 			// シェーダにテクスチャを渡す
-			if(NULL != Textures[i])
+			if(NULL != _textures[i])
 			{
-				LPDIRECT3DTEXTURE9 p_tex = Textures[i]->getpd3dTexture();
+				LPDIRECT3DTEXTURE9 texture = _textures[i]->getpd3dTexture();
 				// シェーダにカラーを渡す
-				Shader->SetColor(vColorRGBA);
-				Shader->SetTexture(p_tex);
+				_shader->SetColor(vColorRGBA);
+				_shader->SetTexture(texture);
 			}else
-				Shader->SetColor(vec4);
+				_shader->SetColor(vec4);
 
 			// シェーダの使用開始
-			Shader->BeginShader();
+			_shader->BeginShader();
 			// シェーダのパス設定
-			Shader->BeginPass(isAddBlend);
+			_shader->BeginPass(isAddBlend);
 			// パーツの描画	
 			if(SUCCEEDED(CGraphicsManager::pd3dDevice->BeginScene()))
 			{
-				Mesh->getpd3dMesh()->DrawSubset(i); 
+				_mesh->getpd3dMesh()->DrawSubset(i); 
 				V(CGraphicsManager::pd3dDevice->EndScene());
 			}
 			// パス終了
-			Shader->EndPass();
+			_shader->EndPass();
 			// シェーダ終了
-			Shader->EndShader();
+			_shader->EndShader();
 		}
 	}
 }
