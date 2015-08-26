@@ -57,9 +57,9 @@ namespace KMT
 		// 描画範囲
 		std::vector<RECT> Rects;
 		// 画像分割後のサイズ
-		CVector3 ImageSize;
+		Vector3 ImageSize;
 		// 描画中心座標
-		CVector3 CenterPosition;
+		Vector3 CenterPosition;
 		// アニメーションの速さ
 		int Speed;
 		// 表示するアニメーション番号

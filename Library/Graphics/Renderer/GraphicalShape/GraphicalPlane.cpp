@@ -9,7 +9,7 @@
 #include <sstream>
 
 using namespace KMT;
-static void GetBillBoardRotation(CVector3* billBoardPosition, CVector3* targetPosition, CMatrix* rotation )
+static void GetBillBoardRotation(Vector3* billBoardPosition, Vector3* targetPosition, CMatrix* rotation )
 {
 	D3DXMatrixIdentity((D3DXMATRIX*)rotation);
 	D3DXMatrixLookAtLH(rotation, (D3DXVECTOR3*)targetPosition, (D3DXVECTOR3*)billBoardPosition, &D3DXVECTOR3(0, 1, 0));
@@ -202,7 +202,7 @@ namespace KMT
 		// ビルボードの場合
 		if(_isBillBoard)
 		{
-			CVector3 cameraPosition = camera->getEye() ;
+			Vector3 cameraPosition = camera->getEye() ;
 			GetBillBoardRotation(&Position, &cameraPosition, &RotMtx);
 		}
 		// 位置
@@ -217,7 +217,7 @@ namespace KMT
 		// カメラの座標をシェーダに使用するための行列変換
 		CMatrix CamMtx = WldMtx * camera->getMatrix(CViewBehavior::VIEW);
 		D3DXMatrixInverse(&CamMtx, NULL, &CamMtx);
-		CVector4 EyePos = CVector4(
+		Vector4 EyePos = Vector4(
 			camera->getEye().x, 
 			camera->getEye().y, 
 			camera->getEye().z, 

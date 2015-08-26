@@ -30,7 +30,7 @@ namespace KMT {
 		return shader;
 	}
 
-	void ShaderParticle::ApplyEffect(const CMatrix& rotation, const CVector4& cameraPosition)
+	void ShaderParticle::ApplyEffect(const CMatrix& rotation, const Vector4& cameraPosition)
 	{
 		return;
 	}

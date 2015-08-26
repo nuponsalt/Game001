@@ -6,7 +6,7 @@
 
 namespace KMT {
 
-	LineSP Line::Create(const CVector3& positionA, const CVector3& positionB, DWORD color)
+	LineSP Line::Create(const Vector3& positionA, const Vector3& positionB, DWORD color)
 	{
 		// ê∂ê¨Ç∑ÇÈ
 		Line* object = new Line();

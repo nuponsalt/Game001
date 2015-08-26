@@ -57,7 +57,7 @@ namespace KMT {
 		// ワールド * ビュー * プロジェクション 行列をシェーダーに設定
 		void SetWVPMatrix(const CMatrix& wvp) const;
 		// カラーをシェーダーに設定
-		void SetColor(const CVector4& color) const;
+		void SetColor(const Vector4& color) const;
 		// テクスチャをシェーダーに設定
 		void SetTexture(const LPDIRECT3DTEXTURE9 texture) const;
 		// シェーダーの使用開始
@@ -71,12 +71,12 @@ namespace KMT {
 		// 特有のシェーダー設定(純粋仮想関数)
 		// rotation : 回転行列
 		// cameraPosition : カメラの視点の座標
-		virtual void ApplyEffect(const CMatrix &rotation, const CVector4& cameraPosition) = 0;
+		virtual void ApplyEffect(const CMatrix &rotation, const Vector4& cameraPosition) = 0;
 
 		//* パラメーター設定 *//
 		// ライトの座標
-		inline void SetLightDirection(CVector4 direction) { _lightDirection = direction; }
-		inline void SetLightDirection(const float x, const float y, const float z) { _lightDirection = CVector4(x, y, z, 0.0f); }
+		inline void SetLightDirection(Vector4 direction) { _lightDirection = direction; }
+		inline void SetLightDirection(const float x, const float y, const float z) { _lightDirection = Vector4(x, y, z, 0.0f); }
 		// 環境光
 		inline void SetAmbient(const float ambient) { _ambient = ambient; }
 		// スペキュラー範囲
@@ -84,9 +84,9 @@ namespace KMT {
 		// スペキュラー強度
 		inline void SetSpecularPower(const float specularPower) { _specularPower = specularPower; }
 		// フォグカラー
-		inline void SetFogColor(const CVector4& fogColor) { _fogColor = fogColor; }
+		inline void SetFogColor(const Vector4& fogColor) { _fogColor = fogColor; }
 		// フォグのパラメーターの設定
-		inline void SetFogRange(const float param1, const float param2) { _fogRange = CVector4(param1, param2, 0, 0); }
+		inline void SetFogRange(const float param1, const float param2) { _fogRange = Vector4(param1, param2, 0, 0); }
 
 	protected :
 		// 使用するシェーダーファイル名
@@ -94,15 +94,15 @@ namespace KMT {
 		// 環境光
 		float _ambient;
 		// 平行光源
-		CVector4 _lightDirection;
+		Vector4 _lightDirection;
 		// スペキュラーの範囲
 		float _specular;
 		// スペキュラーの強度
 		float _specularPower;
 		// フォグカラー
-		CVector4 _fogColor;
+		Vector4 _fogColor;
 		// フォグの範囲
-		CVector4 _fogRange;
+		Vector4 _fogRange;
 
 		// シェーダーのタイプの列挙型
 		enum ShaderType_
@@ -152,7 +152,7 @@ namespace KMT {
 		// シェーダー生成
 		static ShaderSP Create();
 		// モデルに対するエフェクト適用
-		void ApplyEffect(const CMatrix& rotation, const CVector4& cameraPosition);
+		void ApplyEffect(const CMatrix& rotation, const Vector4& cameraPosition);
 
 	private :
 		// コンストラクタ

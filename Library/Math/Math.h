@@ -9,12 +9,12 @@
 
 namespace KMT {
 
-	class CVector3;
+	class Vector3;
 	class CQuaternion;
 
-	extern const CVector3 AXIS_X;
-	extern const CVector3 AXIS_Y;
-	extern const CVector3 AXIS_Z;
+	extern const Vector3 AXIS_X;
+	extern const Vector3 AXIS_Y;
+	extern const Vector3 AXIS_Z;
 
 	// X軸周りの回転を表すクォータニオンを取得
 	CQuaternion RotationX(float angle);
@@ -34,7 +34,7 @@ namespace KMT {
 	// 線形補間
 	// 結果のCVector3を生成
 	// 上記のfloat線形補間関数を使用
-	CVector3 Interpolate(const CVector3 &v1, const CVector3 &v2, float f);
+	Vector3 Interpolate(const Vector3 &v1, const Vector3 &v2, float f);
 
 	// 球面線形補間
 	// f = 0のときv1, f = 1のときv2

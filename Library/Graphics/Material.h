@@ -16,7 +16,7 @@ namespace KMT {
 		// カラー(ビット値)
 		int nColor;
 		// カラー(4Dベクトル)
-		CVector4 vColorRGBA;
+		Vector4 vColorRGBA;
 		// コンストラクタ
 		CMaterial() : vColorRGBA(1, 1, 1, 1), isAddBlend(false) { }
 		// デストラクタ
@@ -26,10 +26,10 @@ namespace KMT {
 		// 設定 : 加算フラグ
 		inline void setisAddBlend(bool _add) { isAddBlend = _add; }
 		// 取得 : カラー
-		inline CVector4 getColorRGBA() const { return vColorRGBA; }
+		inline Vector4 getColorRGBA() const { return vColorRGBA; }
 		// 設定 : カラー
-		inline void setColorRGBA(const float &r, const float &g, const float &b, const float &a) { vColorRGBA = CVector4(r, g, b, a); }
-		inline void setColorRGBA(const CVector4 &_v4color) { vColorRGBA = _v4color; }
+		inline void setColorRGBA(const float &r, const float &g, const float &b, const float &a) { vColorRGBA = Vector4(r, g, b, a); }
+		inline void setColorRGBA(const Vector4 &_v4color) { vColorRGBA = _v4color; }
 
 	protected :
 		// 加算合するか、否か

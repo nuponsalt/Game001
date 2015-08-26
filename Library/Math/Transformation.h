@@ -12,7 +12,7 @@
 
 namespace KMT {
 
-	class CVector3;
+	class Vector3;
 	class CMatrix;
 	class CQuaternion;
 
@@ -32,16 +32,16 @@ namespace KMT {
 	{
 	public :
 		//* 座標 *//
-		CVector3 Position;
+		Vector3 Position;
 		//* 回転 *//
 		// ベクトル
-		CVector3 vRotation;
+		Vector3 vRotation;
 		// 行列
 		CMatrix mRotationX, mRotationY, mRotationZ, mRotationWorld;
 		// クォータニオン
 		CQuaternion qRotation;
 		//* 拡縮 *//
-		CVector3 Scale ;
+		Vector3 Scale ;
 
 		// 現在の回転タイプ
 		ROTATE_TYPE CurrentRotateType;

@@ -44,7 +44,7 @@ namespace KMT {
 		// テクスチャベクター配列(直接インデックス指定)
 		inline CTextureSP GetTexturesElement(size_t index) { return _textures[index]; }
 		// 拡散反射色(ディフューズ色)
-		inline CVector4 GetDiffuseColors(size_t index) { return _diffuseColors[index]; }
+		inline Vector4 GetDiffuseColors(size_t index) { return _diffuseColors[index]; }
 
 		//* 設定 *//
 		// シェーダー
@@ -85,7 +85,7 @@ namespace KMT {
 		// テクスチャー配列(std::vector)
 		std::vector<CTextureSP> _textures;
 		// 頂点カラー配列(std::vector)
-		std::vector<CVector4> _diffuseColors;
+		std::vector<Vector4> _diffuseColors;
 
 	};
 
