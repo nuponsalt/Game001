@@ -59,36 +59,36 @@ namespace KMT {
 		return ret;
 	}
 
-	float Vector2Cross(CVector2& v1, CVector2& v2)
+	float Vector2Cross(Vector2& v1, Vector2& v2)
 	{
 		return v1.x * v2.y - v1.y * v2.x;
 	}
 
-	CVector3 NearOnLine(const CVector3 &p, const CVector3 &a, const CVector3 &b)
+	Vector3 NearOnLine(const Vector3 &p, const Vector3 &a, const Vector3 &b)
 	{
 		//ベクトルAB AP
-		CVector3 AB = b - a;
-		CVector3 AP = p - a;		
+		Vector3 AB = b - a;
+		Vector3 AP = p - a;		
 
 		//ABの単位ベクトルを計算
-		CVector3 nAB = Normalize(AB);
+		Vector3 nAB = Normalize(AB);
 
 		//Aから線上最近点までの距離(ABベクトルの後ろにあるときはマイナス値)
 		float distAX = Dot(nAB, AP);
 
 		//線上最近点
-		CVector3 ret = a + (nAB * distAX);
+		Vector3 ret = a + (nAB * distAX);
 
 		return ret;
 	}
 
-	CVector3 NormalOnPlane(const CVector3 vA, const CVector3& vB, const CVector3& vC)
+	Vector3 NormalOnPlane(const Vector3 vA, const Vector3& vB, const Vector3& vC)
 	{
 		// 各頂点から基準点までのベクトル
-		CVector3 vAB = vB - vA;
-		CVector3 vAC = vC - vA;
+		Vector3 vAB = vB - vA;
+		Vector3 vAC = vC - vA;
 		// 法線算出
-		CVector3 v = Cross(vAB, vAC);
+		Vector3 v = Cross(vAB, vAC);
 		return v.Normalize();
 	}
 }

@@ -17,7 +17,7 @@ namespace KMT {
 		// シェーダー生成
 		static ShaderSP Create();
 		// モデルに対するエフェクト適用
-		void ApplyEffect(const CMatrix& rotation, const CVector4& cameraPosition);
+		void ApplyEffect(const CMatrix& rotation, const Vector4& cameraPosition);
 
 	private :
 		// コンストラクタ

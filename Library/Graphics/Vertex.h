@@ -9,13 +9,13 @@ namespace KMT {
 	{
 	public :
 		// 頂点座標
-		CVector3 _position;
+		Vector3 _position;
 		// 法線
-		CVector3 _normal;
+		Vector3 _normal;
 		// 頂点カラー
 		DWORD	 _color;
 		// テクセル座標
-		CVector2 _uv;
+		Vector2 _uv;
 
 		// 定数FVF
 		static const DWORD FVF = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1;

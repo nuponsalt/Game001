@@ -37,24 +37,24 @@ namespace KMT {
 	// pOut : 正規化反射ベクトル
 	// Front : 進行方向ベクトル
 	// Normal : 衝突点での法線ベクトル
-	CVector3* calculateReflectVector(CVector3* pOut, const CVector3& Front, const CVector3& Normal);
+	Vector3* calculateReflectVector(Vector3* pOut, const Vector3& Front, const Vector3& Normal);
 
 	// 壁と球の反射ベクトルを計算
 	// pOut : 結果を受け取る, Axis : 反射軸, V : 算出元, Ref : 反発係数
-	void getReflectVelocity(CVector3* pOut, CVector3& Axis, CVector3& V, float Ref);
+	void getReflectVelocity(Vector3* pOut, Vector3& Axis, Vector3& V, float Ref);
 
 	// 壁との反射後の位置を算出
-	void getReflectedPosition(float ResTime, Circle& circle, CVector3& RefV);
+	void getReflectedPosition(float ResTime, Circle& circle, Vector3& RefV);
 
 	// 取得 : 線分の衝突判定
 	// a1 : A線分始端頂点座標, a2 : A線分終端頂点座標
 	// b1 : B線分始端頂点座標, b2 : B線分終端頂点座標
 	// pOutIP : 交点を格納するCVector3型のポインタ
-	bool getCollideSegments(CVector3* pOut, const CVector3& a1, const CVector3& a2, const CVector3& b1, const CVector3& b2);
+	bool getCollideSegments(Vector3* pOut, const Vector3& a1, const Vector3& a2, const Vector3& b1, const Vector3& b2);
 
 	// 取得 : 線分と平面の衝突判定
 	// 
-	bool getCollideSegmentPlane(CVector3* pOut, CVector3 A, CVector3 B, Plane PL);
+	bool getCollideSegmentPlane(Vector3* pOut, Vector3 A, Vector3 B, Plane PL);
 
 	// 球が平面の裏側にあるか判定する
 	// 
@@ -66,7 +66,7 @@ namespace KMT {
 	// 取得 : 球同士の衝突判定
 	// posA : 円Aの座標, posB : 円Bの座標
 	// rA : 円Aの半径, rB : 円Bの半径
-	bool getCollideSpheres(CVector3& posA, CVector3& posB, float rA, float rB);
+	bool getCollideSpheres(Vector3& posA, Vector3& posB, float rA, float rB);
 
 	// パーティクル衝突判定・時刻・位置算出関数
 	// rA : パーティクルAの半径, rB : パーティクルBの半径
@@ -75,10 +75,10 @@ namespace KMT {
 	// poutTime : 衝突時間を格納するFLOAT型へのポインタ
 	// poutCollidedA : パーティクルAの衝突位置を格納するCVector3型へのポインタ, poutColldediB : パーティクルAの衝突位置を格納するCVector3型へのポインタ
 	bool calculateParticleCollision(float rA, float rB, 
-											CVector3* pPrePosA, CVector3* pPosA,
-											CVector3* pPrePosB, CVector3* pPosB,
+											Vector3* pPrePosA, Vector3* pPosA,
+											Vector3* pPrePosB, Vector3* pPosB,
 											float* pOutTime,
-											CVector3* pOutCollidedA, CVector3* pOutCollidedB);
+											Vector3* pOutCollidedA, Vector3* pOutCollidedB);
 
 	// パーティクル衝突後速度位置算出関数
 	// pColPosA : 衝突中のパーティクルAの中心位置, pVelocityA : 衝突の瞬間のパーティクルAの速度
@@ -88,12 +88,12 @@ namespace KMT {
 	// time : 反射後の移動可能時間
 	// pOutPosA : パーティクルAの反射後位置, pOutVelocityA : パーティクルAの反射後速度ベクトル
 	// pOutPosB : パーティクルBの反射後位置, pOutVelocityB : パーティクルBの反射後速度ベクトル
-	bool calculateParticlePositionAfterCollision(CVector3* pColPosA, CVector3* pVelocityA,
-															CVector3* pColPosB, CVector3* pVelocityB,
+	bool calculateParticlePositionAfterCollision(Vector3* pColPosA, Vector3* pVelocityA,
+															Vector3* pColPosB, Vector3* pVelocityB,
 															float massA, float massB,
 															float resA, float resB,
 															float time,
-															CVector3* pOutPosA, CVector3* pOutVelocityA,
-															CVector3* pOutPosB, CVector3* pOutVelocityB);
+															Vector3* pOutPosA, Vector3* pOutVelocityA,
+															Vector3* pOutPosB, Vector3* pOutVelocityB);
 
 }

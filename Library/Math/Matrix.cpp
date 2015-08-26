@@ -5,7 +5,7 @@
 
 namespace KMT {
 
-	CMatrix::CMatrix(const CVector3& scale, const CQuaternion& rotation, const CVector3& position) {
+	CMatrix::CMatrix(const Vector3& scale, const CQuaternion& rotation, const Vector3& position) {
 		D3DXMatrixTransformation(this, 0, 0, (D3DXVECTOR3*)&scale, 0, (D3DXQUATERNION*)&rotation, (D3DXVECTOR3*)&position) ;
 	}
 

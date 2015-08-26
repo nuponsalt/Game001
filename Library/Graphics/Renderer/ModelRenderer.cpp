@@ -137,7 +137,7 @@ namespace KMT {
 		// カメラの座標をシェーダに使用するための行列変換
 		CMatrix CamMtx = WldMtx * camera->getMatrix(CViewBehavior::VIEW);
 		D3DXMatrixInverse(&CamMtx, NULL, &CamMtx);
-		CVector4 EyePos = CVector4(
+		Vector4 EyePos = Vector4(
 			camera->getEye().x, 
 			camera->getEye().y, 
 			camera->getEye().z, 

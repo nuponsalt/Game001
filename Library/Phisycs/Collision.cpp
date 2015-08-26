@@ -17,20 +17,20 @@ namespace KMT {
 		return false ;	// 偽
 	}
 
-	CVector3* calculateReflectVector(CVector3 *pOut, const CVector3 &Front, const CVector3 &Normal)
+	Vector3* calculateReflectVector(Vector3 *pOut, const Vector3 &Front, const Vector3 &Normal)
 	{
-		CVector3 N;
+		Vector3 N;
 		Vector3Normalize(&N, &Normal);
 		return Vector3Normalize(pOut, &(Front - 2.0f * Vector3Dot(&Front, &N) * N));
 	}
 
-	void getReflectVelocity(CVector3 *pOut, CVector3 &Axis,CVector3 &V, float Ref)
+	void getReflectVelocity(Vector3 *pOut, Vector3 &Axis,Vector3 &V, float Ref)
 	{
 		Normalize(Axis);
 		*pOut = V - (1 + Ref) * Dot(Axis, V) * Axis;
 	}
 
-	void getReflectedPosition(float ResTime, Circle &circle, CVector3 &RefV)
+	void getReflectedPosition(float ResTime, Circle &circle, Vector3 &RefV)
 	{
 		// 衝突位置
 		// 0.99は壁にめり込まないための補正
@@ -41,18 +41,18 @@ namespace KMT {
 		circle.Position += circle.Velocity * ResTime;
 	}
 
-	bool getCollideSegments(CVector3 *pOut, const CVector3 &a1, const CVector3 &a2, const CVector3 &b1, const CVector3 &b2)
+	bool getCollideSegments(Vector3 *pOut, const Vector3 &a1, const Vector3 &a2, const Vector3 &b1, const Vector3 &b2)
 	{
-		CVector2 seg1_s = a1;
-		CVector2 seg1_e = a2;
+		Vector2 seg1_s = a1;
+		Vector2 seg1_e = a2;
 
-		CVector2 seg2_s = b1;
-		CVector2 seg2_e = b2;
+		Vector2 seg2_s = b1;
+		Vector2 seg2_e = b2;
 
-		CVector2 seg1_v = seg1_e - seg1_s;
-		CVector2 seg2_v = seg2_e - seg2_s;
+		Vector2 seg1_v = seg1_e - seg1_s;
+		Vector2 seg2_v = seg2_e - seg2_s;
 
-		CVector2 v = seg2_s - seg1_s;
+		Vector2 v = seg2_s - seg1_s;
 
 		float C_v1_v2 = Vector2Cross(seg1_v, seg2_v);
 		if (C_v1_v2 == 0.0f) {
@@ -72,8 +72,8 @@ namespace KMT {
 			return false;
 		}
 
-		CVector2 pp = seg1_s + seg1_v * t1 ;
-		pOut = (CVector3*)&pp;
+		Vector2 pp = seg1_s + seg1_v * t1 ;
+		pOut = (Vector3*)&pp;
 
 		return true;
 	}
@@ -176,21 +176,21 @@ namespace KMT {
 	//	CreateFrustumCullingPlane(camera, planes);
 	//}
 
-	bool getCollideSpheres(CVector3& posA, CVector3& posB, float rA, float rB) 
+	bool getCollideSpheres(Vector3& posA, Vector3& posB, float rA, float rB) 
 	{
 		return LengthSq(posA - posB) < ((rA + rB) * (rA + rB));
 	}
 	
 	bool calculateParticleCollision(float rA, float rB, 
-									CVector3 *pPrePosA, CVector3 *pPosA,
-									CVector3 *pPrePosB, CVector3 *pPosB,
+									Vector3 *pPrePosA, Vector3 *pPosA,
+									Vector3 *pPrePosB, Vector3 *pPosB,
 									float *pOutTime,
-									CVector3 *pOutCollidedA, CVector3 *pOutCollidedB)
+									Vector3 *pOutCollidedA, Vector3 *pOutCollidedB)
 	{
 		// 前位置及び到達位置におけるパーティクル間のベクトルを算出
-		CVector3 C0 = *pPrePosB - *pPrePosA;
-		CVector3 C1 = *pPosB - *pPosA;
-		CVector3 D = C1 - C0;
+		Vector3 C0 = *pPrePosB - *pPrePosA;
+		Vector3 C1 = *pPosB - *pPosA;
+		Vector3 D = C1 - C0;
 		// 衝突判定用の2次関数係数の算出
 		float P = LengthSq(D); if(P == 0) return false; // 同じ方向に移動
 		float Q = Dot(C0, D);
@@ -217,26 +217,26 @@ namespace KMT {
 		return true;
 	}
 
-	bool calculateParticlePositionAfterCollision(CVector3 *pColPosA, CVector3 *pVelocityA,
-											CVector3 *pColPosB, CVector3 *pVelocityB,
+	bool calculateParticlePositionAfterCollision(Vector3 *pColPosA, Vector3 *pVelocityA,
+											Vector3 *pColPosB, Vector3 *pVelocityB,
 											float massA, float massB,
 											float resA, float resB,
 											float time,
-											CVector3 *pOutPosA, CVector3 *pOutVelocityA,
-											CVector3 *pOutPosB, CVector3 *pOutVelocityB)
+											Vector3 *pOutPosA, Vector3 *pOutVelocityA,
+											Vector3 *pOutPosB, Vector3 *pOutVelocityB)
 	{
 		// 質量の合計
 		float TotalMass = massA + massB;
 		// 反発率
 		float RefRate = (1 + resA * resB);
 		// 衝突軸ベクトル
-		CVector3 C = *pColPosB - *pColPosA;
+		Vector3 C = *pColPosB - *pColPosA;
 		Normalize(C);
-		CVector3 V = (*pVelocityA - *pVelocityB);
+		Vector3 V = (*pVelocityA - *pVelocityB);
 		// 内積算出
 		float D = Dot(V, C);
 		// 定数ベクトル
-		const CVector3 VEC = RefRate * D / TotalMass * C;
+		const Vector3 VEC = RefRate * D / TotalMass * C;
 		// 衝突後速度ベクトルの算出
 		*pOutVelocityA = -massB * VEC + *pVelocityA;
 		*pOutVelocityB = massA * VEC + *pVelocityB;

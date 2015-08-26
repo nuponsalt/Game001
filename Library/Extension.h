@@ -32,13 +32,13 @@ namespace KMT {
 	D3DXVECTOR3 QuaternionTransformCoord(D3DXVECTOR3 v, D3DXQUATERNION qtn);
 	
 	// 2Dベクトルの外積計算 
-	float Vector2Cross(CVector2& v1, CVector2& v2);
+	float Vector2Cross(Vector2& v1, Vector2& v2);
 	
 	// 線分上の最近点を得る
 	// p : 基になる座標ベクトル, a : 線分の始点, b : 線分の終点
-	CVector3 NearOnLine(const CVector3 &p, const CVector3 &a, const CVector3 &b);
+	Vector3 NearOnLine(const Vector3 &p, const Vector3 &a, const Vector3 &b);
 	
 	// 3頂点で構成される平面の法線を算出
 	// v1 : 基準点, 
-	CVector3 NormalOnPlane(const CVector3 vA, const CVector3& vB, const CVector3& vC);
+	Vector3 NormalOnPlane(const Vector3 vA, const Vector3& vB, const Vector3& vC);
 }

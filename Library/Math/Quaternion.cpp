@@ -10,25 +10,25 @@
 
 namespace KMT {
 
-	CQuaternion::CQuaternion( const CVector3& axis, float angle ) {
+	CQuaternion::CQuaternion( const Vector3& axis, float angle ) {
 		D3DXQuaternionRotationAxis( this, ( D3DXVECTOR3*)&axis, angle ) ;
 	}
 
-	CQuaternion::CQuaternion( const CVector3& axis ){
+	CQuaternion::CQuaternion( const Vector3& axis ){
 		D3DXQuaternionRotationAxis( this, (D3DXVECTOR3*)&axis, axis.Length() * 2 ) ;
 	}
 
-	CQuaternion::CQuaternion( CVector3 vfrom, CVector3 vto ){
-		CVector3 c = vfrom.Normalize().Cross( vto.Normalize() ) ;
+	CQuaternion::CQuaternion( Vector3 vfrom, Vector3 vto ){
+		Vector3 c = vfrom.Normalize().Cross( vto.Normalize() ) ;
 		float d = vfrom.Dot( vto ) ;
 		d = ( d > 1 ? 1 : ( d < - 1 ? - 1 : d ) ) ;
 		D3DXQuaternionRotationAxis( this, (D3DXVECTOR3*)&c, acosf( d ) ) ;
 	}
 
-	CQuaternion::CQuaternion( CVector3 vfrom, CVector3 vto, CVector3 axis ) {
+	CQuaternion::CQuaternion( Vector3 vfrom, Vector3 vto, Vector3 axis ) {
 		axis.Normalize() ;
-		CVector3 fa = ( vfrom - vfrom.Dot( axis ) * axis ).Normalize() ; 
-		CVector3 ta = ( vto - vto.Dot( axis ) * axis ).Normalize() ;
+		Vector3 fa = ( vfrom - vfrom.Dot( axis ) * axis ).Normalize() ; 
+		Vector3 ta = ( vto - vto.Dot( axis ) * axis ).Normalize() ;
 		*this = CQuaternion( vfrom, fa ) * CQuaternion( fa, ta ) * CQuaternion ( ta, vto ) ;
 	}
 

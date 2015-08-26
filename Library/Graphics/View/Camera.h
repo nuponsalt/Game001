@@ -32,7 +32,7 @@ namespace KMT {
 		inline void setCommand(const CCommand& _command) { Command = _command; }
 		
 		// 取得
-		inline CVector3 getDirection() const { return Direction; } //0ベクトルになるような部分での引用はバグの温床になるからNG
+		inline Vector3 getDirection() const { return Direction; } //0ベクトルになるような部分での引用はバグの温床になるからNG
 		inline float getSize() const { return Size; }
 
 		// 行列更新
@@ -42,7 +42,7 @@ namespace KMT {
 
 	protected :
 		// カメラの向き
-		CVector3 Direction;		
+		Vector3 Direction;		
 		// サイズ
 		float Size;
 		// コマンド
