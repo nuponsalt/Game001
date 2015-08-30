@@ -11,6 +11,7 @@ namespace KMT {
 
 	void ModelRenderer::LoadFromX(const std::string &path)
 	{
+		//-------------------------------------------------------------------------
 		// X ファイル とテクスチャのロード
 		_mesh = CMesh::CreateFromX(path);
 		// マテリアル情報の取得
@@ -32,10 +33,10 @@ namespace KMT {
 				_diffuseColors.push_back(color);
 				continue;
 			}
+			//
 			_diffuseColors.push_back(D3DXVECTOR4(0,0,0,0));
-
-			//---------------------------------------------------
 			// テクスチャのパスを自動的に生成
+			//------------------------------------------------
 
 			// ファイルパスの前部分を格納する
 			std::string frontPath;
@@ -63,8 +64,8 @@ namespace KMT {
 				}
 			}
 
-			//------------------------------------------------------------------
 			// Xファイルに記述されているテクスチャのパスの最後の部分だけを抜き出し前部分に追加
+			//----------------------------------------------------
 			std::string temp;
 			temp = materials[i].pTextureFilename;
 			// パスの最後の"/"を検索
@@ -132,9 +133,9 @@ namespace KMT {
 		}
 		// 位置
 		D3DXMatrixTranslation(&PosMtx, Position.x, Position.y, Position.z);
-		GraphicsManager::_device->SetRenderState(D3DRS_CULLMODE, _cullingState);
+		CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_CULLMODE, _cullingState);
 		// デバッグ用
-		//GraphicsManager::_device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+		//CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 		// シェーダを使用する場合カメラのビュー行列(0)、プロジェクション行列(1)をワールド行列に合成
 		WldMtx = SclMtx * RotMtx * PosMtx;
 		WVPMtx = WldMtx * camera->getMatrix(CViewBehavior::VIEW) * camera->getMatrix(CViewBehavior::PROJECTION);
@@ -177,10 +178,10 @@ namespace KMT {
 			// シェーダのパス設定
 			_shader->BeginPass(isAddBlend);
 			// パーツの描画	
-			if(SUCCEEDED(GraphicsManager::_device->BeginScene()))
+			if(SUCCEEDED(CGraphicsManager::pd3dDevice->BeginScene()))
 			{
 				_mesh->getpd3dMesh()->DrawSubset(i); 
-				V(GraphicsManager::_device->EndScene());
+				V(CGraphicsManager::pd3dDevice->EndScene());
 			}
 			// パス終了
 			_shader->EndPass();

@@ -17,7 +17,7 @@ namespace KMT {
 		_cullingState = D3DCULL_NONE;
 
 		// 頂点バッファの作成
-		if(FAILED(GraphicsManager::_device->CreateVertexBuffer(
+		if(FAILED(CGraphicsManager::pd3dDevice->CreateVertexBuffer(
 			sizeof(POINTSPRITE) * _pointNumber, 
 			D3DUSAGE_NPATCHES | D3DUSAGE_POINTS | D3DUSAGE_DYNAMIC, 
 			POINTSPRITE::FVF,
@@ -126,28 +126,28 @@ namespace KMT {
 		// シェーダーのパス開始
 		_shader->BeginPass(isAddBlend);
 		// パーティクルの使用を有効にする
-		GraphicsManager::_device->SetRenderState(D3DRS_POINTSPRITEENABLE, TRUE);
-		GraphicsManager::_device->SetRenderState(D3DRS_POINTSCALEENABLE, TRUE);
+		CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_POINTSPRITEENABLE, TRUE);
+		CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_POINTSCALEENABLE, TRUE);
 		// ポイントの最小サイズ
-		GraphicsManager::_device->SetRenderState(D3DRS_POINTSIZE_MIN, 0);
+		CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_POINTSIZE_MIN, 0);
 		// Zバッファ(パーティクルのみ、Z値の書き込みを行わない)
-		GraphicsManager::_device->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
-		GraphicsManager::_device->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+		CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
+		CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 		// 頂点の設定
-		GraphicsManager::_device->SetStreamSource(0, _vertexBuffer, 0, sizeof(POINTSPRITE));
-		GraphicsManager::_device->SetFVF(POINTSPRITE::FVF);
+		CGraphicsManager::pd3dDevice->SetStreamSource(0, _vertexBuffer, 0, sizeof(POINTSPRITE));
+		CGraphicsManager::pd3dDevice->SetFVF(POINTSPRITE::FVF);
 		// カリングを設定
-		GraphicsManager::_device->SetRenderState(D3DRS_CULLMODE, _cullingState);
+		CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_CULLMODE, _cullingState);
 
-		if(SUCCEEDED(GraphicsManager::_device->BeginScene()))
+		if(SUCCEEDED(CGraphicsManager::pd3dDevice->BeginScene()))
 		{
-			GraphicsManager::_device->DrawPrimitive(D3DPT_POINTLIST, 0, _pointNumber);
-			V(GraphicsManager::_device->EndScene());
+			CGraphicsManager::pd3dDevice->DrawPrimitive(D3DPT_POINTLIST, 0, _pointNumber);
+			V(CGraphicsManager::pd3dDevice->EndScene());
 		}
 		// パス終了
 		_shader->EndPass();
 		// Zバッファ設定のリセット
-		GraphicsManager::_device->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+		CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 		// シェーダー終了
 		_shader->EndShader();
 	}

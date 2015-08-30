@@ -21,6 +21,7 @@ namespace KMT {
 		_camera2D.reset();
 
 		// レンダリングリストを解放
+		//-----------------------------------------
 		for(int i = 0; i < RENDER_STATE_MAX; i++)
 		{
 			_renderLists[i]->clear();
@@ -47,7 +48,7 @@ namespace KMT {
 		}
 
 		// ステンシルバッファの作成
-		if (FAILED(GraphicsManager::_device->CreateDepthStencilSurface( 
+		if (FAILED(CGraphicsManager::pd3dDevice->CreateDepthStencilSurface( 
 			object->_texture->getd3dImageInfo().Width,
 			object->_texture->getd3dImageInfo().Height,
 			D3DFMT_D16, 
@@ -88,13 +89,13 @@ namespace KMT {
 	void Layer::Render()
 	{
 		// ステンシルバッファをセット
-		GraphicsManager::_device->SetDepthStencilSurface(_depthSurface);
+		CGraphicsManager::pd3dDevice->SetDepthStencilSurface(_depthSurface);
 
 		// レンダリングターゲットをセット
-		GraphicsManager::_device->SetRenderTarget(0, _textureSurface);
+		CGraphicsManager::pd3dDevice->SetRenderTarget(0, _textureSurface);
 
 		// サーフェイスをクリア
-		GraphicsManager::_device->Clear(0,
+		CGraphicsManager::pd3dDevice->Clear(0,
 			NULL, 
 			D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER,
 			D3DCOLOR_ARGB(255, 100, 149, 237),
@@ -114,6 +115,7 @@ namespace KMT {
 		// リストアクセス用イテレータ
 		std::list<GraphicBehaviorWP>::iterator listIterator;
 		// 3Dソート
+		//-------------------------------------------------
 		for(int i = 0; i < 2; i++)
 		{
 			listIterator = _renderLists[RENDER_NORMAL + i]->begin();
@@ -139,14 +141,16 @@ namespace KMT {
 		// ソート
 		_renderLists[RENDER_NORMAL]->sort(GraphicBehavior::Compare);
 		_renderLists[RENDER_ALPHA]->sort(GraphicBehavior::CompareBack);
+		//-------------------------------------------------------
 
 		// レンダリングーリストの中身をすべて描画
+		//-------------------------------------------------------
 		for(int i = RENDER_BACK2D; i < RENDER_STATE_MAX; i++)
 		{
 			if(i != RENDER_ALPHA)
 			{
 				// Zバッファのクリア
-				GraphicsManager::_device->Clear(0, 
+				CGraphicsManager::pd3dDevice->Clear(0, 
 					NULL, 
 					D3DCLEAR_ZBUFFER,
 					D3DCOLOR_ARGB(255, 0, 191, 255),
@@ -156,8 +160,8 @@ namespace KMT {
 
 			// Zバッファ切り替え
 			(i == RENDER_NORMAL || i == RENDER_ALPHA) 
-				? GraphicsManager::_device->SetRenderState(D3DRS_ZENABLE, TRUE)
-				: GraphicsManager::_device->SetRenderState(D3DRS_ZENABLE, FALSE);
+				? CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE)
+				: CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 
 			listIterator = _renderLists[i]->begin();
 			

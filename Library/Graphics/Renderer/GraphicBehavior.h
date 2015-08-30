@@ -67,7 +67,6 @@ namespace KMT {
 		{
 			return (riRight.lock()->Position.z > riLeft.lock()->Position.z);
 		}
-
 		// •`‰æ
 		virtual void Render(const CCamera* camera) = 0;
 

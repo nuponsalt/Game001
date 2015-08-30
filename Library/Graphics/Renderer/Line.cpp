@@ -30,12 +30,12 @@ namespace KMT {
 		HRESULT hr;
 
 		// カメラ設定
-		GraphicsManager::_device->SetTransform(D3DTS_VIEW, &_camera->getMatrix(CViewBehavior::VIEW));
-		GraphicsManager::_device->SetTransform(D3DTS_PROJECTION, &_camera->getMatrix(CViewBehavior::PROJECTION));
+		CGraphicsManager::pd3dDevice->SetTransform(D3DTS_VIEW, &_camera->getMatrix(CViewBehavior::VIEW));
+		CGraphicsManager::pd3dDevice->SetTransform(D3DTS_PROJECTION, &_camera->getMatrix(CViewBehavior::PROJECTION));
 
 		// ラインの描画
 		{
-			GraphicsManager::_device->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE);
+			CGraphicsManager::pd3dDevice->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE);
 
 			// ワールドマトリクス設定
 			D3DXMATRIX SclMtx, RotMtx, PosMtx, WldMtx ;
@@ -52,23 +52,23 @@ namespace KMT {
 			//GraphicsManager::m_pd3dDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA ) ;
 
 			// テクスチャは使わない
-			GraphicsManager::_device->SetTexture(0, NULL);
+			CGraphicsManager::pd3dDevice->SetTexture(0, NULL);
 
 			//ライティングOFF
-			GraphicsManager::_device->SetRenderState(D3DRS_LIGHTING, FALSE);
-			GraphicsManager::_device->LightEnable(0, FALSE);
-			GraphicsManager::_device->SetTransform(D3DTS_WORLD, &WldMtx);
+			CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+			CGraphicsManager::pd3dDevice->LightEnable(0, FALSE);
+			CGraphicsManager::pd3dDevice->SetTransform(D3DTS_WORLD, &WldMtx);
 
 			// Render the scene
-			if(SUCCEEDED(GraphicsManager::_device->BeginScene()))
+			if(SUCCEEDED(CGraphicsManager::pd3dDevice->BeginScene()))
 			{
-				GraphicsManager::_device->DrawPrimitiveUP(D3DPT_LINESTRIP, 1, _vertices, sizeof(LineVertex));   
-				V(GraphicsManager::_device->EndScene());
+				CGraphicsManager::pd3dDevice->DrawPrimitiveUP(D3DPT_LINESTRIP, 1, _vertices, sizeof(LineVertex));   
+				V(CGraphicsManager::pd3dDevice->EndScene());
 			}
 
-			GraphicsManager::_device->SetFVF(D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1);
-			GraphicsManager::_device->SetRenderState(D3DRS_LIGHTING, TRUE);
-			GraphicsManager::_device->LightEnable(0, TRUE);
+			CGraphicsManager::pd3dDevice->SetFVF(D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1);
+			CGraphicsManager::pd3dDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+			CGraphicsManager::pd3dDevice->LightEnable(0, TRUE);
 
 		}
 
