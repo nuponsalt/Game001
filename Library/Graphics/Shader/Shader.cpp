@@ -32,7 +32,7 @@ namespace KMT {
 		LPD3DXBUFFER compilationErrors = NULL;
 
 		HRESULT hr = D3DXCreateEffectFromFile( 
-					CGraphicsManager::pd3dDevice, 
+					GraphicsManager::_device, 
 					bufferName, 
 					NULL, 
 					NULL, 

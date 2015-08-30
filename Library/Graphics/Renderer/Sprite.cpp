@@ -7,7 +7,7 @@ namespace KMT {
 	Sprite::Sprite() : _turnVector(1, 1)
 	{
 		// スプライトの生成
-		D3DXCreateSprite(CGraphicsManager::pd3dDevice, &_sprite) ;
+		D3DXCreateSprite(GraphicsManager::_device, &_sprite) ;
 	}
 
 	Sprite::~Sprite()
@@ -44,11 +44,9 @@ namespace KMT {
 		// 描画するか
 		if(!_renders)
 			return;
-		//---------------------------------------------------------------------------------
-		//
+
 		// ワールド行列に関する作業
-		//
-		D3DXMATRIX WldMtx, PosMtx, SclMtx, RotMtx; // ワールド行列、トランスレーション行列（座標）、スケール行列、回転行列
+		D3DXMATRIX WldMtx, PosMtx, SclMtx, RotMtx; 
 		// トランスレーション( 平行移動 ) 行列の作成
 		D3DXMatrixTranslation(&PosMtx, Position.x, Position.y, Position.z);
 		// スケール( 拡縮 ) 行列の作成
@@ -82,7 +80,7 @@ namespace KMT {
 				DXUTGetD3D9Device()->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 				DXUTGetD3D9Device()->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 			}/*else{
-				CGraphicsManager::pd3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, FALSE ) ;
+				GraphicsManager::_device->SetRenderState( D3DRS_ALPHABLENDENABLE, FALSE ) ;
 			}*/
 
 			// スプライトの描画命令
@@ -101,7 +99,7 @@ namespace KMT {
 			// 加算切り替え
 			_sprite->End();
 			// 描画終了
-			V(CGraphicsManager::pd3dDevice->EndScene());
+			V(GraphicsManager::_device->EndScene());
 		}
 	}
 

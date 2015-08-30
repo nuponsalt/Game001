@@ -2,33 +2,33 @@
 
 namespace KMT {
 
-	class CGraphicsManager
+	class GraphicsManager
 	{
 	private :
 		
 		// コンストラクタ
-		CGraphicsManager() {}
+		GraphicsManager() {}
 
 		// デストラクタ
-		~CGraphicsManager() {}
+		~GraphicsManager() {}
 	public :
 		
 		// 画像処理に必要なデバイスのポインタ
-		static IDirect3DDevice9* pd3dDevice ;
+		static IDirect3DDevice9* _device ;
 
 		// バックブッファのサーフェイス
-		static LPDIRECT3DSURFACE9 pd3dBackBufferSurface ;
+		static LPDIRECT3DSURFACE9 _backBufferSurface ;
 
 		// バックバッファの深度バッファのサーフェイス
-		static LPDIRECT3DSURFACE9 pd3dBackDepthSurface ;
+		static LPDIRECT3DSURFACE9 _backDepthSurface ;
 
 		// 初期化
-		static void Initialize( IDirect3DDevice9* _pd3dDevice ) ;
+		static void Initialize( IDirect3DDevice9* device ) ;
 
 		// 解放
 		static void Destroy() ;
 
-		static void setRenderTargetToBackBuffer() ;
+		static void SetRenderTargetToBackBuffer() ;
 	} ;
 
 }
