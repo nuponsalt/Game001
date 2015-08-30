@@ -28,7 +28,7 @@ namespace KMT {
 		// ‰ð•ú
 		static void Destroy() ;
 
-		static void ResetRenderTargetToBackBuffer() ;
+		static void SetRenderTargetToBackBuffer() ;
 	} ;
 
 }

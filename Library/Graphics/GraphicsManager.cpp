@@ -54,7 +54,7 @@ namespace KMT {
 		CTexture::Destroy();
 	}
 
-	void GraphicsManager::ResetRenderTargetToBackBuffer()
+	void GraphicsManager::SetRenderTargetToBackBuffer()
 	{
 		// ステンシルバッファをセット
 		_device->SetDepthStencilSurface(_backDepthSurface);
