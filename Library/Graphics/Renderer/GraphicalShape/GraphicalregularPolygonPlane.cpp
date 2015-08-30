@@ -46,7 +46,7 @@ namespace KMT {
 	//	// メッシュ情報読み込み
 	//	LPD3DXMESH _mesh;
 	//	// 頂点数は面数+中心頂点でできる
-	//	//if (FAILED(D3DXCreateMeshFVF(_facenum, (_type == )(_facenum+1), D3DXMESH_MANAGED, CVertex::FVF, CGraphicsManager::pd3dDevice, &_mesh)))
+	//	//if (FAILED(D3DXCreateMeshFVF(_facenum, (_type == )(_facenum+1), D3DXMESH_MANAGED, CVertex::FVF, GraphicsManager::_device, &_mesh)))
 	//	//{
 	//	//	return false;
 	//	//}
