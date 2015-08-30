@@ -21,7 +21,7 @@ namespace KMT {
 	typedef std::shared_ptr<GraphicBehavior> GraphicBehaviorSP;
 	typedef std::weak_ptr<GraphicBehavior> GraphicBehaviorWP;
 
-	class GraphicBehavior : public CTransformation, public CMaterial
+	class GraphicBehavior : public Transformation, public CMaterial
 	{
 	public :
 		// ソート用の値

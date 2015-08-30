@@ -1,6 +1,15 @@
 #pragma once
 
+#include <DirectXMath.h>
+using namespace DirectX;
+
 namespace KMT {
+
+	//class Matrix : public XMFLOAT4X4A
+	//{
+	//public:
+	//	Matrix() { this = XMMatrixIdentity(); }
+	//};
 
 	// çsóÒ
 	class CMatrix : public D3DXMATRIX {

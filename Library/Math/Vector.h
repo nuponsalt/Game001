@@ -53,22 +53,16 @@ namespace KMT {
 		// D3DXVECTOR4‚©‚ç‚Ì•ÏŠ·
 		Vector3(const D3DXVECTOR4& v) : x(v.x), y(v.y), z(v.z) {}
 		// D3DXVECTOR4‚Ö‚Ì•ÏŠ·
-		operator D3DXVECTOR4() const {
-			return D3DXVECTOR4(x, y, z, 1);
-		}
-		// XMFLOAT3‚©‚ç‚Ì•ÏŠ·
-		Vector3(const XMFLOAT3& v) : x(v.x), y(v.y), z(v.z) { }
-		// XMFLOAT3‚Ö‚Ì•ÏŠ·
-		operator XMFLOAT3() const { return XMFLOAT3(x, y, z); }
+		operator D3DXVECTOR4() const { return D3DXVECTOR4(x, y, z, 1); }
+		// XMVECTOR‚©‚ç‚Ì•ÏŠ·
+		Vector3(const XMVECTOR& v) : x(XMVectorGetX(v)), y(XMVectorGetY(v)), z(XMVectorGetZ(v)) { }
+		// XMVECTOR‚Ö‚Ì•ÏŠ·
+		operator XMVECTOR() const { return XMVectorSet(x, y, z, 1); }
 		// ”äŠr
 			// ==
-		bool operator== (const Vector3& v) {
-			return x == v.x && y == v.y && z == v.z;
-		}
-		// !=
-		bool operator!= (const Vector3& v) {
-			return x != v.x || y != v.y || z != v.z;
-		}
+		bool operator== (const Vector3& v) { return x == v.x && y == v.y && z == v.z; }
+			// !=
+		bool operator!= (const Vector3& v) { return x != v.x || y != v.y || z != v.z; }
 		// ‰ÁZ
 		// Œ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
 		Vector3 operator+ (const Vector3& v) const {
