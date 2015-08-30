@@ -16,9 +16,9 @@ namespace KMT {
 	class CMatrix;
 	class CQuaternion;
 
-	class CTransformation;
-	typedef std::shared_ptr<CTransformation> CTransformationSP;
-	typedef std::weak_ptr<CTransformation> CTransformationWP;
+	class Transformation;
+	typedef std::shared_ptr<Transformation> CTransformationSP;
+	typedef std::weak_ptr<Transformation> CTransformationWP;
 
 	// 回転タイプ
 	enum ROTATE_TYPE
@@ -28,7 +28,7 @@ namespace KMT {
 			QUATERNION
 	};
 
-	class CTransformation
+	class Transformation
 	{
 	public :
 		//* 座標 *//
@@ -47,9 +47,9 @@ namespace KMT {
 		ROTATE_TYPE CurrentRotateType;
 
 		// コンストラクタ
-		CTransformation();
+		Transformation();
 		// デストラクタ
-		virtual ~CTransformation() { }
+		virtual ~Transformation() { }
 	
 };
 
