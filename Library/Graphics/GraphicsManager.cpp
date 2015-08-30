@@ -10,22 +10,22 @@
 
 namespace KMT {
 
-	IDirect3DDevice9* CGraphicsManager::pd3dDevice;
+	IDirect3DDevice9* GraphicsManager::_device;
 
-	LPDIRECT3DSURFACE9 CGraphicsManager::pd3dBackBufferSurface;
+	LPDIRECT3DSURFACE9 GraphicsManager::_backBufferSurface;
 
-	LPDIRECT3DSURFACE9 CGraphicsManager::pd3dBackDepthSurface;
+	LPDIRECT3DSURFACE9 GraphicsManager::_backDepthSurface;
 
-	void CGraphicsManager::Initialize(IDirect3DDevice9 *_pd3dDevice)
+	void GraphicsManager::Initialize(IDirect3DDevice9* device)
 	{
 		// デバイスポインタの取得
-		pd3dDevice = _pd3dDevice;
+		_device = device;
 
 		// バックバッファのサーフェイスを取得
-		pd3dDevice->GetRenderTarget(0, &pd3dBackBufferSurface);
+		_device->GetRenderTarget(0, &_backBufferSurface);
 		
 		// 深度バッファのサーフェイスを取得
-		pd3dDevice->GetDepthStencilSurface(&pd3dBackDepthSurface);
+		_device->GetDepthStencilSurface(&_backDepthSurface);
 
 		//-------------------------------------------------------------
 		// シェーダーの初期読み込み
@@ -42,26 +42,26 @@ namespace KMT {
 		ShaderToon::Create();
 	}
 	
-	void CGraphicsManager::Destroy()
+	void GraphicsManager::Destroy()
 	{
 		// バックバッファのサーフェイスを解放
-		SAFE_RELEASE(pd3dBackBufferSurface);
+		SAFE_RELEASE(_backBufferSurface);
 		// 深度バッファのサーフェイスを解放
-		SAFE_RELEASE(pd3dBackDepthSurface);
+		SAFE_RELEASE(_backDepthSurface);
 		// シェーダーの開放
 		Shader::Destroy();
 		// テクスチャの開放
 		CTexture::Destroy();
 	}
 
-	void CGraphicsManager::setRenderTargetToBackBuffer()
+	void GraphicsManager::ResetRenderTargetToBackBuffer()
 	{
 		// ステンシルバッファをセット
-		pd3dDevice->SetDepthStencilSurface(pd3dBackDepthSurface);
+		_device->SetDepthStencilSurface(_backDepthSurface);
 		// レンダリングターゲットをセット
-		pd3dDevice->SetRenderTarget(0, pd3dBackBufferSurface);
+		_device->SetRenderTarget(0, _backBufferSurface);
 		// サーフェイスをクリア
-		pd3dDevice->Clear(0, 
+		_device->Clear(0, 
 			NULL, 
 			D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER,
 			D3DCOLOR_ARGB(0, 20, 40, 50),
