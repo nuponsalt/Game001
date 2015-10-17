@@ -32,10 +32,10 @@ namespace KMT
 	bool GraphicalPlane::GenerateBoard(const std::string& path, const int &width, const int &height, const CTextureSP &texture)
 	{
 		// キーネーム設定
-		std::stringstream stringStream("");
+		std::stringstream nameBuffer("");
 		// ファイルパス→生成番号→幅高さの順で追加
-		stringStream << path << ++_createCount << width << height;
-		std::string name = stringStream.str();
+		nameBuffer << path << ++_createCount << width << height;
+		std::string name = nameBuffer.str();
 		// メッシュインスタンスの生成
 		_mesh = CMesh::Create(name);
 		// サイズを記録
@@ -113,10 +113,10 @@ namespace KMT
 	{
 		GraphicalPlane *object = new GraphicalPlane();
 		++_createCount;
-		std::stringstream stringStream;
-		stringStream.str("");
-		stringStream << _createCount;
-		std::string name = stringStream.str().c_str();
+		std::stringstream nameBuffer;
+		nameBuffer.str("");
+		nameBuffer << _createCount;
+		std::string name = nameBuffer.str().c_str();
 
 		object->GenerateBoard(name, width, height, texture);
 		return GraphicalPlaneSP(object);

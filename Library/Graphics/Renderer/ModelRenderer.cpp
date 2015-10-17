@@ -16,10 +16,8 @@ namespace KMT {
 		// マテリアル情報の取得
 		D3DXMATERIAL *materials = (D3DXMATERIAL*)(_mesh->getpd3dMaterialBuffer()->GetBufferPointer());
 		// テクスチャのロード
-		std::stringstream stringStream;
 		CTextureSP texture;
 		for(size_t i = 0; i < _mesh->getMaterialNum(); i++){
-			stringStream.str("");
 			// 特定の部分でテクスチャが存在しない場合
 			if(NULL == materials[i].pTextureFilename){
 				texture = NULL;
@@ -78,9 +76,9 @@ namespace KMT {
 				index = stringBuffer.find_last_of("\\");
 				if(index != std::string::npos)
 				{
-					std::string stringBuffer;
-					stringBuffer = stringBuffer.substr(index + 1);
-					texturePath += stringBuffer;
+					std::string stringBuffer2;
+					stringBuffer2 = stringBuffer.substr(index + 1);
+					texturePath += stringBuffer2;
 				}
 				// 該当なしならそのまま追加
 				else{
