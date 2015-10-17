@@ -17,10 +17,8 @@ namespace KMT {
 		D3DXMATERIAL *materials = (D3DXMATERIAL*)(_mesh->getpd3dMaterialBuffer()->GetBufferPointer());
 		// テクスチャのロード
 		std::stringstream stringStream;
-		WCHAR wcharBuffer[255] = { 0 };
 		CTextureSP texture;
 		for(size_t i = 0; i < _mesh->getMaterialNum(); i++){
-			memset(wcharBuffer, 0, sizeof(WCHAR)*255);
 			stringStream.str("");
 			// 特定の部分でテクスチャが存在しない場合
 			if(NULL == materials[i].pTextureFilename){
