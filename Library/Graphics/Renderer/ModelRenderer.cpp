@@ -16,12 +16,12 @@ namespace KMT {
 		// マテリアル情報の取得
 		D3DXMATERIAL *materials = (D3DXMATERIAL*)(_mesh->getpd3dMaterialBuffer()->GetBufferPointer());
 		// テクスチャのロード
-		std::stringstream ss;
-		WCHAR wc_buff[255] = { 0 };
+		std::stringstream stringStream;
+		WCHAR wcharBuffer[255] = { 0 };
 		CTextureSP texture;
 		for(size_t i = 0; i < _mesh->getMaterialNum(); i++){
-			memset(wc_buff, 0, sizeof(WCHAR)*255);
-			ss.str("");
+			memset(wcharBuffer, 0, sizeof(WCHAR)*255);
+			stringStream.str("");
 			// 特定の部分でテクスチャが存在しない場合
 			if(NULL == materials[i].pTextureFilename){
 				texture = NULL;
@@ -38,7 +38,7 @@ namespace KMT {
 			// テクスチャのパスを自動的に生成
 
 			// ファイルパスの前部分を格納する
-			std::string frontPath;
+			std::string texturePath;
 			// Xファイルのパスから必要部分だけ抜き出す
 
 			// "/" "\\"を検索しパスの区切りの最後の部分を検索する
@@ -49,7 +49,7 @@ namespace KMT {
 			std::size_t index = path.find_last_of("/");
 			if(index != std::string::npos)
 			{
-				frontPath = path.substr(0, index + 1);
+				texturePath = path.substr(0, index + 1);
 			}
 			// 該当なしなら"\\"で再検索
 			else
@@ -58,39 +58,39 @@ namespace KMT {
 				if(index != std::string::npos)
 				{
 					// パスの区切りが"\\"のときは"\\"の部分をはずしかわりに"/"をつける
-					frontPath = path.substr(0, index);
-					frontPath += "/";
+					texturePath = path.substr(0, index);
+					texturePath += "/";
 				}
 			}
 
 			//------------------------------------------------------------------
 			// Xファイルに記述されているテクスチャのパスの最後の部分だけを抜き出し前部分に追加
-			std::string temp;
-			temp = materials[i].pTextureFilename;
+			std::string stringBuffer;
+			stringBuffer = materials[i].pTextureFilename;
 			// パスの最後の"/"を検索
-			index = temp.find_last_of("/");
+			index = stringBuffer.find_last_of("/");
 			if(index != std::string::npos)
 			{
-				std::string str1;
-				str1 = temp.substr(index + 1);
-				frontPath += str1;
+				std::string stringBuffer2;
+				stringBuffer2 = stringBuffer.substr(index + 1);
+				texturePath += stringBuffer2;
 			}
 			// 該当なしなら"\\"で再検索
 			else{
-				index = temp.find_last_of("\\");
+				index = stringBuffer.find_last_of("\\");
 				if(index != std::string::npos)
 				{
-					std::string str1;
-					str1 = temp.substr(index + 1);
-					frontPath += str1;
+					std::string stringBuffer;
+					stringBuffer = stringBuffer.substr(index + 1);
+					texturePath += stringBuffer;
 				}
 				// 該当なしならそのまま追加
 				else{
-					frontPath += temp;
+					texturePath += stringBuffer;
 				}
 			}
 			// 独自テクスチャクラスとして生成
-			texture = CTexture::CreateFromFile(frontPath, D3DX_DEFAULT);
+			texture = CTexture::CreateFromFile(texturePath, D3DX_DEFAULT);
 
 			_textures.push_back(texture);
 		}
