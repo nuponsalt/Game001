@@ -58,40 +58,40 @@ namespace KMT
 		_shader = ShaderNormal::Create();
 		// メッシュを生成する
 		LPD3DXMESH mesh;
-		if (FAILED(D3DXCreateMeshFVF(2, 4, D3DXMESH_MANAGED, CVertex::FVF, GraphicsManager::_device, &mesh)))
+		if (FAILED(D3DXCreateMeshFVF(2, 4, D3DXMESH_MANAGED, Vertex::FVF, GraphicsManager::_device, &mesh)))
 			return false;
 
 		//頂点データの作成
-		CVertex* vertex;
+		Vertex* vertex;
 		mesh->LockVertexBuffer(0, (void**)&vertex);
 		for (int y = 0 ; y < 2 ; y++) {
 			for (int x = 0 ; x < 2 ; x++) {
 				float x1 = (float)(x * width - ((float)width / 2));
 				float y1 = (float)(y * height - ((float)height / 2));
 				int index = y * 2 + x;
-				vertex[index].Position.x = x1;
-				vertex[index].Position.y = y1;
-				vertex[index].Position.z = 0;
-				vertex[index].Normal.x = 0;
-				vertex[index].Normal.y = 0;
-				vertex[index].Normal.z = 1;
+				vertex[index]._position.x = x1;
+				vertex[index]._position.y = y1;
+				vertex[index]._position.z = 0;
+				vertex[index]._normal.x = 0;
+				vertex[index]._normal.y = 0;
+				vertex[index]._normal.z = 1;
 				if( texture == NULL )
 				{
-					vertex[index].UV.x = (float)x * 1.0f;
-					vertex[index].UV.y = 1.0f - ((float)y * 1.0f);
+					vertex[index]._UV.x = (float)x * 1.0f;
+					vertex[index]._UV.y = 1.0f - ((float)y * 1.0f);
 				}
 			}
 		}
 		if(texture)
 		{
-			vertex[0].UV.x = (float)Rects[Number].left / Texture->getd3dImageInfo().Width;
-			vertex[0].UV.y = (float)Rects[Number].bottom / Texture->getd3dImageInfo().Height;
-			vertex[1].UV.x = (float)Rects[Number].right / Texture->getd3dImageInfo().Width;
-			vertex[1].UV.y = (float)Rects[Number].bottom / Texture->getd3dImageInfo().Height;
-			vertex[2].UV.x = (float)Rects[Number].left / Texture->getd3dImageInfo().Width;
-			vertex[2].UV.y = (float)Rects[Number].top / Texture->getd3dImageInfo().Height;
-			vertex[3].UV.x = (float)Rects[Number].right / Texture->getd3dImageInfo().Width;
-			vertex[3].UV.y = (float)Rects[Number].top / Texture->getd3dImageInfo().Height;
+			vertex[0]._UV.x = (float)Rects[Number].left / Texture->getd3dImageInfo().Width;
+			vertex[0]._UV.y = (float)Rects[Number].bottom / Texture->getd3dImageInfo().Height;
+			vertex[1]._UV.x = (float)Rects[Number].right / Texture->getd3dImageInfo().Width;
+			vertex[1]._UV.y = (float)Rects[Number].bottom / Texture->getd3dImageInfo().Height;
+			vertex[2]._UV.x = (float)Rects[Number].left / Texture->getd3dImageInfo().Width;
+			vertex[2]._UV.y = (float)Rects[Number].top / Texture->getd3dImageInfo().Height;
+			vertex[3]._UV.x = (float)Rects[Number].right / Texture->getd3dImageInfo().Width;
+			vertex[3]._UV.y = (float)Rects[Number].top / Texture->getd3dImageInfo().Height;
 		}
 		mesh->UnlockVertexBuffer();
 		//インデックスデータの作成
@@ -165,16 +165,16 @@ namespace KMT
 		// 分割読み込みした場合の画像範囲選択
 		if(_previousNumber != Number)
 		{
-			CVertex* vertex;
+			Vertex* vertex;
 			_mesh->getpd3dMesh()->LockVertexBuffer( 0, (void**)&vertex );
-			vertex[0].UV.x = (float)Rects[Number].left		/	_textures[0]->getd3dImageInfo().Width;
-			vertex[0].UV.y = (float)Rects[Number].bottom	/	_textures[0]->getd3dImageInfo().Height;
-			vertex[1].UV.x = (float)Rects[Number].right		/	_textures[0]->getd3dImageInfo().Width;
-			vertex[1].UV.y = (float)Rects[Number].bottom	/	_textures[0]->getd3dImageInfo().Height;
-			vertex[2].UV.x = (float)Rects[Number].left		/	_textures[0]->getd3dImageInfo().Width;
-			vertex[2].UV.y = (float)Rects[Number].top		/	_textures[0]->getd3dImageInfo().Height;
-			vertex[3].UV.x = (float)Rects[Number].right		/	_textures[0]->getd3dImageInfo().Width;
-			vertex[3].UV.y = (float)Rects[Number].top		/	_textures[0]->getd3dImageInfo().Height;
+			vertex[0]._UV.x = (float)Rects[Number].left		/	_textures[0]->getd3dImageInfo().Width;
+			vertex[0]._UV.y = (float)Rects[Number].bottom	/	_textures[0]->getd3dImageInfo().Height;
+			vertex[1]._UV.x = (float)Rects[Number].right		/	_textures[0]->getd3dImageInfo().Width;
+			vertex[1]._UV.y = (float)Rects[Number].bottom	/	_textures[0]->getd3dImageInfo().Height;
+			vertex[2]._UV.x = (float)Rects[Number].left		/	_textures[0]->getd3dImageInfo().Width;
+			vertex[2]._UV.y = (float)Rects[Number].top		/	_textures[0]->getd3dImageInfo().Height;
+			vertex[3]._UV.x = (float)Rects[Number].right		/	_textures[0]->getd3dImageInfo().Width;
+			vertex[3]._UV.y = (float)Rects[Number].top		/	_textures[0]->getd3dImageInfo().Height;
 			_mesh->getpd3dMesh()->UnlockIndexBuffer();
 			_previousNumber = Number;
 		}
