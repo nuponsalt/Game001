@@ -24,14 +24,14 @@ namespace KMT
 		// width : 横幅サイズ
 		// height : 縦幅サイズ
 		// texture : テクスチャー(空でないとダメな状態)
-		static GraphicalPlaneSP Create(const int &width, const int &height, const CTextureSP &texture = NULL) ;
+		static GraphicalPlaneSP Create(const int &width, const int &height, const TextureSP &texture = NULL) ;
 		// テクスチャーのサイズに合わせた板ポリゴンの生成
 		// path : テクスチャーのパス
 		// divisionX, divisionY : 分割量
 		// sizeX, sizeY : サイズ
 		static GraphicalPlaneSP CreateFromTexture(const std::string &path, 
 			const int &divisionX = 1, const int &divisionY = 1, const int &sizeX = 0, const int &sizeY = 0) ;
-		static GraphicalPlaneSP CreateFromTexture(const CTextureSP &texture, 
+		static GraphicalPlaneSP CreateFromTexture(const TextureSP &texture, 
 			const int &divisionX = 1, const int &divisionY = 1, const int &sizeX = 0, const int &sizeY = 0) ;
 		// 描画
 		void Render(const CCamera* camera);
@@ -50,13 +50,13 @@ namespace KMT
 		// width : 横幅サイズ
 		// height : 縦幅サイズ
 		// texture : テクスチャー
-		bool GenerateBoard(const std::string& path, const int &width, const int &height, const CTextureSP &texture = NULL) ;
+		bool GenerateBoard(const std::string& path, const int &width, const int &height, const TextureSP &texture = NULL) ;
 		// テクスチャのサイズに合わせた板ポリを生成する
 		// path : テクスチャのパス
 		// divisionX, divisionY : 画像の分割情報
 		// sizeX, sizeY : 板ポリの大きさ指定
 		void LoadTexture (const std::string &path, const int &divisionX = 1, const int &divisionY = 1, const int &sizeX = 0, const int &sizeY = 0);
-		void LoadTexture (const CTextureSP& texture, const int &divisionX = 1,const int &divisionY = 1, const int &sizeX = 0, const int &sizeY = 0);
+		void LoadTexture (const TextureSP& texture, const int &divisionX = 1,const int &divisionY = 1, const int &sizeX = 0, const int &sizeY = 0);
 
 	}GPlane;
 

@@ -5,8 +5,8 @@
 
 namespace KMT {
 
-	class CTexture;
-	typedef std::shared_ptr<CTexture> CTextureSP;
+	class Texture;
+	typedef std::shared_ptr<Texture> TextureSP;
 
 	class ShaderToon : public Shader
 	{
@@ -21,7 +21,7 @@ namespace KMT {
 	
 	private :
 		// トゥーンテクスチャー
-		CTextureSP _toonTexture;
+		TextureSP _toonTexture;
 
 		// コンストラクタ
 		ShaderToon();

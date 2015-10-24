@@ -13,12 +13,12 @@ namespace KMT
 	void CAnimation::LoadTextureAndAnimation(const std::string &_path, const int &_x_num, const int &_y_num, const DWORD &dwFilter)
 	{
 		// テクスチャーの読み込み
-		Texture = CTexture::CreateFromFile(_path, dwFilter);
+		Texture = Texture::CreateFromFile(_path, dwFilter);
 		// 分割情報反映
 		DivideWidth = _x_num;
 		DivideHeight = _y_num;
 		// 分割後の1つのサイズを取得
-		D3DXIMAGE_INFO info  = Texture->getd3dImageInfo();
+		D3DXIMAGE_INFO info  = Texture->GetImageInfo();
 		ImageSize = CVector3(((float)info.Width / DivideWidth), ((float)info.Height / DivideHeight), 0);
 		
 		// 分割回数を記憶

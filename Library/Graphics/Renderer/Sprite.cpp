@@ -16,7 +16,7 @@ namespace KMT {
 		SAFE_RELEASE( _sprite ) ;
 	}
 
-	void Sprite::SetTexture(const CTextureSP &texture) 
+	void Sprite::SetTexture(const TextureSP &texture) 
 	{
 		Texture = texture ;
 	}
@@ -86,7 +86,7 @@ namespace KMT {
 			// スプライトの描画命令
 			_sprite->Draw(
 				// 描画に使用するテクスチャ
-				Texture->getpd3dTexture(),
+				Texture->GetTextureData(),
 				// 画像の描画範囲
 				&Rects[Number],	
 				// サーフェイスの中心

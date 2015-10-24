@@ -29,7 +29,7 @@ namespace KMT
 	GraphicalPlane::GraphicalPlane() : _textureSize(1.0f, 1.0f, 0.0f), _previousNumber(0)
 	{}
 
-	bool GraphicalPlane::GenerateBoard(const std::string& path, const int &width, const int &height, const CTextureSP &texture)
+	bool GraphicalPlane::GenerateBoard(const std::string& path, const int &width, const int &height, const TextureSP &texture)
 	{
 		// キーネーム設定
 		std::stringstream nameBuffer("");
@@ -45,11 +45,11 @@ namespace KMT
 		// テクスチャ指定がある場合そのサイズを取得
 		if(texture != NULL)
 		{
-			while(UINT(_textureSize.x) < Texture->getd3dImageInfo().Width)
+			while(UINT(_textureSize.x) < Texture->GetImageInfo().Width)
 			{
 				_textureSize.x *= 2;
 			}
-			while(UINT(_textureSize.y) < Texture->getd3dImageInfo().Height)
+			while(UINT(_textureSize.y) < Texture->GetImageInfo().Height)
 			{
 				_textureSize.y *= 2;
 			}
@@ -84,14 +84,14 @@ namespace KMT
 		}
 		if(texture)
 		{
-			vertex[0]._UV.x = (float)Rects[Number].left / Texture->getd3dImageInfo().Width;
-			vertex[0]._UV.y = (float)Rects[Number].bottom / Texture->getd3dImageInfo().Height;
-			vertex[1]._UV.x = (float)Rects[Number].right / Texture->getd3dImageInfo().Width;
-			vertex[1]._UV.y = (float)Rects[Number].bottom / Texture->getd3dImageInfo().Height;
-			vertex[2]._UV.x = (float)Rects[Number].left / Texture->getd3dImageInfo().Width;
-			vertex[2]._UV.y = (float)Rects[Number].top / Texture->getd3dImageInfo().Height;
-			vertex[3]._UV.x = (float)Rects[Number].right / Texture->getd3dImageInfo().Width;
-			vertex[3]._UV.y = (float)Rects[Number].top / Texture->getd3dImageInfo().Height;
+			vertex[0]._UV.x = (float)Rects[Number].left / Texture->GetImageInfo().Width;
+			vertex[0]._UV.y = (float)Rects[Number].bottom / Texture->GetImageInfo().Height;
+			vertex[1]._UV.x = (float)Rects[Number].right / Texture->GetImageInfo().Width;
+			vertex[1]._UV.y = (float)Rects[Number].bottom / Texture->GetImageInfo().Height;
+			vertex[2]._UV.x = (float)Rects[Number].left / Texture->GetImageInfo().Width;
+			vertex[2]._UV.y = (float)Rects[Number].top / Texture->GetImageInfo().Height;
+			vertex[3]._UV.x = (float)Rects[Number].right / Texture->GetImageInfo().Width;
+			vertex[3]._UV.y = (float)Rects[Number].top / Texture->GetImageInfo().Height;
 		}
 		mesh->UnlockVertexBuffer();
 		//インデックスデータの作成
@@ -109,7 +109,7 @@ namespace KMT
 		return true;
 	}
 
-	GraphicalPlaneSP GraphicalPlane::Create(const int &width, const int &height, const CTextureSP &texture)
+	GraphicalPlaneSP GraphicalPlane::Create(const int &width, const int &height, const TextureSP &texture)
 	{
 		GraphicalPlane *object = new GraphicalPlane();
 		++_createCount;
@@ -132,10 +132,10 @@ namespace KMT
 		SetTexture(Texture);
 	}
 
-	void GraphicalPlane::LoadTexture (const CTextureSP& texture,const int& divisionX, const int &divisionY, const int &sizeX, const int &sizeY)
+	void GraphicalPlane::LoadTexture (const TextureSP& texture,const int& divisionX, const int &divisionY, const int &sizeX, const int &sizeY)
 	{
 		Texture = texture;
-		(sizeX == 0 && sizeY == 0) ? GenerateBoard(texture->getFilePath(), (int)ImageSize.x, (int)ImageSize.y, Texture) : GenerateBoard(texture->getFilePath(), sizeX, sizeY, Texture);
+		(sizeX == 0 && sizeY == 0) ? GenerateBoard(texture->GetFilePath(), (int)ImageSize.x, (int)ImageSize.y, Texture) : GenerateBoard(texture->GetFilePath(), sizeX, sizeY, Texture);
 		SetTexture(Texture);
 	}
 
@@ -149,7 +149,7 @@ namespace KMT
 		return GraphicalPlaneSP(object);
 	}
 
-	GraphicalPlaneSP GraphicalPlane::CreateFromTexture(const CTextureSP &texture, const int &divisionX, const int &divisionY, const int &sizeX, const int &sizeY)
+	GraphicalPlaneSP GraphicalPlane::CreateFromTexture(const TextureSP &texture, const int &divisionX, const int &divisionY, const int &sizeX, const int &sizeY)
 	{
 		GraphicalPlane* object = new GraphicalPlane();
 		object->LoadTexture(texture, divisionX, divisionY, sizeX, sizeY);
@@ -167,14 +167,14 @@ namespace KMT
 		{
 			Vertex* vertex;
 			_mesh->getpd3dMesh()->LockVertexBuffer( 0, (void**)&vertex );
-			vertex[0]._UV.x = (float)Rects[Number].left		/	_textures[0]->getd3dImageInfo().Width;
-			vertex[0]._UV.y = (float)Rects[Number].bottom	/	_textures[0]->getd3dImageInfo().Height;
-			vertex[1]._UV.x = (float)Rects[Number].right		/	_textures[0]->getd3dImageInfo().Width;
-			vertex[1]._UV.y = (float)Rects[Number].bottom	/	_textures[0]->getd3dImageInfo().Height;
-			vertex[2]._UV.x = (float)Rects[Number].left		/	_textures[0]->getd3dImageInfo().Width;
-			vertex[2]._UV.y = (float)Rects[Number].top		/	_textures[0]->getd3dImageInfo().Height;
-			vertex[3]._UV.x = (float)Rects[Number].right		/	_textures[0]->getd3dImageInfo().Width;
-			vertex[3]._UV.y = (float)Rects[Number].top		/	_textures[0]->getd3dImageInfo().Height;
+			vertex[0]._UV.x = (float)Rects[Number].left		/	_textures[0]->GetImageInfo().Width;
+			vertex[0]._UV.y = (float)Rects[Number].bottom	/	_textures[0]->GetImageInfo().Height;
+			vertex[1]._UV.x = (float)Rects[Number].right	/	_textures[0]->GetImageInfo().Width;
+			vertex[1]._UV.y = (float)Rects[Number].bottom	/	_textures[0]->GetImageInfo().Height;
+			vertex[2]._UV.x = (float)Rects[Number].left		/	_textures[0]->GetImageInfo().Width;
+			vertex[2]._UV.y = (float)Rects[Number].top		/	_textures[0]->GetImageInfo().Height;
+			vertex[3]._UV.x = (float)Rects[Number].right	/	_textures[0]->GetImageInfo().Width;
+			vertex[3]._UV.y = (float)Rects[Number].top		/	_textures[0]->GetImageInfo().Height;
 			_mesh->getpd3dMesh()->UnlockIndexBuffer();
 			_previousNumber = Number;
 		}
@@ -242,7 +242,7 @@ namespace KMT
 			// シェーダにテクスチャを渡す
 			if(NULL != _textures[i])
 			{
-				LPDIRECT3DTEXTURE9 texture = _textures[i]->getpd3dTexture();
+				LPDIRECT3DTEXTURE9 texture = _textures[i]->GetTextureData();
 				// シェーダにカラーを渡す
 				_shader->SetColor(vColorRGBA);
 				_shader->SetTexture(texture);

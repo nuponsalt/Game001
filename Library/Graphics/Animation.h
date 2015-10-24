@@ -51,7 +51,7 @@ namespace KMT
 
 	protected :
 		// テクスチャー
-		CTextureSP Texture;
+		TextureSP Texture;
 		// 分割数(Width:横, Height:縦)
 		int DivideWidth, DivideHeight;
 		// 描画範囲

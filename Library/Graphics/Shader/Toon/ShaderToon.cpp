@@ -33,7 +33,7 @@ namespace KMT {
 
 		auto shaderToon = new ShaderToon();
 		shaderToon->SetLightDirection(directionX, directionY, directionZ);
-		shaderToon->_toonTexture = CTexture::CreateFromFile(texturePath, D3DX_DEFAULT);
+		shaderToon->_toonTexture = Texture::CreateFromFile(texturePath, D3DX_DEFAULT);
 
 		shader = ShaderSP(shaderToon);
 
@@ -50,7 +50,7 @@ namespace KMT {
 		// ライト設定
 		_effect->SetVector(*GetHandle("LightDir"), (D3DXVECTOR4*)&_lightDirection);
 		// トゥーンテクスチャの設定
-		_effect->SetTexture(*GetHandle("ToonTex"), _toonTexture->getpd3dTexture());		
+		_effect->SetTexture(*GetHandle("ToonTex"), _toonTexture->GetTextureData());		
 	}
 
 }

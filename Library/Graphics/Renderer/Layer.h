@@ -60,7 +60,7 @@ namespace KMT {
 		// レンダリングリスト(描画リストのハッシュマップ)
 		std::vector<std::list<GraphicBehaviorWP>*> _renderLists;
 		// レンダリング対象のテクスチャ
-		CTextureSP _texture;
+		TextureSP _texture;
 		// 上記レンダリング対象のテクスチャのサーフェイス
 		LPDIRECT3DSURFACE9 _textureSurface;
 		// レンダリング対象のテクスチャ用深度バッファ
