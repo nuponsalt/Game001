@@ -45,11 +45,11 @@ namespace KMT
 		// テクスチャ指定がある場合そのサイズを取得
 		if(texture != NULL)
 		{
-			while(UINT(_textureSize.x) < Texture->GetImageInfo().Width)
+			while(UINT(_textureSize.x) < _texture->GetImageInfo().Width)
 			{
 				_textureSize.x *= 2;
 			}
-			while(UINT(_textureSize.y) < Texture->GetImageInfo().Height)
+			while(UINT(_textureSize.y) < _texture->GetImageInfo().Height)
 			{
 				_textureSize.y *= 2;
 			}
@@ -84,14 +84,14 @@ namespace KMT
 		}
 		if(texture)
 		{
-			vertex[0]._UV.x = (float)Rects[Number].left / Texture->GetImageInfo().Width;
-			vertex[0]._UV.y = (float)Rects[Number].bottom / Texture->GetImageInfo().Height;
-			vertex[1]._UV.x = (float)Rects[Number].right / Texture->GetImageInfo().Width;
-			vertex[1]._UV.y = (float)Rects[Number].bottom / Texture->GetImageInfo().Height;
-			vertex[2]._UV.x = (float)Rects[Number].left / Texture->GetImageInfo().Width;
-			vertex[2]._UV.y = (float)Rects[Number].top / Texture->GetImageInfo().Height;
-			vertex[3]._UV.x = (float)Rects[Number].right / Texture->GetImageInfo().Width;
-			vertex[3]._UV.y = (float)Rects[Number].top / Texture->GetImageInfo().Height;
+			vertex[0]._UV.x = (float)_rects[_number].left / _texture->GetImageInfo().Width;
+			vertex[0]._UV.y = (float)_rects[_number].bottom / _texture->GetImageInfo().Height;
+			vertex[1]._UV.x = (float)_rects[_number].right / _texture->GetImageInfo().Width;
+			vertex[1]._UV.y = (float)_rects[_number].bottom / _texture->GetImageInfo().Height;
+			vertex[2]._UV.x = (float)_rects[_number].left / _texture->GetImageInfo().Width;
+			vertex[2]._UV.y = (float)_rects[_number].top / _texture->GetImageInfo().Height;
+			vertex[3]._UV.x = (float)_rects[_number].right / _texture->GetImageInfo().Width;
+			vertex[3]._UV.y = (float)_rects[_number].top / _texture->GetImageInfo().Height;
 		}
 		mesh->UnlockVertexBuffer();
 		//インデックスデータの作成
@@ -127,16 +127,16 @@ namespace KMT
 		// リソースからテクスチャを生成
 		LoadTextureAndAnimation(path, divisionX, divisionY, D3DX_DEFAULT);
 		// イメージサイズに合わせて板ポリゴンを生成
-		(sizeX == 0 && sizeY == 0) ? GenerateBoard(path, (int)ImageSize.x, (int)ImageSize.y, Texture) : GenerateBoard(_path, sizeX, sizeY, Texture);
+		(sizeX == 0 && sizeY == 0) ? GenerateBoard(path, (int)_imageSize.x, (int)_imageSize.y, _texture) : GenerateBoard(_path, sizeX, sizeY, _texture);
 		// テクスチャーを挿入
-		SetTexture(Texture);
+		SetTexture(_texture);
 	}
 
 	void GraphicalPlane::LoadTexture (const TextureSP& texture,const int& divisionX, const int &divisionY, const int &sizeX, const int &sizeY)
 	{
-		Texture = texture;
-		(sizeX == 0 && sizeY == 0) ? GenerateBoard(texture->GetFilePath(), (int)ImageSize.x, (int)ImageSize.y, Texture) : GenerateBoard(texture->GetFilePath(), sizeX, sizeY, Texture);
-		SetTexture(Texture);
+		_texture = texture;
+		(sizeX == 0 && sizeY == 0) ? GenerateBoard(texture->GetFilePath(), (int)_imageSize.x, (int)_imageSize.y, _texture) : GenerateBoard(texture->GetFilePath(), sizeX, sizeY, _texture);
+		SetTexture(_texture);
 	}
 
 	GraphicalPlaneSP GraphicalPlane::CreateFromTexture(const std::string &path, const int &divisionX, const int &divisionY, const int &sizeX, const int &sizeY)
@@ -163,20 +163,20 @@ namespace KMT
 		if(!_renders)
 			return;
 		// 分割読み込みした場合の画像範囲選択
-		if(_previousNumber != Number)
+		if(_previousNumber != _number)
 		{
 			Vertex* vertex;
 			_mesh->getpd3dMesh()->LockVertexBuffer( 0, (void**)&vertex );
-			vertex[0]._UV.x = (float)Rects[Number].left		/	_textures[0]->GetImageInfo().Width;
-			vertex[0]._UV.y = (float)Rects[Number].bottom	/	_textures[0]->GetImageInfo().Height;
-			vertex[1]._UV.x = (float)Rects[Number].right	/	_textures[0]->GetImageInfo().Width;
-			vertex[1]._UV.y = (float)Rects[Number].bottom	/	_textures[0]->GetImageInfo().Height;
-			vertex[2]._UV.x = (float)Rects[Number].left		/	_textures[0]->GetImageInfo().Width;
-			vertex[2]._UV.y = (float)Rects[Number].top		/	_textures[0]->GetImageInfo().Height;
-			vertex[3]._UV.x = (float)Rects[Number].right	/	_textures[0]->GetImageInfo().Width;
-			vertex[3]._UV.y = (float)Rects[Number].top		/	_textures[0]->GetImageInfo().Height;
+			vertex[0]._UV.x = (float)_rects[_number].left		/	_textures[0]->GetImageInfo().Width;
+			vertex[0]._UV.y = (float)_rects[_number].bottom	/	_textures[0]->GetImageInfo().Height;
+			vertex[1]._UV.x = (float)_rects[_number].right	/	_textures[0]->GetImageInfo().Width;
+			vertex[1]._UV.y = (float)_rects[_number].bottom	/	_textures[0]->GetImageInfo().Height;
+			vertex[2]._UV.x = (float)_rects[_number].left		/	_textures[0]->GetImageInfo().Width;
+			vertex[2]._UV.y = (float)_rects[_number].top		/	_textures[0]->GetImageInfo().Height;
+			vertex[3]._UV.x = (float)_rects[_number].right	/	_textures[0]->GetImageInfo().Width;
+			vertex[3]._UV.y = (float)_rects[_number].top		/	_textures[0]->GetImageInfo().Height;
 			_mesh->getpd3dMesh()->UnlockIndexBuffer();
-			_previousNumber = Number;
+			_previousNumber = _number;
 		}
 		// ワールド行列設定
 		CMatrix SclMtx, RotMtx, PosMtx, WldMtx, WVPMtx;

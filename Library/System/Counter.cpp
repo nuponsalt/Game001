@@ -17,7 +17,7 @@ namespace KMT {
 		CCounterSP _obj(new CCounter());
 		// “Ç‚Ýž‚Ý
 		_obj->LoadFromFile("Resource/Texture/Number.png");
-		_obj->getImage()->setPlayMode(PLAYMODE::SELECT_FRAME);
+		_obj->getImage()->SetPlayMode(PlayMode::SELECT_FRAME);
 
 		return _obj;
 	}
@@ -27,7 +27,7 @@ namespace KMT {
 		CCounterSP _obj(new CCounter());
 		// “Ç‚Ýž‚Ý
 		_obj->LoadFromFile(_path);
-		_obj->getImage()->setPlayMode(PLAYMODE::SELECT_FRAME);
+		_obj->getImage()->SetPlayMode(PlayMode::SELECT_FRAME);
 
 		return _obj;
 	}

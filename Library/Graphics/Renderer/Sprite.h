@@ -17,7 +17,7 @@ namespace KMT {
 	typedef std::shared_ptr<Sprite> SpriteSP ;
 	typedef std::weak_ptr<Sprite> SpriteWP ;
 
-	class Sprite : public GraphicBehavior, public CAnimation
+	class Sprite : public GraphicBehavior, public Animation
 	{
 	public :
 		// ‰æ‘œ‚Ì‚Ç‚Ì”ÍˆÍ‚ð•`‰æ‚·‚é‚©

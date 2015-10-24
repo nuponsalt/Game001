@@ -12,7 +12,7 @@ namespace KMT
 	class GraphicalPlane;
 	typedef std::shared_ptr<GraphicalPlane> GraphicalPlaneSP, GPlaneSP;
 
-	typedef class GraphicalPlane : public GraphicBehavior, public CAnimation
+	typedef class GraphicalPlane : public GraphicBehavior, public Animation
 	{
 	public :
 		// ÉTÉCÉY
