@@ -42,6 +42,7 @@ namespace KMT
 				count++;
 			}
 		}
+
 		// 2D ‚Ì’†S
 		const float FHALF = 0.5f;
 		// ˆê–‡•ª‚Ì•

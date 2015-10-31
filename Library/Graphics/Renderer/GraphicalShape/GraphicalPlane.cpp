@@ -77,21 +77,21 @@ namespace KMT
 				vertex[index]._normal.z = 1;
 				if( texture == NULL )
 				{
-					vertex[index]._UV.x = (float)x * 1.0f;
-					vertex[index]._UV.y = 1.0f - ((float)y * 1.0f);
+					vertex[index]._uv.x = (float)x * 1.0f;
+					vertex[index]._uv.y = 1.0f - ((float)y * 1.0f);
 				}
 			}
 		}
 		if(texture)
 		{
-			vertex[0]._UV.x = (float)_rects[_number].left / _texture->GetImageInfo().Width;
-			vertex[0]._UV.y = (float)_rects[_number].bottom / _texture->GetImageInfo().Height;
-			vertex[1]._UV.x = (float)_rects[_number].right / _texture->GetImageInfo().Width;
-			vertex[1]._UV.y = (float)_rects[_number].bottom / _texture->GetImageInfo().Height;
-			vertex[2]._UV.x = (float)_rects[_number].left / _texture->GetImageInfo().Width;
-			vertex[2]._UV.y = (float)_rects[_number].top / _texture->GetImageInfo().Height;
-			vertex[3]._UV.x = (float)_rects[_number].right / _texture->GetImageInfo().Width;
-			vertex[3]._UV.y = (float)_rects[_number].top / _texture->GetImageInfo().Height;
+			vertex[0]._uv.x = (float)_rects[_number].left / _texture->GetImageInfo().Width;
+			vertex[0]._uv.y = (float)_rects[_number].bottom / _texture->GetImageInfo().Height;
+			vertex[1]._uv.x = (float)_rects[_number].right / _texture->GetImageInfo().Width;
+			vertex[1]._uv.y = (float)_rects[_number].bottom / _texture->GetImageInfo().Height;
+			vertex[2]._uv.x = (float)_rects[_number].left / _texture->GetImageInfo().Width;
+			vertex[2]._uv.y = (float)_rects[_number].top / _texture->GetImageInfo().Height;
+			vertex[3]._uv.x = (float)_rects[_number].right / _texture->GetImageInfo().Width;
+			vertex[3]._uv.y = (float)_rects[_number].top / _texture->GetImageInfo().Height;
 		}
 		mesh->UnlockVertexBuffer();
 		//インデックスデータの作成
@@ -167,14 +167,14 @@ namespace KMT
 		{
 			Vertex* vertex;
 			_mesh->getpd3dMesh()->LockVertexBuffer( 0, (void**)&vertex );
-			vertex[0]._UV.x = (float)_rects[_number].left		/	_textures[0]->GetImageInfo().Width;
-			vertex[0]._UV.y = (float)_rects[_number].bottom	/	_textures[0]->GetImageInfo().Height;
-			vertex[1]._UV.x = (float)_rects[_number].right	/	_textures[0]->GetImageInfo().Width;
-			vertex[1]._UV.y = (float)_rects[_number].bottom	/	_textures[0]->GetImageInfo().Height;
-			vertex[2]._UV.x = (float)_rects[_number].left		/	_textures[0]->GetImageInfo().Width;
-			vertex[2]._UV.y = (float)_rects[_number].top		/	_textures[0]->GetImageInfo().Height;
-			vertex[3]._UV.x = (float)_rects[_number].right	/	_textures[0]->GetImageInfo().Width;
-			vertex[3]._UV.y = (float)_rects[_number].top		/	_textures[0]->GetImageInfo().Height;
+			vertex[0]._uv.x = (float)_rects[_number].left		/	_textures[0]->GetImageInfo().Width;
+			vertex[0]._uv.y = (float)_rects[_number].bottom	/	_textures[0]->GetImageInfo().Height;
+			vertex[1]._uv.x = (float)_rects[_number].right	/	_textures[0]->GetImageInfo().Width;
+			vertex[1]._uv.y = (float)_rects[_number].bottom	/	_textures[0]->GetImageInfo().Height;
+			vertex[2]._uv.x = (float)_rects[_number].left		/	_textures[0]->GetImageInfo().Width;
+			vertex[2]._uv.y = (float)_rects[_number].top		/	_textures[0]->GetImageInfo().Height;
+			vertex[3]._uv.x = (float)_rects[_number].right	/	_textures[0]->GetImageInfo().Width;
+			vertex[3]._uv.y = (float)_rects[_number].top		/	_textures[0]->GetImageInfo().Height;
 			_mesh->getpd3dMesh()->UnlockIndexBuffer();
 			_previousNumber = _number;
 		}

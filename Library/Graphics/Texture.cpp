@@ -99,7 +99,7 @@ namespace KMT {
 		// フォントサイズはポリゴン依存
 		int fontSize = ((width + height) >> 1);
 		fontSize = (fontSize <= 32) ? 32 : fontSize;
-		int Len = 0;
+		int length = 0;
 
 		WCHAR fontBuffer[LF_FACESIZE] = {0};
 		DXconvAnsiToWide(fontBuffer, font.c_str(), (font.length()+1));
@@ -117,7 +117,7 @@ namespace KMT {
 		DXconvAnsiToWide(stringBuffer, string_.c_str(), (string_.length() + 1));
 
 		TCHAR *c = stringBuffer;
-		Len = (int)wcslen(c);
+		length = (int)wcslen(c);
 		//-------------------------------------------------------------------------------
 		// デバイスコンテキスト取得
 		// デバイスにフォントを持たせないとGetGlyphOutline関数はエラーとなる

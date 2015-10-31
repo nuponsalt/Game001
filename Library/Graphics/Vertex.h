@@ -15,13 +15,13 @@ namespace KMT {
 		// 頂点カラー
 		DWORD	 _color;
 		// テクセル座標
-		CVector2 _UV;
+		CVector2 _uv;
 
 		// 定数FVF
 		static const DWORD FVF = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 
 		// コンストラクタ
-		Vertex() : _position(0, 0, 0), _normal(0, 1, 0), _UV(0, 0), _color(0xFFFFFFFF) { }
+		Vertex() : _position(0, 0, 0), _normal(0, 1, 0), _uv(0, 0), _color(0xFFFFFFFF) { }
 
 	};
 

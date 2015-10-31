@@ -25,9 +25,9 @@ namespace KMT
 		virtual ~Animation();
 
 		// テクスチャを画像ファイルから読み込む
-		// _path : 画像のファイルパス
-		// _x_num : 横分割
-		// _y_num : 縦分割
+		// path : 画像のファイルパス
+		// divisionX : 横分割
+		// divisionY : 縦分割
 		void LoadTextureAndAnimation(const std::string &path, const int &divisionX = 1, const int &divisionY = 1, const DWORD &filter = D3DX_FILTER_NONE);
 		
 		//* 取得 *//
@@ -44,7 +44,7 @@ namespace KMT
 		inline void SetPlayMode(PlayMode mode) { _currentPlayMode = mode; }
 
 		// アニメーション制御
-		// _mode : 再生モード
+		// mode : 再生モード
 		// frame : フレーム数
 		// 戻り値 : 再生中か否か(falseは再生中、trueは再生終了)
 		// 備考 : フレーム指定モードの場合は第二引数にフレーム番号を、それ以外のモードでは何フレーム毎にアニメーションさせるかを渡す
