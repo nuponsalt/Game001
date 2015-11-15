@@ -24,7 +24,7 @@ namespace KMT {
 	//	ss << _radius << _facenum;
 	//	std::string name = ss.str();
 	//	// メッシュインスタンスの生成
-	//	Mesh = CMesh::Create(name);
+	//	Mesh = Mesh::Create(name);
 	//	// サイズを記憶
 	//	Size.x = _radius * 2.0f;
 	//	Size.y = _radius * 2.0f;

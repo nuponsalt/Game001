@@ -21,7 +21,7 @@ namespace KMT {
 	typedef std::shared_ptr<GraphicBehavior> GraphicBehaviorSP;
 	typedef std::weak_ptr<GraphicBehavior> GraphicBehaviorWP;
 
-	class GraphicBehavior : public Transformation, public CMaterial
+	class GraphicBehavior : public Transformation, public Material
 	{
 	public :
 		// ソート用の値
@@ -38,7 +38,7 @@ namespace KMT {
 
 		//* 取得 *//
 		// メッシュ
-		inline CMeshSP GetMesh() { return _mesh; }
+		inline MeshSP GetMesh() { return _mesh; }
 		// テクスチャベクター配列
 		inline std::vector<TextureSP> GetTextures() { return _textures; }
 		// テクスチャベクター配列(直接インデックス指定)
@@ -76,7 +76,7 @@ namespace KMT {
 		// ファイルパス
 		std::string _path;
 		// メッシュ
-		CMeshSP _mesh;
+		MeshSP _mesh;
 		// シェーダー
 		ShaderSP _shader;
 		// 描画時のカリングモード保存変数
