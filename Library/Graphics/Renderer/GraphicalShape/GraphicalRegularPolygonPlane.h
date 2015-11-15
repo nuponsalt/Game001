@@ -24,7 +24,7 @@ namespace KMT {
 	{
 	public :
 		// サイズ
-		CVector3 _size ;
+		Vector3 _size ;
 
 		// デストラクタ
 		~GraphicalRegularPolygonPlane(){}
@@ -36,7 +36,7 @@ namespace KMT {
 		static RegPolyPlaneSP Create(const int &radius, const int &faceNumber, const FaceGenerateType &type, const CTextureSP &texture = NULL);
 	
 	private :
-		CVector3 _textureSize ;
+		Vector3 _textureSize ;
 
 		// コンストラクタ
 		GraphicalRegularPolygonPlane();

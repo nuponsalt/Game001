@@ -8,56 +8,56 @@
 
 namespace KMT {
 
-	class CMesh ;
-	typedef std::shared_ptr<CMesh> CMeshSP;
-	typedef std::weak_ptr<CMesh> CMeshWP;
+	class Mesh ;
+	typedef std::shared_ptr<Mesh> MeshSP;
+	typedef std::weak_ptr<Mesh> MeshWP;
 
-	class CMesh
+	class Mesh
 	{
 	public :
 		// デストラクタ
-		~CMesh() ;
+		~Mesh() ;
 		// 空生成
-		static CMeshSP Create(const std::string& _path);
+		static MeshSP CreateEmpty(const std::string& path);
 		// Xファイルを読み込んで生成
-		static CMeshSP CreateFromX(const std::string& _path);
+		static MeshSP CreateFromX(const std::string& path);
 		// 破棄
-		static void Destroy(std::string _name = "all");
+		static void Destroy(std::string name = "all");
 		// 取得
-		inline LPD3DXMESH getpd3dMesh() { return pd3dMesh; }
-		inline LPD3DXBUFFER getpd3dMaterialBuffer() { return pd3dMeterialBuffer; }
-		inline DWORD getMaterialNum() const { return MaterialNumber; }
+		inline LPD3DXMESH GetMesh() { return _mesh; }
+		inline LPD3DXBUFFER GetMaterialBuffer() { return _meterialBuffer; }
+		inline DWORD GetMaterialNumber() const { return _materialNumber; }
 		// 設定
-		inline void setpd3dMesh(LPD3DXMESH const _p) { pd3dMesh = _p; }
-		inline void setVertexNum(const WORD _num) { VertexNumber = _num; }
-		inline void setVertexIndexNum(const WORD _num) { IndexNumber = _num; }
-		void setpd3dMeshVertexIndexBuffer(const WORD* _idx);
-		void setpd3dMeshVertexBuffer(const CVertex* _info, const size_t _memsize);
+		inline void SetMesh(LPD3DXMESH const mesh) { _mesh = mesh; }
+		inline void setVertexNum(const WORD number) { _vertexNumber = number; }
+		inline void setVertexIndexNum(const WORD number) { _indexNumber = number; }
+		void SetMeshVertexIndexBuffer(const WORD* index);
+		void SetMeshVertexBuffer(const CVertex* vertexInfo, const size_t memorySize);
 
 	private :
 		// パス
-		std::string FilePath;
+		std::string _path;
 		// メッシュ
-		LPD3DXMESH pd3dMesh;
+		LPD3DXMESH _mesh;
 		// マテリアルバッファー
-		LPD3DXBUFFER pd3dMeterialBuffer;
+		LPD3DXBUFFER _meterialBuffer;
 		// 頂点数
-		WORD VertexNumber;
+		WORD _vertexNumber;
 		// 頂点インデックス
-		BYTE* pIndex;
+		BYTE* _index;
 		// 頂点インデックス数
-		WORD IndexNumber;
+		WORD _indexNumber;
 		// 面数
-		WORD PrimitiveNumber;
+		WORD _faceNumber;
 		// マテリアルの数
-		DWORD MaterialNumber;
+		DWORD _materialNumber;
 		// 頂点情報
-		CVertex* pVertex;
+		CVertex* _vertexInformation;
 		// ハッシュマップ
-		static std::unordered_map<std::string, CMeshWP> Meshs;
+		static std::unordered_map<std::string, MeshWP> _meshes;
 
 		// コンストラクタ
-		CMesh();
+		Mesh();
 	
 	};
 }

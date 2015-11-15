@@ -9,7 +9,7 @@
 #include <sstream>
 
 using namespace KMT;
-static void GetBillBoardRotation(CVector3* billBoardPosition, CVector3* targetPosition, CMatrix* rotation )
+static void GetBillBoardRotation(Vector3* billBoardPosition, Vector3* targetPosition, CMatrix* rotation )
 {
 	D3DXMatrixIdentity((D3DXMATRIX*)rotation);
 	D3DXMatrixLookAtLH(rotation, (D3DXVECTOR3*)targetPosition, (D3DXVECTOR3*)billBoardPosition, &D3DXVECTOR3(0, 1, 0));
@@ -37,7 +37,7 @@ namespace KMT
 		nameBuffer << path << ++_createCount << width << height;
 		std::string name = nameBuffer.str();
 		// メッシュインスタンスの生成
-		_mesh = CMesh::Create(name);
+		_mesh = Mesh::CreateEmpty(name);
 		// サイズを記録
 		_size.x = (float)width ;
 		_size.y = (float)height ;
@@ -104,7 +104,7 @@ namespace KMT
 		index[4] = 2;
 		index[5] = 3;
 		mesh->UnlockIndexBuffer();
-	    _mesh->setpd3dMesh(mesh);
+	    _mesh->SetMesh(mesh);
 
 		return true;
 	}
@@ -166,7 +166,7 @@ namespace KMT
 		if(_previousNumber != Number)
 		{
 			CVertex* vertex;
-			_mesh->getpd3dMesh()->LockVertexBuffer( 0, (void**)&vertex );
+			_mesh->GetMesh()->LockVertexBuffer( 0, (void**)&vertex );
 			vertex[0].UV.x = (float)Rects[Number].left		/	_textures[0]->getd3dImageInfo().Width;
 			vertex[0].UV.y = (float)Rects[Number].bottom	/	_textures[0]->getd3dImageInfo().Height;
 			vertex[1].UV.x = (float)Rects[Number].right		/	_textures[0]->getd3dImageInfo().Width;
@@ -175,7 +175,7 @@ namespace KMT
 			vertex[2].UV.y = (float)Rects[Number].top		/	_textures[0]->getd3dImageInfo().Height;
 			vertex[3].UV.x = (float)Rects[Number].right		/	_textures[0]->getd3dImageInfo().Width;
 			vertex[3].UV.y = (float)Rects[Number].top		/	_textures[0]->getd3dImageInfo().Height;
-			_mesh->getpd3dMesh()->UnlockIndexBuffer();
+			_mesh->GetMesh()->UnlockIndexBuffer();
 			_previousNumber = Number;
 		}
 		// ワールド行列設定
@@ -202,7 +202,7 @@ namespace KMT
 		// ビルボードの場合
 		if(_isBillBoard)
 		{
-			CVector3 cameraPosition = camera->getEye() ;
+			Vector3 cameraPosition = camera->getEye() ;
 			GetBillBoardRotation(&Position, &cameraPosition, &RotMtx);
 		}
 		// 位置
@@ -217,7 +217,7 @@ namespace KMT
 		// カメラの座標をシェーダに使用するための行列変換
 		CMatrix CamMtx = WldMtx * camera->getMatrix(CViewBehavior::VIEW);
 		D3DXMatrixInverse(&CamMtx, NULL, &CamMtx);
-		CVector4 EyePos = CVector4(
+		Vector4 EyePos = Vector4(
 			camera->getEye().x, 
 			camera->getEye().y, 
 			camera->getEye().z, 
@@ -234,7 +234,7 @@ namespace KMT
 
 		HRESULT hr;
 		// 3D モデルのパーツ分ループして描画
-		for(size_t i = 0 ; i < _mesh->getMaterialNum(); i++)
+		for(size_t i = 0 ; i < _mesh->GetMaterialNumber(); i++)
 		{
 			// テクスチャが存在しない場合のカラー
 			D3DXVECTOR4 vec4 = D3DXVECTOR4(1.0,1.0,1.0,1.0);
@@ -244,7 +244,7 @@ namespace KMT
 			{
 				LPDIRECT3DTEXTURE9 texture = _textures[i]->getpd3dTexture();
 				// シェーダにカラーを渡す
-				_shader->SetColor(vColorRGBA);
+				_shader->SetColor(_colorRGBA);
 				_shader->SetTexture(texture);
 			}else
 				_shader->SetColor(vec4);
@@ -252,11 +252,11 @@ namespace KMT
 			// シェーダの使用開始
 			_shader->BeginShader();
 			// シェーダのパス設定
-			_shader->BeginPass(isAddBlend);
+			_shader->BeginPass(_addsBlend);
 			// パーツの描画	
 			if(SUCCEEDED(GraphicsManager::_device->BeginScene()))
 			{
-				_mesh->getpd3dMesh()->DrawSubset(i); 
+				_mesh->GetMesh()->DrawSubset(i); 
 				V(GraphicsManager::_device->EndScene());
 			}
 			// パス終了

@@ -10,7 +10,7 @@ namespace KMT {
 	typedef struct tag_POINTSPRITE
 	{
 		// 頂点座標
-		CVector3 _position;
+		Vector3 _position;
 		// ポイントスプライトサイズ
 		float _size;
 		// 頂点カラー
@@ -26,9 +26,9 @@ namespace KMT {
 	{
 	public :
 		// 座標
-		CVector3 _position;
+		Vector3 _position;
 		// 放出方向ベクトル
-		std::vector<CVector3> _directions;
+		std::vector<Vector3> _directions;
 		// 速度
 		std::vector<float> _speeds;
 		// 加速度

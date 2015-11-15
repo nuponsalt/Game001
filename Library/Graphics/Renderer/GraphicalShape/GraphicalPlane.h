@@ -16,7 +16,7 @@ namespace KMT
 	{
 	public :
 		// サイズ
-		CVector3 _size;
+		Vector3 _size;
 
 		// デストラクタ
 		~GraphicalPlane(){}
@@ -38,7 +38,7 @@ namespace KMT
 
 	private :
 		// テクスチャーのサイズ
-		CVector3 _textureSize;
+		Vector3 _textureSize;
 		// 前のアニメーション番号
 		int _previousNumber;
 		// 板ポリの生成カウント

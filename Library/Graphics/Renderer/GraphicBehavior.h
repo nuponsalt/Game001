@@ -21,7 +21,7 @@ namespace KMT {
 	typedef std::shared_ptr<GraphicBehavior> GraphicBehaviorSP;
 	typedef std::weak_ptr<GraphicBehavior> GraphicBehaviorWP;
 
-	class GraphicBehavior : public CTransformation, public CMaterial
+	class GraphicBehavior : public Transformation, public Material
 	{
 	public :
 		// ソート用の値
@@ -38,13 +38,13 @@ namespace KMT {
 
 		//* 取得 *//
 		// メッシュ
-		inline CMeshSP GetMesh() { return _mesh; }
+		inline MeshSP GetMesh() { return _mesh; }
 		// テクスチャベクター配列
 		inline std::vector<CTextureSP> GetTextures() { return _textures; }
 		// テクスチャベクター配列(直接インデックス指定)
 		inline CTextureSP GetTexturesElement(size_t index) { return _textures[index]; }
 		// 拡散反射色(ディフューズ色)
-		inline CVector4 GetDiffuseColors(size_t index) { return _diffuseColors[index]; }
+		inline Vector4 GetDiffuseColors(size_t index) { return _diffuseColors[index]; }
 
 		//* 設定 *//
 		// シェーダー
@@ -76,7 +76,7 @@ namespace KMT {
 		// ファイルパス
 		std::string _path;
 		// メッシュ
-		CMeshSP _mesh;
+		MeshSP _mesh;
 		// シェーダー
 		ShaderSP _shader;
 		// 描画時のカリングモード保存変数
@@ -85,7 +85,7 @@ namespace KMT {
 		// テクスチャー配列(std::vector)
 		std::vector<CTextureSP> _textures;
 		// 頂点カラー配列(std::vector)
-		std::vector<CVector4> _diffuseColors;
+		std::vector<Vector4> _diffuseColors;
 
 	};
 
