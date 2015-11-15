@@ -117,14 +117,14 @@ namespace KMT {
 		HRESULT hr;
 		// 描画処理
 		// シェーダーにカラーを渡す
-		_shader->SetColor(vColorRGBA);
+		_shader->SetColor(_colorRGBA);
 		// テクスチャを渡す
 		if(NULL != _texture)
 			_shader->SetTexture(_texture->getpd3dTexture());
 		// シェーダーの使用開始
 		_shader->BeginShader();
 		// シェーダーのパス開始
-		_shader->BeginPass(isAddBlend);
+		_shader->BeginPass(_addsBlend);
 		// パーティクルの使用を有効にする
 		GraphicsManager::_device->SetRenderState(D3DRS_POINTSPRITEENABLE, TRUE);
 		GraphicsManager::_device->SetRenderState(D3DRS_POINTSCALEENABLE, TRUE);
