@@ -51,7 +51,7 @@ namespace KMT {
 		// シェーダーの開放
 		Shader::Destroy();
 		// テクスチャの開放
-		CTexture::Destroy();
+		Texture::Destroy();
 	}
 
 	void GraphicsManager::SetRenderTargetToBackBuffer()

@@ -45,7 +45,7 @@ namespace KMT {
 		_emitterData = new Emitter();
 
 		// テクスチャのロード
-		_texture = CTexture::CreateFromFile(path, D3DX_FILTER_NONE);
+		_texture = Texture::CreateFromFile(path, D3DX_FILTER_NONE);
 		// シェーダーを設定
 		_shader = ShaderParticle::Create();
 	}
@@ -120,7 +120,7 @@ namespace KMT {
 		_shader->SetColor(vColorRGBA);
 		// テクスチャを渡す
 		if(NULL != _texture)
-			_shader->SetTexture(_texture->getpd3dTexture());
+			_shader->SetTexture(_texture->GetTextureData());
 		// シェーダーの使用開始
 		_shader->BeginShader();
 		// シェーダーのパス開始

@@ -37,10 +37,10 @@ namespace KMT {
 		LayerSP object = LayerSP(new Layer);
 
 		// テクスチャの生成
-		object->_texture = CTexture::CreateEmpty(width, height);
+		object->_texture = Texture::CreateEmpty(width, height);
 
 		// サーフェイスの取得
-		if (FAILED(object->_texture->getpd3dTexture()->GetSurfaceLevel(0, &object->_textureSurface)))
+		if (FAILED(object->_texture->GetTextureData()->GetSurfaceLevel(0, &object->_textureSurface)))
 		{
 			// サーフェイス取得失敗
 			// エラーに対応するコード
@@ -48,8 +48,8 @@ namespace KMT {
 
 		// ステンシルバッファの作成
 		if (FAILED(GraphicsManager::_device->CreateDepthStencilSurface( 
-			object->_texture->getd3dImageInfo().Width,
-			object->_texture->getd3dImageInfo().Height,
+			object->_texture->GetImageInfo().Width,
+			object->_texture->GetImageInfo().Height,
 			D3DFMT_D16, 
 			D3DMULTISAMPLE_NONE, 
 			0, 

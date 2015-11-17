@@ -12,13 +12,13 @@ namespace KMT {
 
 	Sprite::~Sprite()
 	{
-		Texture.reset() ;
+		_texture.reset() ;
 		SAFE_RELEASE( _sprite ) ;
 	}
 
-	void Sprite::SetTexture(const CTextureSP &texture) 
+	void Sprite::SetTexture(const TextureSP &texture) 
 	{
-		Texture = texture ;
+		_texture = texture ;
 	}
 
 	SpriteSP Sprite::CreateFromFile(const std::string &path)
@@ -86,11 +86,11 @@ namespace KMT {
 			// スプライトの描画命令
 			_sprite->Draw(
 				// 描画に使用するテクスチャ
-				Texture->getpd3dTexture(),
+				_texture->GetTextureData(),
 				// 画像の描画範囲
-				&Rects[Number],	
+				&_rects[_number],	
 				// サーフェイスの中心
-				(D3DXVECTOR3*)&CenterPosition,
+				(D3DXVECTOR3*)&_centerPosition,
 				// 描画座標(行列で制御するので0, 0, 0でOK)
 				&D3DXVECTOR3(0,0,0),
 				// 色

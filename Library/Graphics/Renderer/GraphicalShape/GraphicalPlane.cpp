@@ -29,7 +29,7 @@ namespace KMT
 	GraphicalPlane::GraphicalPlane() : _textureSize(1.0f, 1.0f, 0.0f), _previousNumber(0)
 	{}
 
-	bool GraphicalPlane::GenerateBoard(const std::string& path, const int &width, const int &height, const CTextureSP &texture)
+	bool GraphicalPlane::GenerateBoard(const std::string& path, const int &width, const int &height, const TextureSP &texture)
 	{
 		// キーネーム設定
 		std::stringstream nameBuffer("");
@@ -45,11 +45,11 @@ namespace KMT
 		// テクスチャ指定がある場合そのサイズを取得
 		if(texture != NULL)
 		{
-			while(UINT(_textureSize.x) < Texture->getd3dImageInfo().Width)
+			while(UINT(_textureSize.x) < _texture->GetImageInfo().Width)
 			{
 				_textureSize.x *= 2;
 			}
-			while(UINT(_textureSize.y) < Texture->getd3dImageInfo().Height)
+			while(UINT(_textureSize.y) < _texture->GetImageInfo().Height)
 			{
 				_textureSize.y *= 2;
 			}
@@ -58,40 +58,40 @@ namespace KMT
 		_shader = ShaderNormal::Create();
 		// メッシュを生成する
 		LPD3DXMESH mesh;
-		if (FAILED(D3DXCreateMeshFVF(2, 4, D3DXMESH_MANAGED, CVertex::FVF, GraphicsManager::_device, &mesh)))
+		if (FAILED(D3DXCreateMeshFVF(2, 4, D3DXMESH_MANAGED, Vertex::FVF, GraphicsManager::_device, &mesh)))
 			return false;
 
 		//頂点データの作成
-		CVertex* vertex;
+		Vertex* vertex;
 		mesh->LockVertexBuffer(0, (void**)&vertex);
 		for (int y = 0 ; y < 2 ; y++) {
 			for (int x = 0 ; x < 2 ; x++) {
 				float x1 = (float)(x * width - ((float)width / 2));
 				float y1 = (float)(y * height - ((float)height / 2));
 				int index = y * 2 + x;
-				vertex[index].Position.x = x1;
-				vertex[index].Position.y = y1;
-				vertex[index].Position.z = 0;
-				vertex[index].Normal.x = 0;
-				vertex[index].Normal.y = 0;
-				vertex[index].Normal.z = 1;
+				vertex[index]._position.x = x1;
+				vertex[index]._position.y = y1;
+				vertex[index]._position.z = 0;
+				vertex[index]._normal.x = 0;
+				vertex[index]._normal.y = 0;
+				vertex[index]._normal.z = 1;
 				if( texture == NULL )
 				{
-					vertex[index].UV.x = (float)x * 1.0f;
-					vertex[index].UV.y = 1.0f - ((float)y * 1.0f);
+					vertex[index]._uv.x = (float)x * 1.0f;
+					vertex[index]._uv.y = 1.0f - ((float)y * 1.0f);
 				}
 			}
 		}
 		if(texture)
 		{
-			vertex[0].UV.x = (float)Rects[Number].left / Texture->getd3dImageInfo().Width;
-			vertex[0].UV.y = (float)Rects[Number].bottom / Texture->getd3dImageInfo().Height;
-			vertex[1].UV.x = (float)Rects[Number].right / Texture->getd3dImageInfo().Width;
-			vertex[1].UV.y = (float)Rects[Number].bottom / Texture->getd3dImageInfo().Height;
-			vertex[2].UV.x = (float)Rects[Number].left / Texture->getd3dImageInfo().Width;
-			vertex[2].UV.y = (float)Rects[Number].top / Texture->getd3dImageInfo().Height;
-			vertex[3].UV.x = (float)Rects[Number].right / Texture->getd3dImageInfo().Width;
-			vertex[3].UV.y = (float)Rects[Number].top / Texture->getd3dImageInfo().Height;
+			vertex[0]._uv.x = (float)_rects[_number].left / _texture->GetImageInfo().Width;
+			vertex[0]._uv.y = (float)_rects[_number].bottom / _texture->GetImageInfo().Height;
+			vertex[1]._uv.x = (float)_rects[_number].right / _texture->GetImageInfo().Width;
+			vertex[1]._uv.y = (float)_rects[_number].bottom / _texture->GetImageInfo().Height;
+			vertex[2]._uv.x = (float)_rects[_number].left / _texture->GetImageInfo().Width;
+			vertex[2]._uv.y = (float)_rects[_number].top / _texture->GetImageInfo().Height;
+			vertex[3]._uv.x = (float)_rects[_number].right / _texture->GetImageInfo().Width;
+			vertex[3]._uv.y = (float)_rects[_number].top / _texture->GetImageInfo().Height;
 		}
 		mesh->UnlockVertexBuffer();
 		//インデックスデータの作成
@@ -109,7 +109,7 @@ namespace KMT
 		return true;
 	}
 
-	GraphicalPlaneSP GraphicalPlane::Create(const int &width, const int &height, const CTextureSP &texture)
+	GraphicalPlaneSP GraphicalPlane::Create(const int &width, const int &height, const TextureSP &texture)
 	{
 		GraphicalPlane *object = new GraphicalPlane();
 		++_createCount;
@@ -127,16 +127,16 @@ namespace KMT
 		// リソースからテクスチャを生成
 		LoadTextureAndAnimation(path, divisionX, divisionY, D3DX_DEFAULT);
 		// イメージサイズに合わせて板ポリゴンを生成
-		(sizeX == 0 && sizeY == 0) ? GenerateBoard(path, (int)ImageSize.x, (int)ImageSize.y, Texture) : GenerateBoard(_path, sizeX, sizeY, Texture);
+		(sizeX == 0 && sizeY == 0) ? GenerateBoard(path, (int)_imageSize.x, (int)_imageSize.y, _texture) : GenerateBoard(_path, sizeX, sizeY, _texture);
 		// テクスチャーを挿入
-		SetTexture(Texture);
+		SetTexture(_texture);
 	}
 
-	void GraphicalPlane::LoadTexture (const CTextureSP& texture,const int& divisionX, const int &divisionY, const int &sizeX, const int &sizeY)
+	void GraphicalPlane::LoadTexture (const TextureSP& texture,const int& divisionX, const int &divisionY, const int &sizeX, const int &sizeY)
 	{
-		Texture = texture;
-		(sizeX == 0 && sizeY == 0) ? GenerateBoard(texture->getFilePath(), (int)ImageSize.x, (int)ImageSize.y, Texture) : GenerateBoard(texture->getFilePath(), sizeX, sizeY, Texture);
-		SetTexture(Texture);
+		_texture = texture;
+		(sizeX == 0 && sizeY == 0) ? GenerateBoard(texture->GetFilePath(), (int)_imageSize.x, (int)_imageSize.y, _texture) : GenerateBoard(texture->GetFilePath(), sizeX, sizeY, _texture);
+		SetTexture(_texture);
 	}
 
 	GraphicalPlaneSP GraphicalPlane::CreateFromTexture(const std::string &path, const int &divisionX, const int &divisionY, const int &sizeX, const int &sizeY)
@@ -149,7 +149,7 @@ namespace KMT
 		return GraphicalPlaneSP(object);
 	}
 
-	GraphicalPlaneSP GraphicalPlane::CreateFromTexture(const CTextureSP &texture, const int &divisionX, const int &divisionY, const int &sizeX, const int &sizeY)
+	GraphicalPlaneSP GraphicalPlane::CreateFromTexture(const TextureSP &texture, const int &divisionX, const int &divisionY, const int &sizeX, const int &sizeY)
 	{
 		GraphicalPlane* object = new GraphicalPlane();
 		object->LoadTexture(texture, divisionX, divisionY, sizeX, sizeY);
@@ -163,20 +163,20 @@ namespace KMT
 		if(!_renders)
 			return;
 		// 分割読み込みした場合の画像範囲選択
-		if(_previousNumber != Number)
+		if(_previousNumber != _number)
 		{
-			CVertex* vertex;
+			Vertex* vertex;
 			_mesh->getpd3dMesh()->LockVertexBuffer( 0, (void**)&vertex );
-			vertex[0].UV.x = (float)Rects[Number].left		/	_textures[0]->getd3dImageInfo().Width;
-			vertex[0].UV.y = (float)Rects[Number].bottom	/	_textures[0]->getd3dImageInfo().Height;
-			vertex[1].UV.x = (float)Rects[Number].right		/	_textures[0]->getd3dImageInfo().Width;
-			vertex[1].UV.y = (float)Rects[Number].bottom	/	_textures[0]->getd3dImageInfo().Height;
-			vertex[2].UV.x = (float)Rects[Number].left		/	_textures[0]->getd3dImageInfo().Width;
-			vertex[2].UV.y = (float)Rects[Number].top		/	_textures[0]->getd3dImageInfo().Height;
-			vertex[3].UV.x = (float)Rects[Number].right		/	_textures[0]->getd3dImageInfo().Width;
-			vertex[3].UV.y = (float)Rects[Number].top		/	_textures[0]->getd3dImageInfo().Height;
+			vertex[0]._uv.x = (float)_rects[_number].left		/	_textures[0]->GetImageInfo().Width;
+			vertex[0]._uv.y = (float)_rects[_number].bottom	/	_textures[0]->GetImageInfo().Height;
+			vertex[1]._uv.x = (float)_rects[_number].right	/	_textures[0]->GetImageInfo().Width;
+			vertex[1]._uv.y = (float)_rects[_number].bottom	/	_textures[0]->GetImageInfo().Height;
+			vertex[2]._uv.x = (float)_rects[_number].left		/	_textures[0]->GetImageInfo().Width;
+			vertex[2]._uv.y = (float)_rects[_number].top		/	_textures[0]->GetImageInfo().Height;
+			vertex[3]._uv.x = (float)_rects[_number].right	/	_textures[0]->GetImageInfo().Width;
+			vertex[3]._uv.y = (float)_rects[_number].top		/	_textures[0]->GetImageInfo().Height;
 			_mesh->getpd3dMesh()->UnlockIndexBuffer();
-			_previousNumber = Number;
+			_previousNumber = _number;
 		}
 		// ワールド行列設定
 		CMatrix SclMtx, RotMtx, PosMtx, WldMtx, WVPMtx;
@@ -242,7 +242,7 @@ namespace KMT
 			// シェーダにテクスチャを渡す
 			if(NULL != _textures[i])
 			{
-				LPDIRECT3DTEXTURE9 texture = _textures[i]->getpd3dTexture();
+				LPDIRECT3DTEXTURE9 texture = _textures[i]->GetTextureData();
 				// シェーダにカラーを渡す
 				_shader->SetColor(vColorRGBA);
 				_shader->SetTexture(texture);

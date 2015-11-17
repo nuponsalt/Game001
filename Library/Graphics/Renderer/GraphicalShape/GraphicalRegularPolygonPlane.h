@@ -33,7 +33,7 @@ namespace KMT {
 		// faceNumber : 縦幅サイズ
 		// type : 面生成タイプ
 		// texture : テクスチャー
-		static RegPolyPlaneSP Create(const int &radius, const int &faceNumber, const FaceGenerateType &type, const CTextureSP &texture = NULL);
+		static RegPolyPlaneSP Create(const int &radius, const int &faceNumber, const FaceGenerateType &type, const TextureSP &texture = NULL);
 	
 	private :
 		CVector3 _textureSize ;
@@ -44,7 +44,7 @@ namespace KMT {
 		// radius : 半径
 		// faceNumber : 面数(3で正三角形,数が増えるほど円に近くなる)
 		// texture : テクスチャー
-		bool GenerateRegularPolygonBoard(const int &radius, const int &faceNumber, const FaceGenerateType &type, const CTextureSP &texture = NULL);
+		bool GenerateRegularPolygonBoard(const int &radius, const int &faceNumber, const FaceGenerateType &type, const TextureSP &texture = NULL);
 	};
 
 }

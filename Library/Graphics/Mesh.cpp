@@ -100,7 +100,7 @@ namespace KMT {
 		pd3dMesh->UnlockIndexBuffer();
 	}
 
-	void CMesh::setpd3dMeshVertexBuffer(const CVertex* _info, const size_t _memsize)
+	void CMesh::setpd3dMeshVertexBuffer(const Vertex* _info, const size_t _memsize)
 	{
 		pd3dMesh->LockVertexBuffer(0, (void**)&pVertex);
 		memcpy(pVertex, _info, _memsize * VertexNumber);

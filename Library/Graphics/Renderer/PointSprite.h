@@ -66,7 +66,7 @@ namespace KMT {
 		// 頂点バッファ
 		LPDIRECT3DVERTEXBUFFER9 _vertexBuffer;
 		// テクスチャ
-		CTextureSP _texture;
+		TextureSP _texture;
 		// エミッター配列(std::vector)
 		Emitter* _emitterData;
 

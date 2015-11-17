@@ -12,63 +12,63 @@
 namespace KMT {
 
 	//--------------------------------------------------------------------
-	// CTexture
+	// Texture
 
-	class CTexture;
+	class Texture;
 
-	typedef std::shared_ptr<CTexture> CTextureSP;
-	typedef std::weak_ptr<CTexture> CTextureWP;
+	typedef std::shared_ptr<Texture> TextureSP;
+	typedef std::weak_ptr<Texture> TextureWP;
 
-	class CTexture sealed
+	class Texture sealed
 	{
 	private :
 		// テクスチャのマップ
-		static std::unordered_map<std::string, CTextureWP> Textures;
+		static std::unordered_map<std::string, TextureWP> _textures;
 		// 文字テクスチャマップ
-		static std::unordered_map<std::string, CTextureWP> stringTextures;
+		static std::unordered_map<std::string, TextureWP> _stringTextures;
 		// ファイルパス
-		std::string FilePath;
+		std::string _filePath;
 		// テクスチャデータ
-		LPDIRECT3DTEXTURE9 pd3dTexture;
+		LPDIRECT3DTEXTURE9 _textureData;
 		// 画像情報
-		D3DXIMAGE_INFO d3dImageInfo;
+		D3DXIMAGE_INFO _imageInfo;
 		// テクスチャーの番号
-		static size_t TexCount;
+		static size_t _textureCount;
 
 		// コンストラクタ
-		CTexture();
+		Texture();
 
 	public :
 		// デストラクタ
-		~CTexture();
+		~Texture();
 		// 空のテクスチャ生成
-		// _name : ハッシュマップ登録名
-		// nWidth : 生成時のテクスチャの幅
-		// nHeight : 生成時のテクスチャの高さ
-		static CTextureSP CreateEmpty(const size_t Width, const size_t Height);
+		// width : 生成時のテクスチャの幅
+		// height : 生成時のテクスチャの高さ
+		static TextureSP CreateEmpty(const size_t width, const size_t height);
 		// 文字が書き込まれたテクスチャの生成
-		// nWidth : テクスチャの幅
-		// nHeight : テクスチャの高さ
-		// nFromRGB : フォントのグラデーションの開始色( ARGBの論理和指定 )
-		// nToRGB : フォントのグラデーションの終了色( ARGBの論理和指定 )
-		// cFont : 使用するフォント
-		// cChar : 生成する文字
+		// width : テクスチャの幅
+		// height : テクスチャの高さ
+		// color1 : フォントのグラデーションの開始色( ARGBの論理和指定 )
+		// color1 : フォントのグラデーションの終了色( ARGBの論理和指定 )
+		// font : 使用するフォント
+		// string_ : 生成する文字
 		// 備考 : マップ登録キーはフォント名＋生成文字
-		static CTextureSP CreateToFont(int nWidth, int nHeight, int nFromRGB, int nToRGB, const std::string Font, const std::string Char);
+		static TextureSP CreateToFont(int width, int height, int color1, int color2, const std::string font, const std::string string_);
 		// リソースからのテクスチャ生成
-		// _path : ファイルパス
-		static CTextureSP CreateFromFile(const std::string &_path, const DWORD dwFilter = D3DX_FILTER_NONE);
+		// path : ファイルパス
+		// filter : フィルタリングの設定
+		static TextureSP CreateFromFile(const std::string &path, const DWORD filter = D3DX_FILTER_NONE);
 		// 破棄
-		// m_name : 破棄するオブジェクトの名前
+		// name : 破棄するオブジェクトの名前
 		// tips : デフォルト引数のallで全ての配列内オブジェクトを破棄
-		static void Destroy(std::string _name = "all");
+		static void Destroy(std::string name = "all");
 
 		// 取得 : ファイルパス
-		inline std::string getFilePath() { return FilePath; }
+		inline std::string GetFilePath() { return _filePath; }
 		// 取得 : DirectXテクスチャ情報
-		inline LPDIRECT3DTEXTURE9 getpd3dTexture() { return pd3dTexture; }
+		inline LPDIRECT3DTEXTURE9 GetTextureData() { return _textureData; }
 		// 取得 : イメージ情報取得
-		inline D3DXIMAGE_INFO getd3dImageInfo() { return d3dImageInfo; }
+		inline D3DXIMAGE_INFO GetImageInfo() { return _imageInfo; }
 
 	} ;
 
