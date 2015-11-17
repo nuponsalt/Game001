@@ -16,7 +16,7 @@ namespace KMT {
 		// マテリアル情報の取得
 		D3DXMATERIAL *materials = (D3DXMATERIAL*)(_mesh->getpd3dMaterialBuffer()->GetBufferPointer());
 		// テクスチャのロード
-		CTextureSP texture;
+		TextureSP texture;
 		for(size_t i = 0; i < _mesh->getMaterialNum(); i++){
 			// 特定の部分でテクスチャが存在しない場合
 			if(NULL == materials[i].pTextureFilename){
@@ -86,7 +86,7 @@ namespace KMT {
 				}
 			}
 			// 独自テクスチャクラスとして生成
-			texture = CTexture::CreateFromFile(texturePath, D3DX_DEFAULT);
+			texture = Texture::CreateFromFile(texturePath, D3DX_DEFAULT);
 
 			_textures.push_back(texture);
 		}
@@ -162,7 +162,7 @@ namespace KMT {
 			// シェーダにテクスチャを渡す
 			if(NULL != _textures[i])
 			{
-				LPDIRECT3DTEXTURE9 texture = _textures[i]->getpd3dTexture();
+				LPDIRECT3DTEXTURE9 texture = _textures[i]->GetTextureData();
 				// シェーダにカラーを渡す
 				_shader->SetColor(vColorRGBA);
 				_shader->SetTexture(texture);

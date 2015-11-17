@@ -17,7 +17,7 @@ namespace KMT {
 	typedef std::shared_ptr<Sprite> SpriteSP ;
 	typedef std::weak_ptr<Sprite> SpriteWP ;
 
-	class Sprite : public GraphicBehavior, public CAnimation
+	class Sprite : public GraphicBehavior, public Animation
 	{
 	public :
 		// 画像のどの範囲を描画するか
@@ -27,7 +27,7 @@ namespace KMT {
 		~Sprite();
 
 		// テクスチャの設定
-		void SetTexture(const CTextureSP &texture);
+		void SetTexture(const TextureSP &texture);
 		//* 生成 *//
 		static SpriteSP Create();
 		// 一枚テクスチャ

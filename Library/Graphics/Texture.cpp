@@ -14,110 +14,110 @@
 namespace KMT {
 
 	//-----------------------------------------------------------
-	// CTexture
+	// Texture
 
 	// static parameters
-	std::unordered_map<std::string, CTextureWP> CTexture::Textures;
-	std::unordered_map<std::string, CTextureWP> CTexture::stringTextures;
-	size_t CTexture::TexCount = 0;
+	std::unordered_map<std::string, TextureWP> Texture::_textures;
+	std::unordered_map<std::string, TextureWP> Texture::_stringTextures;
+	size_t Texture::_textureCount = 0;
 
-	CTexture::CTexture() : pd3dTexture( NULL )
+	Texture::Texture() : _textureData( NULL )
 	{}
 
-	CTexture::~CTexture()
+	Texture::~Texture()
 	{
 		// イテレータを準備
 		// ファイルパスで検索
-		std::unordered_map<std::string, CTextureWP>::iterator it = Textures.find(FilePath);
+		std::unordered_map<std::string, TextureWP>::iterator texturesIterator = _textures.find(_filePath);
 		// 該当ありだった場合
-		if(it != Textures.end())
+		if(texturesIterator != _textures.end())
 			// mapから消す
-			Textures.erase(it);
+			_textures.erase(texturesIterator);
 
-		SAFE_RELEASE(pd3dTexture);
+		SAFE_RELEASE(_textureData);
 #if _DEBUG
 		OutputDebugString(L"Release Texture\n");
 #endif
 	}
 
-	CTextureSP CTexture::CreateEmpty( const size_t nWidth, const size_t nHeight )
+	TextureSP Texture::CreateEmpty( const size_t width, const size_t height )
 	{
 			
 		// テクスチャクラスのポインタを用意
 		// 新しくテクスチャクラスを作製
-		CTextureSP ptexture = CTextureSP( new CTexture() ) ;
+		TextureSP object = TextureSP( new Texture() ) ;
 
 		// widthとheightの大きいほうを基準とする
-		int size = nWidth > nHeight ? nWidth : nHeight ;
-		int tex_size = 1 ;
-		while( tex_size < size )
+		int size = width > height ? width : height ;
+		int textureSize = 1 ;
+		while( textureSize < size )
 		{
-			tex_size *= 2 ;
+			textureSize *= 2 ;
 		}
 
 		if ( FAILED( D3DXCreateTexture( DXUTGetD3D9Device(), 
-			tex_size, 
-			tex_size, 
+			textureSize, 
+			textureSize, 
 			0, 
 			D3DUSAGE_RENDERTARGET, 
 			D3DFMT_A8R8G8B8, 
 			D3DPOOL_DEFAULT, 
-			&ptexture->pd3dTexture ) ) )
+			&object->_textureData ) ) )
 		{
 			// テクスチャの作成に失敗
 			// エラーに対応するコードをここに書く
 			//CDebug::AddString("Error : Failed to Create Texture\n"); 
 		}
 		// テクスチャのサイズを記録
-		ptexture->d3dImageInfo.Width = tex_size ;
-		ptexture->d3dImageInfo.Height = tex_size ;
+		object->_imageInfo.Width = textureSize ;
+		object->_imageInfo.Height = textureSize ;
 		// テクスチャの総数を更新
-		TexCount ++ ;
+		_textureCount ++ ;
 		// テクスチャNoをファイルパスの代わりにキーにしてマップに登録
-		std::stringstream ss ;
-		ss.str("");
-		ss << TexCount << ":" << nWidth << nHeight ;
-		std::string str = ss.str().c_str() ;
+		std::stringstream pathBuffer ;
+		pathBuffer.str("");
+		pathBuffer << _textureCount << ":" << width << height ;
+		std::string path = pathBuffer.str().c_str() ;
 		// ファイルパスを保持
-		ptexture->FilePath = str;
+		object->_filePath = path;
 		// マップに登録
-		Textures.insert( std::make_pair( str, CTextureWP( ptexture ) ) ) ;
+		_textures.insert( std::make_pair( path, TextureWP( object ) ) ) ;
 
-		return ptexture ;
+		return object ;
 	}
 
 
-	CTextureSP CTexture::CreateToFont( int nWidth, int nHeight, int nFromRGB, int nToRGB, const std::string cFont, const std::string cChar ) 
+	TextureSP Texture::CreateToFont( int width, int height, int color1, int color2, const std::string font, const std::string string_ ) 
 	{
-		std::stringstream ss("") ;
-		ss << cFont << cChar ;
+		std::stringstream texturePath("") ;
+		texturePath << font << string_ ;
 		// 既にこのテクスチャーが存在する場合、返す
-		std::unordered_map<std::string, CTextureWP>::iterator it = Textures.find( ss.str() ) ;
-		if(it != Textures.end())
-			return it->second.lock();
+		std::unordered_map<std::string, TextureWP>::iterator texturesIterator = _textures.find( texturePath.str() ) ;
+		if(texturesIterator != _textures.end())
+			return texturesIterator->second.lock();
 		//-------------------------------------------------------------------------------
 		// フォントサイズはポリゴン依存
-		int fontsize = ((nWidth + nHeight) >> 1);
-		fontsize = (fontsize <= 32) ? 32 : fontsize;
-		int Len = 0;
+		int fontSize = ((width + height) >> 1);
+		fontSize = (fontSize <= 32) ? 32 : fontSize;
+		int length = 0;
 
-		WCHAR font_buff[LF_FACESIZE] = {0};
-		DXconvAnsiToWide(font_buff, cFont.c_str(), (cFont.length()+1));
+		WCHAR fontBuffer[LF_FACESIZE] = {0};
+		DXconvAnsiToWide(fontBuffer, font.c_str(), (font.length()+1));
 		// フォント情報設定
-		LOGFONT logfont = {fontsize, 0, 0, 0, 0, 0, 0, 0, SHIFTJIS_CHARSET, OUT_TT_ONLY_PRECIS,
+		LOGFONT logFont = {fontSize, 0, 0, 0, 0, 0, 0, 0, SHIFTJIS_CHARSET, OUT_TT_ONLY_PRECIS,
 			CLIP_DEFAULT_PRECIS, PROOF_QUALITY, FIXED_PITCH | FF_MODERN, 0};
 		
-		memcpy(logfont.lfFaceName, font_buff, sizeof(WCHAR)*LF_FACESIZE);
+		memcpy(logFont.lfFaceName, fontBuffer, sizeof(WCHAR)*LF_FACESIZE);
 
-		HFONT hFont = CreateFontIndirect(&logfont);
+		HFONT hFont = CreateFontIndirect(&logFont);
 		if(!(hFont))
 			MessageBox(NULL, TEXT("Error : Failed to create string texture"), NULL, MB_OK | MB_ICONSTOP);
 
-		WCHAR char_buff[256] = {0};
-		DXconvAnsiToWide(char_buff, cChar.c_str(), (cChar.length() + 1));
+		WCHAR stringBuffer[256] = {0};
+		DXconvAnsiToWide(stringBuffer, string_.c_str(), (string_.length() + 1));
 
-		TCHAR *c = char_buff;
-		Len = (int)wcslen(c);
+		TCHAR *c = stringBuffer;
+		length = (int)wcslen(c);
 		//-------------------------------------------------------------------------------
 		// デバイスコンテキスト取得
 		// デバイスにフォントを持たせないとGetGlyphOutline関数はエラーとなる
@@ -125,7 +125,7 @@ namespace KMT {
 		HFONT oldFont = (HFONT)SelectObject(hdc, hFont);
 		//-----------------------------------------------------------------------------------------------
 		LPDIRECT3DTEXTURE9 pWkTex = NULL;
-		CTextureSP ptexture = CTextureSP(new CTexture());
+		TextureSP object = TextureSP(new Texture());
 		//-----------------------------------------------------------------------------------------------
 		for(int i = 0; i < 1; i++){
 			//-------------------------------------------------------------------------------
@@ -192,9 +192,9 @@ namespace KMT {
 			int iOfs_y = TM.tmAscent - GM.gmptGlyphOrigin.y;
 			int iBmp_w = GM.gmBlackBoxX + (4-(GM.gmBlackBoxX%4)) % 4;
 			int iBmp_h = GM.gmBlackBoxY;
-			int Level = 65;
+			int level = 65;
 			int x, y;
-			DWORD Alpha, Color;
+			DWORD alpha, color;
 
 			FillMemory(LockedRect.pBits , LockedRect.Pitch * TM.tmHeight, 0);
 
@@ -208,20 +208,20 @@ namespace KMT {
 					//	Alpha = ( 0 == ptr[ x-iOfs_x + iBmp_w * ( y-iOfs_y ) ] )? 0 : 255 ;
 					//}
 
-					Alpha = (DWORD)ptr[ x-iOfs_x + iBmp_w * ( y-iOfs_y ) ] ;
-					Alpha = Alpha * ( 256 / ( Level - 1 ) ) ;
-					if( Alpha > 255 )
-						Alpha = 255 ;
+					alpha = (DWORD)ptr[ x-iOfs_x + iBmp_w * ( y-iOfs_y ) ] ;
+					alpha = alpha * ( 256 / ( level - 1 ) ) ;
+					if( alpha > 255 )
+						alpha = 255 ;
 					//Alpha = ( 0 == ptr[ x-iOfs_x + iBmp_w * ( y-iOfs_y ) ] )? 0 : 255 ;
 					{
 						int wkY = ( iOfs_y + iBmp_h ) ;
-						int wkStR = ( nFromRGB & 0x00ff0000 )>>16 ;
-						int wkStG = ( nFromRGB & 0x0000ff00 )>>8 ;
-						int wkStB = ( nFromRGB & 0x000000ff ) ;
+						int wkStR = ( color1 & 0x00ff0000 )>>16 ;
+						int wkStG = ( color1 & 0x0000ff00 )>>8 ;
+						int wkStB = ( color1 & 0x000000ff ) ;
 
-						int wkEnR = ( nToRGB & 0x00ff0000 )>>16 ;
-						int wkEnG = ( nToRGB & 0x0000ff00 )>>8 ;
-						int wkEnB = ( nToRGB & 0x000000ff ) ;
+						int wkEnR = ( color2 & 0x00ff0000 )>>16 ;
+						int wkEnG = ( color2 & 0x0000ff00 )>>8 ;
+						int wkEnB = ( color2 & 0x000000ff ) ;
 
 						int wkSubR = wkStR - wkEnR ;
 						int wkSubG = wkStG - wkEnG ;
@@ -234,8 +234,8 @@ namespace KMT {
 						int wkR = wkStR - (int)( y * wkAddR ) ;
 						int wkG = wkStG - (int)( y * wkAddG ) ;
 						int wkB = wkStB - (int)( y * wkAddB ) ;
-						Color = D3DCOLOR_ARGB( 0, wkR, wkG, wkB ) | ( Alpha << 24 ) ;
-						memcpy( ( BYTE* )LockedRect.pBits + LockedRect.Pitch*y + 4*x, &Color, sizeof(DWORD) ) ;
+						color = D3DCOLOR_ARGB( 0, wkR, wkG, wkB ) | ( alpha << 24 ) ;
+						memcpy( ( BYTE* )LockedRect.pBits + LockedRect.Pitch*y + 4*x, &color, sizeof(DWORD) ) ;
 					}
 				}
 			}
@@ -246,10 +246,10 @@ namespace KMT {
 
 		}
 
-		D3DXVECTOR3 v1( -( nWidth * 0.5f ),  ( nHeight * 0.5f ), 0.0f ) ;
-		D3DXVECTOR3 v2(  ( nWidth * 0.5f ),  ( nHeight * 0.5f ), 0.0f ) ;
-		D3DXVECTOR3 v3(  ( nWidth * 0.5f ), -( nHeight * 0.5f ), 0.0f ) ;
-		D3DXVECTOR3 v4( -( nWidth * 0.5f ), -( nHeight * 0.5f ), 0.0f ) ;
+		//D3DXVECTOR3 v1( -( width * 0.5f ),  ( height * 0.5f ), 0.0f ) ;
+		//D3DXVECTOR3 v2(  ( width * 0.5f ),  ( height * 0.5f ), 0.0f ) ;
+		//D3DXVECTOR3 v3(  ( width * 0.5f ), -( height * 0.5f ), 0.0f ) ;
+		//D3DXVECTOR3 v4( -( width * 0.5f ), -( height * 0.5f ), 0.0f ) ;
 		//CreateSprite( v1, v2, v3, v4, NULL ) ;
 
 		//-------------------------------------------------------------------------------
@@ -261,38 +261,38 @@ namespace KMT {
 		//*ppFont = pWkFont ;
 		//pWkFont->Init( pStr ) ;
 
-		ptexture->pd3dTexture = pWkTex ;
-		ptexture->d3dImageInfo.Width = fontsize ;
+		object->_textureData = pWkTex ;
+		object->_imageInfo.Width = fontSize ;
 
-		stringTextures.insert(make_pair(ss.str(), CTextureWP(ptexture)));
+		_stringTextures.insert(make_pair(texturePath.str(), TextureWP(object)));
 
-		return ptexture ;
+		return object ;
 
 	}
 
-	CTextureSP CTexture::CreateFromFile(const std::string &_path, const DWORD dwFilter)
+	TextureSP Texture::CreateFromFile(const std::string &path, const DWORD filter)
 	{
-		CTextureSP ptexture;
-		std::stringstream ss;
-		ss.str("");
-		ss << _path << "Filter : " << dwFilter;
-		std::string str = ss.str().c_str();
+		TextureSP object;
+		std::stringstream filePathBuffer;
+		filePathBuffer.str("");
+		filePathBuffer << path << "Filter : " << filter;
+		std::string filePath = filePathBuffer.str().c_str();
 
-		std::unordered_map<std::string, CTextureWP>::iterator it = Textures.find(str);
+		std::unordered_map<std::string, TextureWP>::iterator texturesIterator = _textures.find(filePath);
 		// 該当無しだった場合
-		if(it == Textures.end())
+		if(texturesIterator == _textures.end())
 		{
-			ptexture = CTextureSP(new CTexture());
+			object = TextureSP(new Texture());
 
-			ptexture->FilePath = str;
+			object->_filePath = filePath;
 			// ファイルパスをワイド文字に変換する
-			WCHAR buff_path[256] = {0} ;
-			DXconvAnsiToWide( buff_path, _path.c_str(), ( _path.length() + 1 ) ) ;
+			WCHAR pathBuffer[256] = {0} ;
+			DXconvAnsiToWide( pathBuffer, path.c_str(), ( path.length() + 1 ) ) ;
 
 			// テクスチャのロード
 			D3DXCreateTextureFromFileEx(DXUTGetD3D9Device(),
 				// ファイルパス
-				buff_path,			
+				pathBuffer,			
 				D3DX_DEFAULT,
 				D3DX_DEFAULT,
 				D3DX_DEFAULT,
@@ -300,49 +300,49 @@ namespace KMT {
 				D3DFMT_UNKNOWN,
 				D3DPOOL_DEFAULT,
 				// フィルター
-				dwFilter,
+				filter,
 				D3DX_DEFAULT,
 				// 透明色の指定 全て0指定でカラーキーなし
 				D3DXCOLOR(0,0,0,0),	
 				// 画像情報の取得
-				&ptexture->d3dImageInfo,		
+				&object->_imageInfo,		
 				NULL,
 				// テクスチャの受け取り
-				&ptexture->pd3dTexture			
+				&object->_textureData			
 				);
 
 			// マップに登録
-			Textures.insert(std::make_pair(str, CTextureWP(ptexture)));
+			_textures.insert(std::make_pair(filePath, TextureWP(object)));
 		// 該当ありだった場合
 		}
 		else
 			// 作成済みのテクスチャクラスのポインタを取得
-			ptexture = CTextureSP((*it).second);	
+			object = TextureSP((*texturesIterator).second);	
 
-		return ptexture;
+		return object;
 	}
 
-	void CTexture::Destroy(std::string _name) 
+	void Texture::Destroy(std::string name) 
 	{
 		// イテレータを用意
 		// イテレータをハッシュマップの先頭にセット
-		std::unordered_map<std::string, CTextureWP>::iterator it = Textures.begin() ; 
+		std::unordered_map<std::string, TextureWP>::iterator texturesIterator = _textures.begin() ; 
 		// 全部解放
-		if( _name == "all" ){
-			while(it != Textures.end())
+		if( name == "all" ){
+			while(texturesIterator != _textures.end())
 			{
-				(*it).second.reset();
-				Textures.erase(it++);
+				(*texturesIterator).second.reset();
+				_textures.erase(texturesIterator++);
 			}
 		}
 		else
 			// テクスチャを１つだけ解放
 		{
-			it = Textures.find(_name);
-			if(it != Textures.end())
+			texturesIterator = _textures.find(name);
+			if(texturesIterator != _textures.end())
 			{
-				(*it).second.reset();
-				Textures.erase(it);
+				(*texturesIterator).second.reset();
+				_textures.erase(texturesIterator);
 			}
 		}
 	}

@@ -32,7 +32,7 @@ namespace KMT {
 		inline void setVertexNum(const WORD _num) { VertexNumber = _num; }
 		inline void setVertexIndexNum(const WORD _num) { IndexNumber = _num; }
 		void setpd3dMeshVertexIndexBuffer(const WORD* _idx);
-		void setpd3dMeshVertexBuffer(const CVertex* _info, const size_t _memsize);
+		void setpd3dMeshVertexBuffer(const Vertex* _info, const size_t _memsize);
 
 	private :
 		// パス
@@ -52,7 +52,7 @@ namespace KMT {
 		// マテリアルの数
 		DWORD MaterialNumber;
 		// 頂点情報
-		CVertex* pVertex;
+		Vertex* pVertex;
 		// ハッシュマップ
 		static std::unordered_map<std::string, CMeshWP> Meshs;
 

@@ -7,7 +7,7 @@ namespace KMT
 {
 
 	// アニメーション再生モード
-	enum PLAYMODE{
+	enum PlayMode{
 		// フレーム指定
 		SELECT_FRAME,			
 		// 一度だけ再生
@@ -16,34 +16,35 @@ namespace KMT
 		PLAY_LOOP	
 	};
 
-	class CAnimation 
+	class Animation 
 	{
 	public :
 		// コンストラクタ
-		CAnimation();
+		Animation();
 		// デストラクタ
-		virtual ~CAnimation();
+		virtual ~Animation();
 
 		// テクスチャを画像ファイルから読み込む
-		// _path : 画像のファイルパス
-		// _x_num : 横分割
-		// _y_num : 縦分割
-		void LoadTextureAndAnimation(const std::string &_path, const int &_x_num = 1, const int &_y_num = 1, const DWORD &dwFilter = D3DX_FILTER_NONE);
+		// path : 画像のファイルパス
+		// divisionX : 横分割
+		// divisionY : 縦分割
+		void LoadTextureAndAnimation(const std::string &path, const int &divisionX = 1, const int &divisionY = 1, const DWORD &filter = D3DX_FILTER_NONE);
 		
 		//* 取得 *//
 		// 現在のアニメーション番号を取得する
-		inline int GetAnimationNumber() const { return Number; }
+		inline int GetAnimationNumber() const { return _number; }
+
 		//* 設定 *//
 		// 分割数
-		inline void setDivideW(const int &_num) { DivideWidth = _num; }
-		inline void setDivideH(const int &_num) { DivideHeight = _num; }
+		inline void SetDivisionWidth(const int &num) { _divisionWidth = num; }
+		inline void SetDivisionHeight(const int &num) { _divisionHeight = num; }
 		// 再生速度
-		inline void setAnimationSpeed(int _speed) { Speed = _speed; }
+		inline void SetAnimationSpeed(int speed) { _speed = speed; }
 		// 再生モード
-		inline void setPlayMode(PLAYMODE mode) { CurrentPlayMode = mode; }
+		inline void SetPlayMode(PlayMode mode) { _currentPlayMode = mode; }
 
 		// アニメーション制御
-		// _mode : 再生モード
+		// mode : 再生モード
 		// frame : フレーム数
 		// 戻り値 : 再生中か否か(falseは再生中、trueは再生終了)
 		// 備考 : フレーム指定モードの場合は第二引数にフレーム番号を、それ以外のモードでは何フレーム毎にアニメーションさせるかを渡す
@@ -51,24 +52,23 @@ namespace KMT
 
 	protected :
 		// テクスチャー
-		CTextureSP Texture;
-		// 分割数(Width:横, Height:縦)
-		int DivideWidth, DivideHeight;
+		TextureSP _texture;
+		// 分割数(width:横, height:縦)
+		int _divisionWidth, _divisionHeight;
 		// 描画範囲
-		std::vector<RECT> Rects;
+		std::vector<RECT> _rects;
 		// 画像分割後のサイズ
-		CVector3 ImageSize;
+		CVector3 _imageSize;
 		// 描画中心座標
-		CVector3 CenterPosition;
+		CVector3 _centerPosition;
 		// アニメーションの速さ
-		int Speed;
+		int _speed;
 		// 表示するアニメーション番号
-		int Number;
+		int _number;
 		// アニメーション用のカウンタ
-		int Count;
-
+		int _count;
 		// 再生モード
-		PLAYMODE CurrentPlayMode;
+		PlayMode _currentPlayMode;
 		
 	};
 }

@@ -40,9 +40,9 @@ namespace KMT {
 		// メッシュ
 		inline CMeshSP GetMesh() { return _mesh; }
 		// テクスチャベクター配列
-		inline std::vector<CTextureSP> GetTextures() { return _textures; }
+		inline std::vector<TextureSP> GetTextures() { return _textures; }
 		// テクスチャベクター配列(直接インデックス指定)
-		inline CTextureSP GetTexturesElement(size_t index) { return _textures[index]; }
+		inline TextureSP GetTexturesElement(size_t index) { return _textures[index]; }
 		// 拡散反射色(ディフューズ色)
 		inline CVector4 GetDiffuseColors(size_t index) { return _diffuseColors[index]; }
 
@@ -52,7 +52,7 @@ namespace KMT {
 		// カリングモード
 		inline void SetCullingState(const _D3DCULL cullingState) { _cullingState = cullingState; }
 		// テクスチャ
-		inline void SetTexture(const CTextureSP& texture) { _textures.push_back(texture); }
+		inline void SetTexture(const TextureSP& texture) { _textures.push_back(texture); }
 		
 		//* std::listのsort使用関数 *
 		static inline bool Compare(const GraphicBehaviorWP riLeft, const GraphicBehaviorWP riRight)
@@ -83,7 +83,7 @@ namespace KMT {
 		_D3DCULL _cullingState;
 		
 		// テクスチャー配列(std::vector)
-		std::vector<CTextureSP> _textures;
+		std::vector<TextureSP> _textures;
 		// 頂点カラー配列(std::vector)
 		std::vector<CVector4> _diffuseColors;
 
