@@ -42,7 +42,7 @@ namespace KMT {
 	void DebugText::drawText(const int left, const int top, const DWORD color, LPCWSTR text, ...)
 	{
 		// •`‰æˆÊ’u‚ÌÝ’è
-		RECT _rect = { left, top, 0, 0 };
+		RECT rect = { left, top, 0, 0 };
 		// ƒJƒ‰[•Û‘¶
 		_color = color;
 		// ‰Â•Ï’·ˆø”‚©‚ç•¶Žš—ñ‚É•ÏŠ·
@@ -57,9 +57,9 @@ namespace KMT {
 		{
 			// ƒeƒLƒXƒg•`‰æ
 			// text : •`‰æ‚·‚é•¶Žš—ñ (WCHAR Žw’è)
-			// _rect : •`‰æ”ÍˆÍŽw’è
+			// rect : •`‰æ”ÍˆÍŽw’è
 			// nColor : FŽw’è
-			_font->DrawText(NULL, buffer,	-1, &_rect,	DT_LEFT | DT_NOCLIP, color);
+			_font->DrawText(NULL, buffer,	-1, &rect,	DT_LEFT | DT_NOCLIP, color);
 			// •`‰æI—¹
 			V(GraphicsManager::_device->EndScene());
 		}

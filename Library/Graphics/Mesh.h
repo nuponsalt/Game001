@@ -31,8 +31,8 @@ namespace KMT {
 		inline void SetMesh(LPD3DXMESH const mesh) { _mesh = mesh; }
 		inline void setVertexNum(const WORD number) { _vertexNumber = number; }
 		inline void setVertexIndexNum(const WORD number) { _indexNumber = number; }
-		void SetMeshVertexIndexBuffer(const WORD* index);
-		void SetMeshVertexBuffer(const Vertex* vertexInfo, const size_t memorySize);
+		void SetIndexBuffer(const WORD* index);
+		void SetVertexBuffer(const Vertex* vertexInfo, const size_t memorySize);
 
 	private :
 		// ƒpƒX

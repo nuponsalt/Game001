@@ -94,15 +94,15 @@ namespace KMT {
 		}
 	}
 
-	void Mesh::SetMeshVertexIndexBuffer(const WORD* index)
+	void Mesh::SetIndexBuffer(const WORD* index)
 	{
-		WORD *pI;
-		_mesh->LockIndexBuffer(0, (void **)&pI);
-		memcpy(pI, index, sizeof(WORD) * _indexNumber);
+		WORD *indexBuffer;
+		_mesh->LockIndexBuffer(0, (void **)&indexBuffer);
+		memcpy(indexBuffer, index, sizeof(WORD) * _indexNumber);
 		_mesh->UnlockIndexBuffer();
 	}
 
-	void Mesh::SetMeshVertexBuffer(const Vertex* vertexInfo, const size_t memorySize)
+	void Mesh::SetVertexBuffer(const Vertex* vertexInfo, const size_t memorySize)
 	{
 		_mesh->LockVertexBuffer(0, (void**)&_vertexInformation);
 		memcpy(_vertexInformation, vertexInfo, memorySize * _vertexNumber);
