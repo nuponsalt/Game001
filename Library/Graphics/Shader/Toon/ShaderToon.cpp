@@ -43,7 +43,7 @@ namespace KMT {
 		return shader;
 	}
 
-	void ShaderToon::ApplyEffect(const CMatrix& rotation, const CVector4& cameraPosition)
+	void ShaderToon::ApplyEffect(const CMatrix& rotation, const Vector4& cameraPosition)
 	{
 		// ƒ‰ƒCƒgŒvŽZ—p‚É‰ñ“]s—ñ‚ð“n‚·
 		_effect->SetMatrix(*GetHandle("ROT"), &rotation);

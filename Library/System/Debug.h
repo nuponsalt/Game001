@@ -28,7 +28,7 @@
 //
 //	private :
 //		// 文字列描画用オブジェクト
-//		static CDebugTextSP Text_;
+//		static DebugTextSP Text_;
 //		// 描画文字列
 //		static std::vector<std::string> Texts_;
 //

@@ -1,109 +1,111 @@
 #include "DXUT.h"
 #include "Mesh.h"
 
+#include "GraphicsManager.h"
 #include "../Extension.h"
 
 namespace KMT {
 
-	std::unordered_map<std::string, CMeshWP> CMesh::Meshs;
+	std::unordered_map<std::string, MeshWP> Mesh::_meshes;
 
-	CMesh::CMesh() : pd3dMesh(NULL), pd3dMeterialBuffer(NULL), MaterialNumber(1), pVertex(NULL)
+	Mesh::Mesh() : _mesh(NULL), _meterialBuffer(NULL), _materialNumber(1), _vertexInformation(NULL)
 	{}
 
-	CMesh::~CMesh()
+	Mesh::~Mesh()
 	{
 		// イテレータの準備
 		// ファイルパスで検索
-		std::unordered_map<std::string, CMeshWP>::iterator it = Meshs.find(FilePath);
+		std::unordered_map<std::string, MeshWP>::iterator it = _meshes.find(_path);
 
-		if(it != Meshs.end())
+		if(it != _meshes.end())
 		{
-			Meshs.erase( it ) ;
+			_meshes.erase( it ) ;
 		}
-		SAFE_RELEASE(pd3dMesh);
-		SAFE_RELEASE(pd3dMeterialBuffer);
+		SAFE_RELEASE(_mesh);
+		SAFE_RELEASE(_meterialBuffer);
 #if _DEBUG
 		OutputDebugString(L"Release Mesh\n");
 #endif
 	}
 
-	CMeshSP CMesh::Create(const std::string& _path)
+	MeshSP Mesh::CreateEmpty(const std::string& path)
 	{
-		std::unordered_map<std::string, CMeshWP>::iterator it = Meshs.find(_path);
+		std::unordered_map<std::string, MeshWP>::iterator it = _meshes.find(path);
 		// 存在すれば返す
-		if(it != Meshs.end()){
+		if(it != _meshes.end())
 			return it->second.lock();
-		}
-		CMeshSP pmesh = CMeshSP(new CMesh);
-		pmesh->FilePath = _path;
-		Meshs.insert(make_pair(_path, pmesh));
+		
+		MeshSP mesh = MeshSP(new Mesh);
+		mesh->_path = path;
+		_meshes.insert(make_pair(path, mesh));
 
-		return pmesh;
+		return mesh;
 	}
 
-	CMeshSP CMesh::CreateFromX(const std::string& _path)
+	MeshSP Mesh::CreateFromX(const std::string& path)
 	{
-		std::unordered_map<std::string, CMeshWP>::iterator it = Meshs.find(_path);
+		std::unordered_map<std::string, MeshWP>::iterator it = _meshes.find(path);
 
-		if(it != Meshs.end()) 
-			return CMeshSP((*it).second.lock());
+		if(it != _meshes.end()) 
+			return MeshSP((*it).second.lock());
 		// 存在しなければ新しくロード
-		CMeshSP pmesh = CMeshSP(new CMesh);
+		MeshSP mesh = MeshSP(new Mesh);
 		// ファイルパスを取得
-		pmesh->FilePath = _path;
+		mesh->_path = path;
 		// 文字列変換
 		WCHAR wcbuff[255] = {0};
-		DXconvAnsiToWide(wcbuff, _path.c_str(), 255);
+		DXconvAnsiToWide(wcbuff, path.c_str(), 255);
 		// メッシュのロード
 		D3DXLoadMeshFromX(wcbuff,
 			D3DXMESH_MANAGED,
-			DXUTGetD3D9Device(),
+			GraphicsManager::_device,
 			NULL,
-			&pmesh->pd3dMeterialBuffer,
+			&mesh->_meterialBuffer,
 			NULL,
-			&pmesh->MaterialNumber,
-			&pmesh->pd3dMesh);
+			&mesh->_materialNumber,
+			&mesh->_mesh);
 		// マップに追加
-		Meshs.insert(std::make_pair(_path, CMeshWP(pmesh)));
+		_meshes.insert(std::make_pair(path, MeshWP(mesh)));
 
-		return pmesh ;
+		return mesh ;
 	}
 
-	void CMesh::Destroy(std::string _name) 
+	void Mesh::Destroy(std::string name) 
 	{
 		// イテレータを用意
 		// イテレータをハッシュマップの先頭にセット
-		std::unordered_map<std::string, CMeshWP>::iterator it = Meshs.begin();
+		std::unordered_map<std::string, MeshWP>::iterator it = _meshes.begin();
 		// 全部解放
-		if(_name == "all"){
-			while(it != Meshs.end()){
+		if(name == "all"){
+			while(it != _meshes.end())
+			{
 				(*it).second.reset();
-				Meshs.erase(it++);
+				_meshes.erase(it++);
 			}
 		}
-		else
-			// テクスチャを１つだけ解放
+		else // テクスチャを１つだけ解放			
 		{
-			it = Meshs.find(_name);
-			if(it != Meshs.end()){
+			it = _meshes.find(name);
+			if(it != _meshes.end())
+			{
 				(*it).second.reset();
-				Meshs.erase(it);
+				_meshes.erase(it);
 			}
 		}
 	}
 
-	void CMesh::setpd3dMeshVertexIndexBuffer(const WORD* _idx)
+	void Mesh::SetIndexBuffer(const WORD* index)
 	{
-		WORD *pI;
-		pd3dMesh->LockIndexBuffer(0, (void **)&pI);
-		memcpy(pI, _idx, sizeof(WORD) * IndexNumber);
-		pd3dMesh->UnlockIndexBuffer();
+		WORD *indexBuffer;
+		_mesh->LockIndexBuffer(0, (void **)&indexBuffer);
+		memcpy(indexBuffer, index, sizeof(WORD) * _indexNumber);
+		_mesh->UnlockIndexBuffer();
 	}
 
-	void CMesh::setpd3dMeshVertexBuffer(const Vertex* _info, const size_t _memsize)
+	void Mesh::SetVertexBuffer(const Vertex* vertexInfo, const size_t memorySize)
 	{
-		pd3dMesh->LockVertexBuffer(0, (void**)&pVertex);
-		memcpy(pVertex, _info, _memsize * VertexNumber);
-		pd3dMesh->UnlockVertexBuffer();
+		_mesh->LockVertexBuffer(0, (void**)&_vertexInformation);
+		memcpy(_vertexInformation, vertexInfo, memorySize * _vertexNumber);
+		_mesh->UnlockVertexBuffer();
 	}
 }

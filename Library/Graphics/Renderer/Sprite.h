@@ -45,7 +45,7 @@ namespace KMT {
 		// DirectX3Dスプライト
 		LPD3DXSPRITE _sprite;
 		// 反転用二次元ベクトル
-		CVector2 _turnVector;
+		Vector2 _turnVector;
 		
 		// コンストラクタ
 		Sprite();

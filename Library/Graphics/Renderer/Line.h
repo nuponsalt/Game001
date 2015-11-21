@@ -12,7 +12,7 @@ namespace KMT {
 
 		// コンストラクタ
 		LineVertex() { }
-		LineVertex(CVector3 v, DWORD color) : _x(v.x), _y(v.y), _z(v.z), _color(color) { }
+		LineVertex(Vector3 v, DWORD color) : _x(v.x), _y(v.y), _z(v.z), _color(color) { }
 
 	}*pLineVertex;
 
@@ -27,7 +27,7 @@ namespace KMT {
 		// デストラクタ
 		~Line() { }
 		// 生成
-		static LineSP Create(const CVector3& positionA, const CVector3& positionB, DWORD color);
+		static LineSP Create(const Vector3& positionA, const Vector3& positionB, DWORD color);
 
 		// 描画
 		void Render(const CCamera* camera);

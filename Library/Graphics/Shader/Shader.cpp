@@ -108,7 +108,7 @@ namespace KMT {
 		_effect->SetMatrix(_wvp, (D3DXMATRIX*)&wvp);
 	}
 
-	void Shader::SetColor(const CVector4& color) const
+	void Shader::SetColor(const Vector4& color) const
 	{
 		_effect->SetVector(_color, (D3DXVECTOR4*)&color);
 	}
@@ -177,7 +177,7 @@ namespace KMT {
 		return shader;
 	}
 
-	void ShaderNormal::ApplyEffect(const CMatrix& rotation, const CVector4& cameraPosition)
+	void ShaderNormal::ApplyEffect(const CMatrix& rotation, const Vector4& cameraPosition)
 	{
 		return;
 	}

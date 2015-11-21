@@ -39,7 +39,7 @@ namespace KMT {
 
 		shader->SetAmbient(ambient);
 		shader->SetLightDirection(directionX, directionY, directionZ);
-		shader->SetFogColor(CVector4(
+		shader->SetFogColor(Vector4(
 			xml->GetElement("Fog")->GetElement("Color")->GetElement("R")->GetFloat(), 
 			xml->GetElement("Fog")->GetElement("Color")->GetElement("G")->GetFloat(), 
 			xml->GetElement("Fog")->GetElement("Color")->GetElement("B")->GetFloat(),
@@ -55,7 +55,7 @@ namespace KMT {
 		return shader;
 	}
 
-	void ShaderLambert::ApplyEffect(const CMatrix &rotation, const CVector4& cameraPosition)
+	void ShaderLambert::ApplyEffect(const CMatrix &rotation, const Vector4& cameraPosition)
 	{
 		// ƒ‰ƒCƒgŒvŽZ—p‚É‰ñ“]s—ñ‚ð“n‚·
 		_effect->SetMatrix(*GetHandle("ROT"), &rotation);

@@ -9,31 +9,30 @@
 
 namespace KMT {
 
-	class CMaterial
+	class Material
 	{
-	public :
-		
+	public :		
 		// カラー(ビット値)
-		int nColor;
+		int _color;
 		// カラー(4Dベクトル)
-		CVector4 vColorRGBA;
+		Vector4 _colorRGBA;
 		// コンストラクタ
-		CMaterial() : vColorRGBA(1, 1, 1, 1), isAddBlend(false) { }
+		Material() : _colorRGBA(1, 1, 1, 1), _addsBlend(false) { }
 		// デストラクタ
-		virtual ~CMaterial() { }
+		virtual ~Material() { }
 		// 取得 : 加算フラグ
-		inline bool getisAddBlend() { return isAddBlend; }
+		inline bool GetAddsBlend() { return _addsBlend; }
 		// 設定 : 加算フラグ
-		inline void setisAddBlend(bool _add) { isAddBlend = _add; }
+		inline void SetAddsBlend(bool adds) { _addsBlend = adds; }
 		// 取得 : カラー
-		inline CVector4 getColorRGBA() const { return vColorRGBA; }
+		inline Vector4 GetColorRGBA() const { return _colorRGBA; }
 		// 設定 : カラー
-		inline void setColorRGBA(const float &r, const float &g, const float &b, const float &a) { vColorRGBA = CVector4(r, g, b, a); }
-		inline void setColorRGBA(const CVector4 &_v4color) { vColorRGBA = _v4color; }
+		inline void SetColorRGBA(const float &r, const float &g, const float &b, const float &a) { _colorRGBA = Vector4(r, g, b, a); }
+		inline void SetColorRGBA(const Vector4 &rgba) { _colorRGBA = rgba; }
 
 	protected :
 		// 加算合するか、否か
-		bool isAddBlend;
+		bool _addsBlend;
 
 	};
 

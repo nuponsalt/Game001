@@ -12,13 +12,13 @@
 
 namespace KMT {
 
-	class CVector3;
+	class Vector3;
 	class CMatrix;
 	class CQuaternion;
 
-	class CTransformation;
-	typedef std::shared_ptr<CTransformation> CTransformationSP;
-	typedef std::weak_ptr<CTransformation> CTransformationWP;
+	class Transformation;
+	typedef std::shared_ptr<Transformation> CTransformationSP;
+	typedef std::weak_ptr<Transformation> CTransformationWP;
 
 	// 回転タイプ
 	enum ROTATE_TYPE
@@ -28,28 +28,28 @@ namespace KMT {
 			QUATERNION
 	};
 
-	class CTransformation
+	class Transformation
 	{
 	public :
 		//* 座標 *//
-		CVector3 Position;
+		Vector3 Position;
 		//* 回転 *//
 		// ベクトル
-		CVector3 vRotation;
+		Vector3 vRotation;
 		// 行列
 		CMatrix mRotationX, mRotationY, mRotationZ, mRotationWorld;
 		// クォータニオン
 		CQuaternion qRotation;
 		//* 拡縮 *//
-		CVector3 Scale ;
+		Vector3 Scale ;
 
 		// 現在の回転タイプ
 		ROTATE_TYPE CurrentRotateType;
 
 		// コンストラクタ
-		CTransformation();
+		Transformation();
 		// デストラクタ
-		virtual ~CTransformation() { }
+		virtual ~Transformation() { }
 	
 };
 
