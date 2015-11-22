@@ -13,9 +13,6 @@
 
 namespace KMT {
 
-	//-----------------------------------------------------------
-	// Texture
-
 	// static parameters
 	std::unordered_map<std::string, TextureWP> Texture::_textures;
 	std::unordered_map<std::string, TextureWP> Texture::_stringTextures;
@@ -95,6 +92,7 @@ namespace KMT {
 		std::unordered_map<std::string, TextureWP>::iterator texturesIterator = _textures.find( texturePath.str() ) ;
 		if(texturesIterator != _textures.end())
 			return texturesIterator->second.lock();
+
 		//-------------------------------------------------------------------------------
 		// フォントサイズはポリゴン依存
 		int fontSize = ((width + height) >> 1);
@@ -116,15 +114,15 @@ namespace KMT {
 		WCHAR stringBuffer[256] = {0};
 		DXconvAnsiToWide(stringBuffer, string_.c_str(), (string_.length() + 1));
 
-		TCHAR *c = stringBuffer;
-		length = (int)wcslen(c);
+		TCHAR *char_ = stringBuffer;
+		length = (int)wcslen(char_);
 		//-------------------------------------------------------------------------------
 		// デバイスコンテキスト取得
 		// デバイスにフォントを持たせないとGetGlyphOutline関数はエラーとなる
 		HDC hdc = GetDC(NULL);
 		HFONT oldFont = (HFONT)SelectObject(hdc, hFont);
 		//-----------------------------------------------------------------------------------------------
-		LPDIRECT3DTEXTURE9 pWkTex = NULL;
+		LPDIRECT3DTEXTURE9 textureBuffer = NULL;
 		TextureSP object = TextureSP(new Texture());
 		//-----------------------------------------------------------------------------------------------
 		for(int i = 0; i < 1; i++){
@@ -133,114 +131,116 @@ namespace KMT {
 			size_t code = 0;
 #if _UNICODE
 			// unicodeの場合、文字コードは単純にワイド文字のUINT変換です
-			code = (UINT)*c;
+			code = (UINT)*char_;
 #else
 			// マルチバイト文字の場合、
 			// 1バイト文字のコードは1バイト目のUINT変換、
 			// 2バイト文字のコードは[先導コード]*256 + [文字コード]です
-			if( IsDBCSLeadByte( *c ) ){
-				code = (BYTE)c[0]<<8 | (BYTE)c[1];
-				c += 2;
+			if( IsDBCSLeadByte( *char_) ){
+				code = (BYTE)char_[0]<<8 | (BYTE)char_[1];
+				char_ += 2;
 			}else{
-				code = c[0];
-				c++;
+				code = char_[0];
+				char_++;
 			}
 #endif	
 			//-------------------------------------------------------------------------------
 			// フォントビットマップ取得
-			TEXTMETRIC TM;
-			GetTextMetrics(hdc, &TM);
-			GLYPHMETRICS GM;
-			CONST MAT2 Mat = {{0,1}, {0,0}, {0,0}, {0,1}};
+			TEXTMETRIC textmetric;
+			GetTextMetrics(hdc, &textmetric);
+			GLYPHMETRICS glyphmetrics;
+			CONST MAT2 matrix = {{0,1}, {0,0}, {0,0}, {0,1}};
 
-			//DWORD size = GetGlyphOutline( hdc, code, GGO_BITMAP, &GM, 0, NULL, &Mat ) ;			
-			//DWORD size = GetGlyphOutline( hdc, code, GGO_GRAY2_BITMAP, &GM, 0, NULL, &Mat ) ;
-			//DWORD size = GetGlyphOutline( hdc, code, GGO_GRAY4_BITMAP, &GM, 0, NULL, &Mat ) ;
-			DWORD size = GetGlyphOutline(hdc, code, GGO_GRAY8_BITMAP, &GM, 0, NULL, &Mat);
+			//DWORD size = GetGlyphOutline( hdc, code, GGO_BITMAP, &GM, 0, NULL, &matrix ) ;			
+			//DWORD size = GetGlyphOutline( hdc, code, GGO_GRAY2_BITMAP, &GM, 0, NULL, &matrix ) ;
+			//DWORD size = GetGlyphOutline( hdc, code, GGO_GRAY4_BITMAP, &GM, 0, NULL, &matrix ) ;
+			DWORD size = GetGlyphOutline(hdc, code, GGO_GRAY8_BITMAP, &glyphmetrics, 0, NULL, &matrix);
 
 			BYTE *ptr = new BYTE[size];
 
 			//BYTE *ptr = ( BYTE* )T2Malloc( sizeof( BYTE ) * size ) ;
-			//GetGlyphOutline( hdc, code, GGO_BITMAP, &GM, size, ptr, &Mat ) ;
-			//GetGlyphOutline( hdc, code, GGO_GRAY2_BITMAP, &GM, size, ptr, &Mat ) ;
-			//GetGlyphOutline( hdc, code, GGO_GRAY4_BITMAP, &GM, size, ptr, &Mat ) ;
-			GetGlyphOutline(hdc, code, GGO_GRAY8_BITMAP, &GM, size, ptr, &Mat);
+			//GetGlyphOutline( hdc, code, GGO_BITMAP, &GM, size, ptr, &matrix ) ;
+			//GetGlyphOutline( hdc, code, GGO_GRAY2_BITMAP, &GM, size, ptr, &matrix ) ;
+			//GetGlyphOutline( hdc, code, GGO_GRAY4_BITMAP, &GM, size, ptr, &matrix ) ;
+			GetGlyphOutline(hdc, code, GGO_GRAY8_BITMAP, &glyphmetrics, size, ptr, &matrix);
 			//---------------------------------------------------------------
 			// テクスチャ作成
-			D3DLOCKED_RECT LockedRect;
+			D3DLOCKED_RECT lockedRect;
 
-			if(FAILED(DXUTGetD3D9Device()->CreateTexture(GM.gmCellIncX,
-				TM.tmHeight,
+			if(FAILED(DXUTGetD3D9Device()->CreateTexture(glyphmetrics.gmCellIncX,
+				textmetric.tmHeight,
 				1,
 				D3DUSAGE_DYNAMIC,
 				D3DFMT_A8R8G8B8,
 				D3DPOOL_DEFAULT,
-				&pWkTex,
+				&textureBuffer,
 				NULL))){
 					MessageBox(NULL, TEXT(" !! Font Create Err 02 !! "), NULL, MB_OK | MB_ICONSTOP);
 			}
 
-			if(FAILED(pWkTex->LockRect(0, &LockedRect, NULL, D3DLOCK_DISCARD))){
+			if(FAILED(textureBuffer->LockRect(0, &lockedRect, NULL, D3DLOCK_DISCARD))){
 				MessageBox(NULL, TEXT(" !! Font Create Err 03 !! "), NULL, MB_OK | MB_ICONSTOP);
 			}
 			//---------------------------------------------------------------
 			// フォント情報の書き込み
-			// iOfs_x, iOfs_y : 書き出し位置(左上)
-			// iBmp_w, iBmp_h : フォントビットマップの幅高
+			// offsetX, offsetY : 書き出し位置(左上)
+			// bitmapWidth, bitmapHeight : フォントビットマップの幅高
 			// Level : α値の段階 (GGO_GRAY4_BITMAPは17段階、GGO_GRAY8_BITMAPは65段階)
-			int iOfs_x = GM.gmptGlyphOrigin.x;
-			int iOfs_y = TM.tmAscent - GM.gmptGlyphOrigin.y;
-			int iBmp_w = GM.gmBlackBoxX + (4-(GM.gmBlackBoxX%4)) % 4;
-			int iBmp_h = GM.gmBlackBoxY;
+			int offsetX = glyphmetrics.gmptGlyphOrigin.x;
+			int offsetY = textmetric.tmAscent - glyphmetrics.gmptGlyphOrigin.y;
+			int bitmapWidth = glyphmetrics.gmBlackBoxX + (4-(glyphmetrics.gmBlackBoxX%4)) % 4;
+			int bitmapHeight = glyphmetrics.gmBlackBoxY;
 			int level = 65;
 			int x, y;
 			DWORD alpha, color;
 
-			FillMemory(LockedRect.pBits , LockedRect.Pitch * TM.tmHeight, 0);
+			FillMemory(lockedRect.pBits , lockedRect.Pitch * textmetric.tmHeight, 0);
 
-			for(y = iOfs_y; y < iOfs_y+iBmp_h; y++){
-				for(x = iOfs_x; x < iOfs_x+iBmp_w; x++){
+			int divisor = (offsetY + bitmapHeight);
+			int initialRed		= (color1 & 0x00ff0000) >> 16;
+			int initialGreen	= (color1 & 0x0000ff00) >> 8;
+			int initialBlue		= (color1 & 0x000000ff);
+
+			int finalRed	= (color2 & 0x00ff0000) >> 16;
+			int finalGreen	= (color2 & 0x0000ff00) >> 8;
+			int finalBlue	= (color2 & 0x000000ff);
+
+			int subtractedRed	= initialRed	- finalRed;
+			int subtractedGreen = initialGreen	- finalGreen;
+			int subtractedBlue	= initialBlue	- finalBlue;
+
+			float additionalRed		= ((float)subtractedRed		/ (float)divisor);
+			float additionalGreen	= ((float)subtractedGreen	/ (float)divisor);
+			float additionalBlue	= ((float)subtractedGreen	/ (float)divisor);
+
+			int red, green, blue;
+
+			for(y = offsetY; y < offsetY+bitmapHeight; y++){
+				for(x = offsetX; x < offsetX+bitmapWidth; x++){
 					//--------------------------------------------------------------
 					// ノーマルフォント
 					//if( T2FONT_ANTIALIAS & FLG ){
-					//	Alpha = ( 255 * ptr[ x-iOfs_x + iBmp_w * ( y-iOfs_y ) ] ) / ( Level-1 ) ;
+					//	Alpha = ( 255 * ptr[ x-offsetX + bitmapWidth * ( y-offsetY ) ] ) / ( Level-1 ) ;
 					//}else{
-					//	Alpha = ( 0 == ptr[ x-iOfs_x + iBmp_w * ( y-iOfs_y ) ] )? 0 : 255 ;
+					//	Alpha = ( 0 == ptr[ x-offsetX + bitmapWidth * ( y-offsetY ) ] )? 0 : 255 ;
 					//}
 
-					alpha = (DWORD)ptr[ x-iOfs_x + iBmp_w * ( y-iOfs_y ) ] ;
+					alpha = (DWORD)ptr[ x-offsetX + bitmapWidth * ( y-offsetY ) ] ;
 					alpha = alpha * ( 256 / ( level - 1 ) ) ;
 					if( alpha > 255 )
 						alpha = 255 ;
-					//Alpha = ( 0 == ptr[ x-iOfs_x + iBmp_w * ( y-iOfs_y ) ] )? 0 : 255 ;
-					{
-						int wkY = ( iOfs_y + iBmp_h ) ;
-						int wkStR = ( color1 & 0x00ff0000 )>>16 ;
-						int wkStG = ( color1 & 0x0000ff00 )>>8 ;
-						int wkStB = ( color1 & 0x000000ff ) ;
+					//Alpha = ( 0 == ptr[ x-offsetX + bitmapWidth * ( y-offsetY ) ] )? 0 : 255 ;
 
-						int wkEnR = ( color2 & 0x00ff0000 )>>16 ;
-						int wkEnG = ( color2 & 0x0000ff00 )>>8 ;
-						int wkEnB = ( color2 & 0x000000ff ) ;
-
-						int wkSubR = wkStR - wkEnR ;
-						int wkSubG = wkStG - wkEnG ;
-						int wkSubB = wkStB - wkEnB ;
-
-						float wkAddR = ( (float)wkSubR / (float)wkY ) ;
-						float wkAddG = ( (float)wkSubG / (float)wkY ) ;
-						float wkAddB = ( (float)wkSubB / (float)wkY ) ;
-
-						int wkR = wkStR - (int)( y * wkAddR ) ;
-						int wkG = wkStG - (int)( y * wkAddG ) ;
-						int wkB = wkStB - (int)( y * wkAddB ) ;
-						color = D3DCOLOR_ARGB( 0, wkR, wkG, wkB ) | ( alpha << 24 ) ;
-						memcpy( ( BYTE* )LockedRect.pBits + LockedRect.Pitch*y + 4*x, &color, sizeof(DWORD) ) ;
-					}
+					red		= initialRed	- (int)( y * additionalRed ) ;
+					green	= initialGreen	- (int)( y * additionalGreen ) ;
+					blue	= initialBlue	- (int)( y * additionalBlue ) ;
+					color = D3DCOLOR_ARGB( 0, red, green, blue ) | ( alpha << 24 ) ;
+					memcpy( ( BYTE* )lockedRect.pBits + lockedRect.Pitch*y + 4*x, &color, sizeof(DWORD) ) ;
+					
 				}
 			}
 
-			pWkTex->UnlockRect( 0 ) ;
+			textureBuffer->UnlockRect( 0 ) ;
 
 			delete[] ptr;		
 
@@ -261,7 +261,7 @@ namespace KMT {
 		//*ppFont = pWkFont ;
 		//pWkFont->Init( pStr ) ;
 
-		object->_textureData = pWkTex ;
+		object->_textureData = textureBuffer ;
 		object->_imageInfo.Width = fontSize ;
 
 		_stringTextures.insert(make_pair(texturePath.str(), TextureWP(object)));
