@@ -184,11 +184,11 @@ namespace KMT {
 			//---------------------------------------------------------------
 			// フォント情報の書き込み
 			// offsetX, offsetY : 書き出し位置(左上)
-			// bitmapWeight, bitmapHeight : フォントビットマップの幅高
+			// bitmapWidth, bitmapHeight : フォントビットマップの幅高
 			// Level : α値の段階 (GGO_GRAY4_BITMAPは17段階、GGO_GRAY8_BITMAPは65段階)
 			int offsetX = glyphmetrics.gmptGlyphOrigin.x;
 			int offsetY = textmetric.tmAscent - glyphmetrics.gmptGlyphOrigin.y;
-			int bitmapWeight = glyphmetrics.gmBlackBoxX + (4-(glyphmetrics.gmBlackBoxX%4)) % 4;
+			int bitmapWidth = glyphmetrics.gmBlackBoxX + (4-(glyphmetrics.gmBlackBoxX%4)) % 4;
 			int bitmapHeight = glyphmetrics.gmBlackBoxY;
 			int level = 65;
 			int x, y;
@@ -216,20 +216,20 @@ namespace KMT {
 			int red, green, blue;
 
 			for(y = offsetY; y < offsetY+bitmapHeight; y++){
-				for(x = offsetX; x < offsetX+bitmapWeight; x++){
+				for(x = offsetX; x < offsetX+bitmapWidth; x++){
 					//--------------------------------------------------------------
 					// ノーマルフォント
 					//if( T2FONT_ANTIALIAS & FLG ){
-					//	Alpha = ( 255 * ptr[ x-offsetX + bitmapWeight * ( y-offsetY ) ] ) / ( Level-1 ) ;
+					//	Alpha = ( 255 * ptr[ x-offsetX + bitmapWidth * ( y-offsetY ) ] ) / ( Level-1 ) ;
 					//}else{
-					//	Alpha = ( 0 == ptr[ x-offsetX + bitmapWeight * ( y-offsetY ) ] )? 0 : 255 ;
+					//	Alpha = ( 0 == ptr[ x-offsetX + bitmapWidth * ( y-offsetY ) ] )? 0 : 255 ;
 					//}
 
-					alpha = (DWORD)ptr[ x-offsetX + bitmapWeight * ( y-offsetY ) ] ;
+					alpha = (DWORD)ptr[ x-offsetX + bitmapWidth * ( y-offsetY ) ] ;
 					alpha = alpha * ( 256 / ( level - 1 ) ) ;
 					if( alpha > 255 )
 						alpha = 255 ;
-					//Alpha = ( 0 == ptr[ x-offsetX + bitmapWeight * ( y-offsetY ) ] )? 0 : 255 ;
+					//Alpha = ( 0 == ptr[ x-offsetX + bitmapWidth * ( y-offsetY ) ] )? 0 : 255 ;
 
 					red		= initialRed	- (int)( y * additionalRed ) ;
 					green	= initialGreen	- (int)( y * additionalGreen ) ;
