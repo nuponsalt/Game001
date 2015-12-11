@@ -18,14 +18,14 @@ namespace KMT {
 	void CViewBehavior::calculateViewFructum()
 	{
 		// スクリーン座標上の視錐台の各頂点座標
-		CVector4 nearTL(-1, 1, 0, 1);
-		CVector4 nearTR(1, 1, 0, 1);
-		CVector4 nearBL(-1, -1, 0, 1);
-		CVector4 nearBR(1, -1, 0, 1);
-		CVector4 farTL(-1, 1, 1, 1);
-		CVector4 farTR(1, 1, 1, 1);
-		CVector4 farBL(-1, -1, 1, 1);
-		CVector4 farBR(1, -1, 1, 1);
+		Vector4 nearTL(-1, 1, 0, 1);
+		Vector4 nearTR(1, 1, 0, 1);
+		Vector4 nearBL(-1, -1, 0, 1);
+		Vector4 nearBR(1, -1, 0, 1);
+		Vector4 farTL(-1, 1, 1, 1);
+		Vector4 farTR(1, 1, 1, 1);
+		Vector4 farBL(-1, -1, 1, 1);
+		Vector4 farBR(1, -1, 1, 1);
 
 		// ビュープロジェクション行列の逆行列を求める
 		CMatrix MVP = Matrix[VIEW] * Matrix[PROJECTION];

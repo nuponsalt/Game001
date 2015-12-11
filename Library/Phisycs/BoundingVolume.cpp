@@ -5,7 +5,7 @@
 
 namespace KMT {
 
-	Plane::Plane(const CVector3& v1, const CVector3& v2, const CVector3& v3)
+	Plane::Plane(const Vector3& v1, const Vector3& v2, const Vector3& v3)
 	{
 		Normal = NormalOnPlane(v1, v2, v3); 
 		Distance = Normal.Dot(v1);

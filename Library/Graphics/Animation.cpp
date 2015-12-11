@@ -19,7 +19,7 @@ namespace KMT
 		_divisionHeight = divisionY;
 		// 分割後の1つのサイズを取得
 		D3DXIMAGE_INFO info  = _texture->GetImageInfo();
-		_imageSize = CVector3(((float)info.Width / _divisionWidth), ((float)info.Height / _divisionHeight), 0);
+		_imageSize = Vector3(((float)info.Width / _divisionWidth), ((float)info.Height / _divisionHeight), 0);
 		
 		// 分割回数を記憶
 		int count = 0;
@@ -48,7 +48,7 @@ namespace KMT
 		// 一枚分の幅
 		float x = _imageSize.x / (float)_divisionWidth;
 		float y = _imageSize.y / (float)_divisionHeight;
-		_centerPosition = CVector3(( x * FHALF ), ( y * FHALF), 0.0f );
+		_centerPosition = Vector3((x * FHALF), (y * FHALF), 0.0f);
 	}
 
 	const bool Animation::UpdateAnimation(const int &frame)

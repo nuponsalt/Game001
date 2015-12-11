@@ -12,12 +12,12 @@ namespace KMT {
 	void ModelRenderer::LoadFromX(const std::string &path)
 	{
 		// X ファイル とテクスチャのロード
-		_mesh = CMesh::CreateFromX(path);
+		_mesh = Mesh::CreateFromX(path);
 		// マテリアル情報の取得
-		D3DXMATERIAL *materials = (D3DXMATERIAL*)(_mesh->getpd3dMaterialBuffer()->GetBufferPointer());
+		D3DXMATERIAL *materials = (D3DXMATERIAL*)(_mesh->GetMaterialBuffer()->GetBufferPointer());
 		// テクスチャのロード
 		TextureSP texture;
-		for(size_t i = 0; i < _mesh->getMaterialNum(); i++){
+		for(size_t i = 0; i < _mesh->GetMaterialNumber(); i++){
 			// 特定の部分でテクスチャが存在しない場合
 			if(NULL == materials[i].pTextureFilename){
 				texture = NULL;
@@ -137,7 +137,7 @@ namespace KMT {
 		// カメラの座標をシェーダに使用するための行列変換
 		CMatrix CamMtx = WldMtx * camera->getMatrix(CViewBehavior::VIEW);
 		D3DXMatrixInverse(&CamMtx, NULL, &CamMtx);
-		CVector4 EyePos = CVector4(
+		Vector4 EyePos = Vector4(
 			camera->getEye().x, 
 			camera->getEye().y, 
 			camera->getEye().z, 
@@ -154,7 +154,7 @@ namespace KMT {
 		
 		HRESULT hr;
 		// 3D モデルのパーツ分ループして描画
-		for(size_t i = 0 ; i < _mesh->getMaterialNum(); i++)
+		for(size_t i = 0 ; i < _mesh->GetMaterialNumber(); i++)
 		{
 			// テクスチャが存在しない場合のカラー
 			D3DXVECTOR4 color = D3DXVECTOR4(1.0,1.0,1.0,1.0);
@@ -164,18 +164,18 @@ namespace KMT {
 			{
 				LPDIRECT3DTEXTURE9 texture = _textures[i]->GetTextureData();
 				// シェーダにカラーを渡す
-				_shader->SetColor(vColorRGBA);
+				_shader->SetColor(_colorRGBA);
 				_shader->SetTexture(texture);
 			}else
 				_shader->SetColor(color);
 			// シェーダの使用開始
 			_shader->BeginShader();
 			// シェーダのパス設定
-			_shader->BeginPass(isAddBlend);
+			_shader->BeginPass(_addsBlend);
 			// パーツの描画	
 			if(SUCCEEDED(GraphicsManager::_device->BeginScene()))
 			{
-				_mesh->getpd3dMesh()->DrawSubset(i); 
+				_mesh->GetMesh()->DrawSubset(i); 
 				V(GraphicsManager::_device->EndScene());
 			}
 			// パス終了

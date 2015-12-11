@@ -14,23 +14,23 @@ namespace KMT {
 	// ’è‹` : 3DVector Extension
 
 	// ’·‚³
-	float Vector3Length( const CVector3* pV ){
+	float Vector3Length( const Vector3* pV ){
 		return sqrtf( pV->x * pV->x + pV->y * pV->y + pV->z * pV->z ) ;
 	}
 
 	// ’·‚³‚Ì2æ
-	float Vector3LengthSq( const CVector3 *pV ){
+	float Vector3LengthSq( const Vector3 *pV ){
 		return pV->x * pV->x + pV->y * pV->y + pV->z * pV->z ;
 	}
 
 	// “àÏ
-	float Vector3Dot(const CVector3 *pV1, const CVector3 *pV2){
+	float Vector3Dot(const Vector3 *pV1, const Vector3 *pV2){
 		return pV1->x * pV2->x + pV1->y * pV2->y + pV1->z * pV2->z;
 	}
 
 	// ŠOÏ
-	CVector3* Vector3Cross( CVector3 *pOut, const CVector3 *pV1, const CVector3 *pV2 ){
-		CVector3 v ;
+	Vector3* Vector3Cross( Vector3 *pOut, const Vector3 *pV1, const Vector3 *pV2 ){
+		Vector3 v ;
 
 		v.x = pV1->y * pV2->z - pV1->z * pV2->y ;
 		v.y = pV1->z * pV2->x - pV1->x * pV2->z ;
@@ -41,7 +41,7 @@ namespace KMT {
 	}
 
 	// üŒ`•âŠÔ
-	CVector3* Vector3Lerp( CVector3 *pOut, const CVector3 *pV1, const CVector3 *pV2, float s ){
+	Vector3* Vector3Lerp( Vector3 *pOut, const Vector3 *pV1, const Vector3 *pV2, float s ){
 		pOut->x = pV1->x + s * ( pV2->x - pV1->x ) ;
 		pOut->y = pV1->y + s * ( pV2->y - pV1->y ) ;
 		pOut->z = pV1->z + s * ( pV2->z - pV1->z ) ;
@@ -49,7 +49,7 @@ namespace KMT {
 	}
 
 	// ³‹K‰»
-	CVector3* Vector3Normalize( CVector3 *pOut, const CVector3 *pV ){
+	Vector3* Vector3Normalize( Vector3 *pOut, const Vector3 *pV ){
 		float f = 1 / sqrtf( pV->x * pV->x + pV->y * pV->y + pV->z * pV->z ) ;
 		pOut->x = pV->x * f ;
 		pOut->y = pV->y * f ;
@@ -57,22 +57,22 @@ namespace KMT {
 		return pOut ;
 	}
 
-	const CVector3 AXIS_X(1, 0, 0) ;
-	const CVector3 AXIS_Y(0, 1, 0) ;
-	const CVector3 AXIS_Z(0, 0, 1) ;
+	const Vector3 AXIS_X(1, 0, 0) ;
+	const Vector3 AXIS_Y(0, 1, 0) ;
+	const Vector3 AXIS_Z(0, 0, 1) ;
 
 	//-----------------------------------------------------
 	// Quaternion Extension
 
-	CQuaternion RotationX( float angle ) { return CQuaternion( CVector3( 1, 0, 0 ), angle ) ; }
+	CQuaternion RotationX( float angle ) { return CQuaternion( Vector3( 1, 0, 0 ), angle ) ; }
 
-	CQuaternion RotationY( float angle ) { return CQuaternion( CVector3( 0, 1, 0 ), angle ) ; }
+	CQuaternion RotationY( float angle ) { return CQuaternion( Vector3( 0, 1, 0 ), angle ) ; }
 
-	CQuaternion RotationZ( float angle ) { return CQuaternion( CVector3( 0, 0, 1 ), angle ) ; }
+	CQuaternion RotationZ( float angle ) { return CQuaternion( Vector3( 0, 0, 1 ), angle ) ; }
 
-	CVector3 Interpolate(const CVector3 &v1, const CVector3 &v2, float f)
+	Vector3 Interpolate(const Vector3 &v1, const Vector3 &v2, float f)
 	{
-		CVector3 _v = v1 ;
+		Vector3 _v = v1 ;
 		_v.x = Interpolate(_v.x, v2.x, f) ;
 		_v.y = Interpolate(_v.y, v2.y, f) ;
 		_v.z = Interpolate(_v.z, v2.z, f) ;

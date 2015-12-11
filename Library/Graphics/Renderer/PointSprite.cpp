@@ -34,7 +34,7 @@ namespace KMT {
 
 		for(int i = 0; i < _pointNumber - 1; i++)
 		{
-			pointSprite[i]._position = CVector3(0, 0, 0);
+			pointSprite[i]._position = Vector3(0, 0, 0);
 			pointSprite[i]._size = size;
 			pointSprite[i]._color = 0;
 		}
@@ -99,7 +99,7 @@ namespace KMT {
 		// カメラの座標をシェーダに使用するための行列変換
 		CMatrix CamMtx = WldMtx * camera->getMatrix(CViewBehavior::VIEW);
 		D3DXMatrixInverse(&CamMtx, NULL, &CamMtx);
-		CVector4 EyePos = CVector4(
+		Vector4 EyePos = Vector4(
 			camera->getEye().x, 
 			camera->getEye().y, 
 			camera->getEye().z, 
@@ -117,14 +117,14 @@ namespace KMT {
 		HRESULT hr;
 		// 描画処理
 		// シェーダーにカラーを渡す
-		_shader->SetColor(vColorRGBA);
+		_shader->SetColor(_colorRGBA);
 		// テクスチャを渡す
 		if(NULL != _texture)
 			_shader->SetTexture(_texture->GetTextureData());
 		// シェーダーの使用開始
 		_shader->BeginShader();
 		// シェーダーのパス開始
-		_shader->BeginPass(isAddBlend);
+		_shader->BeginPass(_addsBlend);
 		// パーティクルの使用を有効にする
 		GraphicsManager::_device->SetRenderState(D3DRS_POINTSPRITEENABLE, TRUE);
 		GraphicsManager::_device->SetRenderState(D3DRS_POINTSCALEENABLE, TRUE);

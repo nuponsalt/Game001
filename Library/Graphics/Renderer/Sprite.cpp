@@ -71,7 +71,7 @@ namespace KMT {
 			//
 			// ‰ÁZƒuƒŒƒ“ƒh‚Ìİ’è
 			//
-			if(isAddBlend)
+			if(_addsBlend)
 			{
 				DXUTGetD3D9Device()->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
 				DXUTGetD3D9Device()->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
@@ -94,7 +94,7 @@ namespace KMT {
 				// •`‰æÀ•W(s—ñ‚Å§Œä‚·‚é‚Ì‚Å0, 0, 0‚ÅOK)
 				&D3DXVECTOR3(0,0,0),
 				// F
-				D3DCOLOR_ARGB((int)(vColorRGBA.w * 255), (int)(vColorRGBA.x * 255), (int)(vColorRGBA.y * 255), (int)(vColorRGBA.z * 255)));
+				D3DCOLOR_ARGB((int)(_colorRGBA.w * 255), (int)(_colorRGBA.x * 255), (int)(_colorRGBA.y * 255), (int)(_colorRGBA.z * 255)));
 
 			// ‰ÁZØ‚è‘Ö‚¦
 			_sprite->End();

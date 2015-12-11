@@ -5,62 +5,63 @@
 //*********************************************************************
 #include "DXUT.h"
 #include "Text.h"
+#include "GraphicsManager.h"
 
 namespace KMT {
 
-	CDebugText::CDebugText() : bitColor(0xFFFFFFFF) { }
+	DebugText::DebugText() : _color(0xFFFFFFFF) { }
 	
-	CDebugText::~CDebugText() 
+	DebugText::~DebugText() 
 	{
-		SAFE_RELEASE(pd3dfont);
+		SAFE_RELEASE(_font);
 	}
 
-	CDebugTextSP CDebugText::CreateText(size_t nSize, const LPCWCHAR wFont) 
+	DebugTextSP DebugText::CreateText(size_t size, const LPCWCHAR fontName) 
 	{
-		CDebugTextSP ptext  = CDebugTextSP(new CDebugText);
+		DebugTextSP text  = DebugTextSP(new DebugText);
 		// フォントの情報を設定
-		D3DXFONT_DESC _d3dfontDesc;
+		D3DXFONT_DESC fontDesc;
 		// フォントの高さ
-		_d3dfontDesc.Height = nSize;
+		fontDesc.Height = size;
 		// フォントの幅
-		_d3dfontDesc.Width = nSize / 2;
-		_d3dfontDesc.Weight = 0;
-		_d3dfontDesc.MipLevels = 0;
-		_d3dfontDesc.Italic = FALSE;
-		_d3dfontDesc.CharSet = SHIFTJIS_CHARSET;
-		_d3dfontDesc.OutputPrecision = OUT_TT_ONLY_PRECIS;
-		_d3dfontDesc.Quality = DEFAULT_QUALITY;
-		_d3dfontDesc.PitchAndFamily  = DEFAULT_PITCH | FF_DONTCARE;
-		lstrcpy(_d3dfontDesc.FaceName, wFont);
+		fontDesc.Width = size / 2;
+		fontDesc.Weight = 0;
+		fontDesc.MipLevels = 0;
+		fontDesc.Italic = FALSE;
+		fontDesc.CharSet = SHIFTJIS_CHARSET;
+		fontDesc.OutputPrecision = OUT_TT_ONLY_PRECIS;
+		fontDesc.Quality = DEFAULT_QUALITY;
+		fontDesc.PitchAndFamily  = DEFAULT_PITCH | FF_DONTCARE;
+		lstrcpy(fontDesc.FaceName, fontName);
 		// フォント生成
-		D3DXCreateFontIndirect(DXUTGetD3D9Device(), &_d3dfontDesc, &ptext->pd3dfont);
+		D3DXCreateFontIndirect(GraphicsManager::_device, &fontDesc, &text->_font);
 		// 結果のオブジェクトが戻る
-		return ptext;
+		return text;
 	}
 
-	void CDebugText::drawText(const int _Left, const int _Top, const DWORD _bitColor, LPCWSTR _Text, ...)
+	void DebugText::drawText(const int left, const int top, const DWORD color, LPCWSTR text, ...)
 	{
 		// 描画位置の設定
-		RECT _rect = { _Left, _Top, 0, 0 };
+		RECT rect = { left, top, 0, 0 };
 		// カラー保存
-		bitColor = _bitColor;
+		_color = color;
 		// 可変長引数から文字列に変換
 		va_list va;
-		va_start(va, _Text);
-		WCHAR _Buffer[255] = { 0 };
-		vswprintf_s(_Buffer, _Text, va);
+		va_start(va, text);
+		WCHAR buffer[255] = { 0 };
+		vswprintf_s(buffer, text, va);
 		va_end(va);
 
 		HRESULT hr;
-		if(SUCCEEDED(DXUTGetD3D9Device()->BeginScene()))
+		if(SUCCEEDED(GraphicsManager::_device->BeginScene()))
 		{
 			// テキスト描画
-			// _Text : 描画する文字列 (WCHAR 指定)
-			// _rect : 描画範囲指定
+			// text : 描画する文字列 (WCHAR 指定)
+			// rect : 描画範囲指定
 			// nColor : 色指定
-			pd3dfont->DrawText(NULL, _Buffer,	-1, &_rect,	DT_LEFT | DT_NOCLIP, _bitColor);
+			_font->DrawText(NULL, buffer,	-1, &rect,	DT_LEFT | DT_NOCLIP, color);
 			// 描画終了
-			V(DXUTGetD3D9Device()->EndScene());
+			V(GraphicsManager::_device->EndScene());
 		}
 	}
 

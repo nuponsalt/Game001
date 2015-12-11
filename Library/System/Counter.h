@@ -29,13 +29,13 @@ namespace KMT {
 		static CCounterSP CreateCounter(const std::string &_path);
 		/* æ“¾ */
 		// Šî“_À•W‚Ìæ“¾ŠÖ”
-		inline const CVector3 getPosition() const { return Position; }
+		inline const Vector3 getPosition() const { return Position; }
 		
 		inline SpriteSP getImage() const { return Image; }
 		/* İ’è */
 		// À•W
-		inline void setPosition(const CVector3& _position){ Position = _position; }
-		inline void setPosition(const float &_x, const float &_y, const float &_z) { Position = CVector3(_x, _y, _z); }
+		inline void setPosition(const Vector3& _position){ Position = _position; }
+		inline void setPosition(const float &_x, const float &_y, const float &_z) { Position = Vector3(_x, _y, _z); }
 		// •`‰æŠ´Šo
 		inline void setInterval(const float _interval){ Interval = _interval; }
 		// •`‰æŠÖ”
@@ -53,7 +53,7 @@ namespace KMT {
 		// ”š‰æ‘œ
 		SpriteSP Image;
 		// •`‰æ‚·‚éÛ‚ÌŠî“_À•W
-		CVector3 Position;
+		Vector3 Position;
 		// •`‰æŠÔŠu
 		float Interval;
 

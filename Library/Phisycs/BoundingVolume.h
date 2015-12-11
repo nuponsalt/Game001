@@ -30,9 +30,9 @@ namespace KMT {
 		// 判定
 		bool isDetect;
 		// 速度
-		CVector3 Velocity;
+		Vector3 Velocity;
 		// 加速度
-		CVector3 Acceleration;
+		Vector3 Acceleration;
 		// 質量
 		float Mass;
 		// スケール
@@ -52,14 +52,14 @@ namespace KMT {
 	struct Segment : public BoundingVolume
 	{
 		// 始点座標
-		CVector3 s;
+		Vector3 s;
 		// 終点座標
-		CVector3 e;
+		Vector3 e;
 
 		// コンストラクタ(全ての頂点が減点の線分生成)
 		Segment() { }
 		// コンストラクタ(指定した頂点座標の線分を生成)
-		Segment(const CVector3 &_s, const CVector3 &_e) : s(_s), e(_e) { }
+		Segment(const Vector3 &_s, const Vector3 &_e) : s(_s), e(_e) { }
 
 	};
 
@@ -67,7 +67,7 @@ namespace KMT {
 	typedef struct Plane : public BoundingVolume
 	{
 		// 法線
-		CVector3 Normal;
+		Vector3 Normal;
 		// 無限平面上の点から減点までの距離
 		float Distance;
 
@@ -75,7 +75,7 @@ namespace KMT {
 		Plane() : Normal(0, 1, 0), Distance(0) { }
 		/// 与えられた3点から平面を初期化する
 		/// 引数は時計回りの順で与える
-		Plane(const CVector3& v1, const CVector3& v2, const CVector3& v3);
+		Plane(const Vector3& v1, const Vector3& v2, const Vector3& v3);
 
 	}PlaneVolume, *pPlaneVolume;
 
@@ -83,9 +83,9 @@ namespace KMT {
 	typedef struct Sphere : public BoundingVolume
 	{
 		// 円の座標
-		CVector3 Position;
+		Vector3 Position;
 		// 1つ前の座標
-		CVector3 PreviousPosition;
+		Vector3 PreviousPosition;
 		// 半径
 		float Radius;
 
@@ -98,26 +98,26 @@ namespace KMT {
 	typedef struct Triangle : public BoundingVolume
 	{
 		// 頂点座標
-		CVector3 Position[3];
+		Vector3 Position[3];
 		// 1つ前の頂点座標
-		CVector3 PreviousPosition[3];
+		Vector3 PreviousPosition[3];
 
 		// コンストラクタ
 		Triangle() { for (int i = 0; i < 3; i++) { Position[i] = PreviousPosition[i] = 0; } }
 
 		// 取得 : 三角形の法線
-		CVector3 getNomal() const { return Normalize(Cross(Position[1] - Position[0], Position[2] - Position[0])); }
+		Vector3 getNomal() const { return Normalize(Cross(Position[1] - Position[0], Position[2] - Position[0])); }
 
 	}*PTriangle, PolygonVolume, *PPolygonVolume;
 
 	struct AABB : public BoundingVolume
 	{
 		// 中心座標
-		CVector3 Position;
+		Vector3 Position;
 		// 1つ前の中心座標
-		CVector3 PreviousPosition;
+		Vector3 PreviousPosition;
 		// 半径
-		CVector3 Radius;
+		Vector3 Radius;
 
 		// コンストラクタ
 		AABB() { }

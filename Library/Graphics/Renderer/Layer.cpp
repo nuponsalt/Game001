@@ -128,8 +128,8 @@ namespace KMT {
 				}
 
 				// ƒJƒƒ‰‚©‚ç‚Ì‹——£‚ðŒvŽZ
-				CVector3 cameraPosition = _camera3D->getEye();
-				CVector3 length = (*listIterator).lock()->Position - cameraPosition;
+				Vector3 cameraPosition = _camera3D->getEye();
+				Vector3 length = (*listIterator).lock()->Position - cameraPosition;
 				(*listIterator).lock()->_cameraDistance = length.Length();
 
 				++listIterator;
