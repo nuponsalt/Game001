@@ -4,58 +4,61 @@
 
 namespace KMT {
 
-	CCounter::CCounter() : Position(), Interval(0) { }
+	Counter::Counter() : _position(), _interval(0) { }
 
-	void CCounter::LoadFromFile(const std::string& _path)
+	void Counter::LoadFromFile(const std::string& _path)
 	{
-		if(Image == NULL)
-			Image = Sprite::CreateFromFile(_path, DIV_X_NUM, DIV_Y_NUM);
+		if(_image == NULL)
+			_image = Sprite::CreateFromFile(_path, DIV_X_NUM, DIV_Y_NUM);
 	}
 
-	CCounterSP CCounter::CreateCounter()
+	CounterSP Counter::CreateCounter()
 	{
-		CCounterSP _obj(new CCounter());
+		CounterSP object(new Counter());
 		// “Ç‚İ‚İ
-		_obj->LoadFromFile("Resource/Texture/Number.png");
-		_obj->getImage()->SetPlayMode(PlayMode::SELECT_FRAME);
+		object->LoadFromFile("Resource/Texture/Number.png");
+		object->GetImage()->SetPlayMode(PlayMode::SELECT_FRAME);
 
-		return _obj;
+		return object;
 	}
 
-	CCounterSP CCounter::CreateCounter(const std::string &_path)
+	CounterSP Counter::CreateCounter(const std::string &_path)
 	{
-		CCounterSP _obj(new CCounter());
+		CounterSP object(new Counter());
 		// “Ç‚İ‚İ
-		_obj->LoadFromFile(_path);
-		_obj->getImage()->SetPlayMode(PlayMode::SELECT_FRAME);
+		object->LoadFromFile(_path);
+		object->GetImage()->SetPlayMode(PlayMode::SELECT_FRAME);
 
-		return _obj;
+		return object;
 	}
 
-	void CCounter::Render(const ALIGN_TYPE &_type, const int &_number)
+	void Counter::Render(const AlignState &type, const int &number)
 	{
 		// ó‚¯æ‚Á‚½”’l‚Ì•¶š”‚ğæ“¾‚·‚é
 		int place = 0;
-		char buf[MAX_NUM] = {0};
+		char buffer[MAX_NUM] = {0};
 
-		place = sprintf_s(buf, "%d", _number);
+		place = sprintf_s(buffer, "%d", number);
 
 		// ¶Šñ‚¹‚Ìê‡
-		if(LEFT_ALI == _type) {
-			for(int i = 0 ; i < place ; i++) {
-				Image->Position = D3DXVECTOR3(Position.x + (i * Interval), Position.y, 0);
-				Image->UpdateAnimation((buf[ i ] - '0'));
-				Image->Render();
+		if(LEFT_ALIGN == type) 
+		{
+			for(int i = 0 ; i < place ; i++)
+			{
+				_image->Position = D3DXVECTOR3(_position.x + (i * _interval), _position.y, 0);
+				_image->UpdateAnimation((buffer[ i ] - '0'));
+				_image->Render();
 			}
 		}
 		
 		// ‰EŠñ‚¹‚Ìê‡
-		if(RIGHT_ALI == _type)
+		if(RIGHT_ALIGN == type)
 		{
-			for( int i = 0 ; i < place ; ++i ) {
-				Image->Position = D3DXVECTOR3(Position.x - ((place - i) * Interval), Position.y, 0);
-				Image->UpdateAnimation((buf[ i ] - '0'));
-				Image->Render();
+			for( int i = 0 ; i < place ; ++i )
+			{
+				_image->Position = D3DXVECTOR3(_position.x - ((place - i) * _interval), _position.y, 0);
+				_image->UpdateAnimation((buffer[ i ] - '0'));
+				_image->Render();
 			}
 		}
 	}

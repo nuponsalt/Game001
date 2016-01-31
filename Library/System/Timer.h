@@ -5,53 +5,53 @@
 namespace KMT
 {
 
-	class CTimer ;
-	typedef std::shared_ptr< CTimer > CTimerSP ;
+	class Timer ;
+	typedef std::shared_ptr< Timer > TimerSP ;
 
-	class CTimer
+	class Timer
 	{
 	private :
-		int count ;	// カウント
-		int time ;	// trueを返す時間
+		int _count ;	// カウント
+		int _time ;	// trueを返す時間
 
 	public :
 
 		// デフォルトコンストラクタ
-		CTimer() : count(0), time(0)
+		Timer() : _count(0), _time(0)
 		{}
 
 		// コンストラクタ
 		// arg1... trueを返すまでの時間
-		CTimer(const int _time) : count( 0 ), time( _time )
+		Timer(const int time) : _count( 0 ), _time( time )
 		{}
 
 		// デストラクタ
-		~CTimer(){}
+		~Timer(){}
 
 		// タイマーを進める関数
 		// ret.... [ false : セットした時間にはまだ達していない ] [ true : セットした時間に達した ]
 		// tips... セットした時間になるとtrueを返し、カウントをリセットする
-		const bool TimeCount() ;
+		const bool Count() ;
 
 		// タイマーを進める関数その2
 		// ret.... [ false : カウントが0以外 ] [ true : カウントが0 ]
-		// tips... TimeCount関数とは違い、カウントが0になったときにtrueを返す。他はTimeCount関数と同じ
-		const bool TimeCountZero() ;
+		// tips... Count関数とは違い、カウントが0になったときにtrueを返す。他はCount関数と同じ
+		const bool CountZero() ;
 
 		// 時間をセットする関数
 		// arg1... セットしたい時間
-		void setTime( const int _time ){ time = _time ; count = 0 ; }
+		void SetTime( const int time ){ _time = time ; _count = 0 ; }
 
 		// カウントをリセットする関数
-		void ResetCount(){ count = 0 ; }
+		void ResetCount(){ _count = 0 ; }
 
 		// 現在セットしてある時間を取得する関数
 		// ret.... [ 戻り値 : 現在セットしてある時間 ]
-		const int getTime() const { return time ; }
+		const int GetTime() const { return _time ; }
 
 		// 現在のカウントの取得関数
 		// ret.... [ 戻り値 : 現在のカウント ]
-		const int getCount() const { return count ; }
+		const int GetCount() const { return _count ; }
 	} ;
 
 }

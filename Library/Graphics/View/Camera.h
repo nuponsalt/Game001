@@ -29,7 +29,7 @@ namespace KMT {
 		inline void setSize(const float &_Size) { Size = _Size; }
 		void setSizeIPO(const float &_Size);
 		/* コマンド */
-		inline void setCommand(const CCommand& _command) { Command = _command; }
+		inline void setCommand(const Command& _command) { Command = _command; }
 		
 		// 取得
 		inline Vector3 getDirection() const { return Direction; } //0ベクトルになるような部分での引用はバグの温床になるからNG
@@ -46,7 +46,7 @@ namespace KMT {
 		// サイズ
 		float Size;
 		// コマンド
-		CCommand Command;
+		Command Command;
 
 		// コンストラクタ
 		CCamera();
