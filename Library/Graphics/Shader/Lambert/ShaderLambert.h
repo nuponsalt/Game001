@@ -1,4 +1,4 @@
-#pragma once 
+ï»¿#pragma once 
 
 #include "../Shader.h"
 
@@ -7,15 +7,15 @@ namespace KMT {
 	class ShaderLambert : public Shader
 	{
 	public :
-		// ƒfƒXƒgƒ‰ƒNƒ^
+		// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		~ShaderLambert() { }
-		// ƒVƒF[ƒ_[¶¬
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ç”Ÿæˆ
 		static ShaderSP Create();
-		// ƒ‚ƒfƒ‹‚É‘Î‚·‚éƒGƒtƒFƒNƒgİ’è
-		void ApplyEffect(const CMatrix& rotation, const Vector4& cameraPosition);
+		// ãƒ¢ãƒ‡ãƒ«ã«å¯¾ã™ã‚‹ã‚¨ãƒ•ã‚§ã‚¯ãƒˆè¨­å®š
+		void ApplyEffect(const Matrix& rotation, const Vector4& cameraPosition);
 	
 	private :
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		ShaderLambert();
 
 	};

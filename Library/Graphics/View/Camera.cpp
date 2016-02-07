@@ -1,4 +1,4 @@
-#include "DXUT.h"
+ï»¿#include "DXUT.h"
 #include "Camera.h"
 
 #include "../../Math/Math.h"
@@ -19,16 +19,16 @@ namespace KMT {
 
 	void CCamera::updateView()
 	{
-		// ƒrƒ…[s—ñ, ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚ğ DirectX ‚Éİ’è
-		D3DXMatrixLookAtLH(&Matrix[VIEW], (D3DXVECTOR3*)&View.Eye, (D3DXVECTOR3*)&View.LookAt, (D3DXVECTOR3*)&View.Up);
-		D3DXMatrixPerspectiveFovLH(&Matrix[PROJECTION], Persective.Angle, Persective.Aspect, Persective.Near, Persective.Far);
+		// ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—, ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã‚’ DirectX ã«è¨­å®š
+		D3DXMatrixLookAtLH(&Matrices[VIEW], (D3DXVECTOR3*)&View.Eye, (D3DXVECTOR3*)&View.LookAt, (D3DXVECTOR3*)&View.Up);
+		D3DXMatrixPerspectiveFovLH(&Matrices[PROJECTION], Persective.Angle, Persective.Aspect, Persective.Near, Persective.Far);
 	}
 
 	void CCamera::Calculate()
 	{
-		// ƒJƒƒ‰À•W—š—ğ‚ğæ“¾
+		// ã‚«ãƒ¡ãƒ©åº§æ¨™å±¥æ­´ã‚’å–å¾—
 		View.previousEye = View.Eye;
-		// ƒJƒƒ‰•ûŒü
+		// ã‚«ãƒ¡ãƒ©æ–¹å‘
 		Direction = (View.LookAt - View.Eye).Normalize();
 	}
 

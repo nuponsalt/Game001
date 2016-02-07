@@ -1,4 +1,4 @@
-#include "DXUT.h"
+ï»¿#include "DXUT.h"
 #include "ShaderToon.h"
 
 #include "../../../Support/wsb_xml.h"
@@ -19,13 +19,13 @@ namespace KMT {
 		ShaderSP shader;
 		std::unordered_map<std::string, ShaderSP>::iterator it = _shaders.find(path);
 
-		// ‘¶Ý‚µ‚½‚ç‘æ“ñ—v‘f‚ð•Ô‚·
+		// å­˜åœ¨ã—ãŸã‚‰ç¬¬äºŒè¦ç´ ã‚’è¿”ã™
 		if(it != _shaders.end())
 		{
 			shader = (*it).second;
 			return shader;
 		}
-		// ‘¶Ý‚µ‚È‚¯‚ê‚ÎV‚µ‚­¶¬
+		// å­˜åœ¨ã—ãªã‘ã‚Œã°æ–°ã—ãç”Ÿæˆ
 		std::string texturePath = xml->GetElement("ToonTex")->GetString();
 		float directionX = xml->GetElement("LightDirection")->GetElement("X")->GetFloat();
 		float directionY = xml->GetElement("LightDirection")->GetElement("Y")->GetFloat();
@@ -37,19 +37,19 @@ namespace KMT {
 
 		shader = ShaderSP(shaderToon);
 
-		// ƒnƒbƒVƒ…ƒ}ƒbƒv‚É‘}“ü
+		// ãƒãƒƒã‚·ãƒ¥ãƒžãƒƒãƒ—ã«æŒ¿å…¥
 		_shaders.insert(std::make_pair(path, shader));
 
 		return shader;
 	}
 
-	void ShaderToon::ApplyEffect(const CMatrix& rotation, const Vector4& cameraPosition)
+	void ShaderToon::ApplyEffect(const Matrix& rotation, const Vector4& cameraPosition)
 	{
-		// ƒ‰ƒCƒgŒvŽZ—p‚É‰ñ“]s—ñ‚ð“n‚·
+		// ãƒ©ã‚¤ãƒˆè¨ˆç®—ç”¨ã«å›žè»¢è¡Œåˆ—ã‚’æ¸¡ã™
 		_effect->SetMatrix(*GetHandle("ROT"), &rotation);
-		// ƒ‰ƒCƒgÝ’è
+		// ãƒ©ã‚¤ãƒˆè¨­å®š
 		_effect->SetVector(*GetHandle("LightDir"), (D3DXVECTOR4*)&_lightDirection);
-		// ƒgƒD[ƒ“ƒeƒNƒXƒ`ƒƒ‚ÌÝ’è
+		// ãƒˆã‚¥ãƒ¼ãƒ³ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®è¨­å®š
 		_effect->SetTexture(*GetHandle("ToonTex"), _toonTexture->GetTextureData());		
 	}
 

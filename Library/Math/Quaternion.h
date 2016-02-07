@@ -1,5 +1,5 @@
-//*********************************************************************
-// ƒNƒH[ƒ^ƒjƒIƒ“ƒNƒ‰ƒX
+ï»¿//*********************************************************************
+// ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚¯ãƒ©ã‚¹
 // Last Update : 2013.12.11
 // Yuta Komatsu
 //*********************************************************************
@@ -8,121 +8,86 @@
 #include <DirectXMath.h>
 using namespace DirectX;
 
-namespace KMT {
-
-	class Quaternion
+namespace KMT
+{
+	// ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³
+	class Quaternion : public D3DXQUATERNION
 	{
-	public :
-		float x, y, z, w;
-		
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-		Quaternion() : x(0), y(0), z(0), w(1) { }
-		// w’è‚µ‚½—v‘f‚Å¶¬
-		Quaternion(float X, float Y, float Z, float W) : x(X), y(Y), z(Z), w(W) { }
-		// w’è‚µ‚½²‚ÆŠoŒå‚Ì‰ñ“]‚ğ•\‚·ƒNƒH[ƒ^ƒjƒIƒ“‚ğ¶¬
-		// w’èŠp“x‚Íƒ‰ƒWƒAƒ“
+	public:
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		// å˜ä½ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’ç”Ÿæˆ
+		Quaternion() : D3DXQUATERNION(0, 0, 0, 1) { }
+		// æŒ‡å®šã—ãŸè¦ç´ ã§ç”Ÿæˆ
+		Quaternion(float x, float y, float z, float w) : D3DXQUATERNION(x, y, z, w) { }
+		// æŒ‡å®šã—ãŸè»¸ã¨è§’åº¦ã®å›è»¢ã‚’è¡¨ã™ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’ç”Ÿæˆ
+		// æŒ‡å®šè§’åº¦ã¯ãƒ©ã‚¸ã‚¢ãƒ³å€¤
 		Quaternion(const Vector3& axis, float angle);
-		// w’è‚µ‚½²‚ÆŠp“x‚Ì‰ñ“]‚ğ•\‚·ƒNƒH[ƒ^ƒjƒIƒ“‚ğ¶¬
-		// ã‹LƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Æ‹@”\‚Í“¯“™
-		friend Quaternion GetQuaternionAroundAxis(const Vector3& axis, float angle)
+		// æŒ‡å®šã—ãŸè»¸ã¨è§’åº¦ã®å›è»¢ã‚’è¡¨ã™ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’ç”Ÿæˆ
+		// ä¸Šè¨˜ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã¨æ©Ÿèƒ½ã¯åŒç­‰
+		friend Quaternion RotateAroundAxis(const Vector3& axis, float angle)
 		{
 			return Quaternion(axis, angle);
 		}
-
-		// w’è²‚Ì‰ñ“]‚ğ•\‚·ƒNƒH[ƒ^ƒjƒIƒ“‚ğ¶¬
-		// ²‚Ì’·‚³‚ªŠp“x‚É‚È‚é
+		// æŒ‡å®šè»¸ã®å›è»¢ã‚’è¡¨ã™ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’ç”Ÿæˆ
+		// è»¸ã®é•·ã•ãŒè§’åº¦ã«ãªã‚‹
 		Quaternion(const Vector3& axis);
-
-	};
-
-	// ƒNƒH[ƒ^ƒjƒIƒ“
-	class CQuaternion : public D3DXQUATERNION {
-	public:
-
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-		// ’PˆÊƒNƒH[ƒ^ƒjƒIƒ“‚ğ¶¬
-		CQuaternion() : D3DXQUATERNION(0, 0, 0, 1) {}
-
-		// w’è‚µ‚½—v‘f‚Å¶¬
-		CQuaternion(float x, float y, float z, float w) : D3DXQUATERNION(x, y, z, w) {}
-
-		// w’è‚µ‚½²‚ÆŠp“x‚Ì‰ñ“]‚ğ•\‚·ƒNƒH[ƒ^ƒjƒIƒ“‚ğ¶¬
-		// w’èŠp“x‚Íƒ‰ƒWƒAƒ“’l
-		CQuaternion(const Vector3& axis, float angle);
-
-		// w’è‚µ‚½²‚ÆŠp“x‚Ì‰ñ“]‚ğ•\‚·ƒNƒH[ƒ^ƒjƒIƒ“‚ğ¶¬
-		// ã‹LƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Æ‹@”\‚Í“¯“™
-		friend CQuaternion RotationAroundAxis(const Vector3& axis, float angle) {
-			return CQuaternion(axis, angle);
+		// æŒ‡å®šãƒ™ã‚¯ãƒˆãƒ«é–“ã®å›è»¢ã‚’è¡¨ã™ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’ç”Ÿæˆ
+		// ãƒ™ã‚¯ãƒˆãƒ«ã¯æ­£è¦åŒ–ã—ã¦ãŠãå¿…è¦ãªã„
+		Quaternion(Vector3 from, Vector3 to);
+		// æŒ‡å®šãƒ™ã‚¯ãƒˆãƒ«é–“ã®å›è»¢ã‚’è¡¨ã™ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’ç”Ÿæˆ
+		// ãƒ™ã‚¯ãƒˆãƒ«ã¯æ­£è¦åŒ–ã—ã¦ãŠãå¿…è¦ãªã„
+		// ä¸Šè¨˜ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã¨æ©Ÿèƒ½ã¯åŒç­‰
+		friend Quaternion RotationBetweenVectors(const Vector3& from, const Vector3& to)
+		{
+			return Quaternion(from, to);
 		}
-
-		// w’è²‚Ì‰ñ“]‚ğ•\‚·ƒNƒH[ƒ^ƒjƒIƒ“‚ğ¶¬
-		// ²‚Ì’·‚³‚ªŠp“x‚É‚È‚é
-		CQuaternion(const Vector3& axis);
-
-		// w’èƒxƒNƒgƒ‹ŠÔ‚Ì‰ñ“]‚ğ•\‚·ƒNƒH[ƒ^ƒjƒIƒ“‚ğ¶¬
-		// ƒxƒNƒgƒ‹‚Í³‹K‰»‚µ‚Ä‚¨‚­•K—v‚È‚¢
-		CQuaternion(Vector3 vfrom, Vector3 vto);
-
-		// w’èƒxƒNƒgƒ‹ŠÔ‚Ì‰ñ“]‚ğ•\‚·ƒNƒH[ƒ^ƒjƒIƒ“‚ğ¶¬
-		// ƒxƒNƒgƒ‹‚Í³‹K‰»‚µ‚Ä‚¨‚­•K—v‚È‚¢
-		// ã‹LƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Æ‹@”\‚Í“¯“™
-		friend CQuaternion RotationBetweenVectors(const Vector3& vfrom, const Vector3& vto) {
-			return CQuaternion(vfrom, vto);
+		// æŒ‡å®šãƒ™ã‚¯ãƒˆãƒ«é–“ã®å›è»¢ã‚’è¡¨ã™ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’ç”Ÿæˆ
+		// ãƒ™ã‚¯ãƒˆãƒ«ã¯æ­£è¦åŒ–ã—ã¦ãŠãå¿…è¦ãªã„
+		// æŒ‡å®šã—ãŸè»¸ã‚’ä¸­å¿ƒã«å›è»¢ã™ã‚‹ã®ã§ã€ã‚«ãƒ¡ãƒ©ãªã©ã§å¤©åœ°ã‚’åè»¢ã•ã›ãŸããªã„å ´åˆãªã©ã«ä½¿ç”¨
+		Quaternion(Vector3 from, Vector3 to, Vector3 axis);
+		// æŒ‡å®šãƒ™ã‚¯ãƒˆãƒ«é–“ã®å›è»¢ã‚’è¡¨ã™ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’ç”Ÿæˆ
+		// ãƒ™ã‚¯ãƒˆãƒ«ã¯æ­£è¦åŒ–ã—ã¦ãŠãå¿…è¦ãªã„
+		// æŒ‡å®šã—ãŸè»¸ã‚’ä¸­å¿ƒã«å›è»¢ã™ã‚‹ã®ã§ã€ã‚«ãƒ¡ãƒ©ãªã©ã§å¤©åœ°ã‚’åè»¢ã•ã›ãŸããªã„å ´åˆãªã©ã«ä½¿ç”¨
+		// æ©Ÿèƒ½ã¯è©²å½“ã™ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã¨åŒç­‰
+		friend Quaternion RotationBetweenVectorsAroundAxis(const Vector3& from, const Vector3& to, const Vector3& axis)
+		{
+			return Quaternion(from, to, axis);
 		}
-
-		// w’èƒxƒNƒgƒ‹ŠÔ‚Ì‰ñ“]‚ğ•\‚·ƒNƒH[ƒ^ƒjƒIƒ“‚ğ¶¬
-		// ƒxƒNƒgƒ‹‚Í³‹K‰»‚µ‚Ä‚¨‚­•K—v‚È‚¢
-		// w’è‚µ‚½²‚ğ’†S‚É‰ñ“]‚·‚é‚Ì‚ÅAƒJƒƒ‰‚È‚Ç‚Å“V’n‚ğ”½“]‚³‚¹‚½‚­‚È‚¢ê‡‚È‚Ç‚Ég—p
-		CQuaternion(Vector3 vfrom, Vector3 vto, Vector3 axis);
-
-		// w’èƒxƒNƒgƒ‹ŠÔ‚Ì‰ñ“]‚ğ•\‚·ƒNƒH[ƒ^ƒjƒIƒ“‚ğ¶¬
-		// ƒxƒNƒgƒ‹‚Í³‹K‰»‚µ‚Ä‚¨‚­•K—v‚È‚¢
-		// w’è‚µ‚½²‚ğ’†S‚É‰ñ“]‚·‚é‚Ì‚ÅAƒJƒƒ‰‚È‚Ç‚Å“V’n‚ğ”½“]‚³‚¹‚½‚­‚È‚¢ê‡‚È‚Ç‚Ég—p
-		// ‹@”\‚ÍŠY“–‚·‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Æ“¯“™
-		friend CQuaternion RotationBetweenVectorsAroundAxis(const Vector3& vfrom, const Vector3& vto, const Vector3& axis) {
-			return CQuaternion(vfrom, vto, axis);
-		}
-
-		// ‹…–ÊüŒ`•âŠÔ
-		// f = 0‚Ì‚Æ‚«v1, f = 1‚Ì‚Æ‚«v2
-		CQuaternion(const CQuaternion& v1, const CQuaternion& v2, float f);
-
-		// D3DXQUATERNION‚©‚ç‚Ì•ÏŠ·
-		CQuaternion(const D3DXQUATERNION& q);
-
-		// D3DXQUATERNION‚Ö‚Ì•ÏŠ·
+		// çƒé¢ç·šå½¢è£œé–“
+		// f = 0ã®ã¨ãv1, f = 1ã®ã¨ãv2
+		Quaternion(const Quaternion& a, const Quaternion& b, float f);
+		// D3DXQUATERNIONã‹ã‚‰ã®å¤‰æ›
+		Quaternion(const D3DXQUATERNION& a);
+		// D3DXQUATERNIONã¸ã®å¤‰æ›
 		operator D3DXQUATERNION() const;
-
-		// ‘ã“ü
-		CQuaternion& operator= (const CQuaternion& q);
-
-		// ³‹K‰»
-		// Šù‘¶‚ÌƒNƒH[ƒ^ƒjƒIƒ“‚É‘ã“ü
-		CQuaternion& Normalize();
-
-		// ³‹K‰»
-		// Œ‹‰Ê‚ÌƒNƒH[ƒ^ƒjƒIƒ“‚ğ¶¬
-		friend CQuaternion Normalize(CQuaternion q) {
+		// ä»£å…¥
+		Quaternion& operator= (const Quaternion& a);
+		// æ­£è¦åŒ–
+		// æ—¢å­˜ã®ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã«ä»£å…¥
+		Quaternion& Normalize();
+		// æ­£è¦åŒ–
+		// çµæœã®ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’ç”Ÿæˆ
+		friend Quaternion Normalize(Quaternion a)
+		{
 			return q.Normalize();
 		}
-
-		// ‹tƒNƒH[ƒ^ƒjƒIƒ“
-		// Šù‘¶‚ÌƒNƒH[ƒ^ƒjƒIƒ“‚É‘ã“ü
-		CQuaternion& Inverse();
-
-		// ‹tƒNƒH[ƒ^ƒjƒIƒ“
-		// Œ‹‰Ê‚ÌƒNƒH[ƒ^ƒjƒIƒ“‚ğ¶¬
-		friend CQuaternion Inverse(CQuaternion q) {
+		// é€†ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³
+		// æ—¢å­˜ã®ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã«ä»£å…¥
+		Quaternion& Inverse();
+		// é€†ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³
+		// çµæœã®ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’ç”Ÿæˆ
+		friend Quaternion Inverse(Quaternion a)
+		{
 			return q.Inverse();
 		}
-
-		CQuaternion& Delta(CQuaternion q);
-
-		friend CQuaternion Delta(CQuaternion q1, CQuaternion q2) {
-			return q1.Delta(q2);
+		// å·®åˆ†
+		// æ—¢å­˜ã®ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã«ä»£å…¥
+		Quaternion& Delta(Quaternion a);
+		// å·®åˆ†
+		// çµæœã®ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã«ä»£å…¥
+		friend Quaternion Delta(Quaternion a, Quaternion b)
+		{
+			return a.Delta(b);
 		}
-
 	};
-
 }

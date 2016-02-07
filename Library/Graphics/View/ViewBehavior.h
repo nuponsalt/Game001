@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../../Math/Vector.h"
 #include "../../Math/Matrix.h"
@@ -9,64 +9,64 @@ namespace KMT {
 
 	typedef struct tag_View
 	{
-		// À•W
+		// åº§æ¨™
 		Vector3 Eye;
-		// ‘OƒtƒŒ[ƒ€‚ÌÀ•W
+		// å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã®åº§æ¨™
 		Vector3 previousEye;
-		// ’‹“_
+		// æ³¨è¦–ç‚¹
 		Vector3 LookAt;
-		// ‘OƒtƒŒ[ƒ€‚Ì’‹“_
+		// å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã®æ³¨è¦–ç‚¹
 		Vector3 previousLookAt;
-		// ƒAƒbƒp[ƒxƒNƒgƒ‹
+		// ã‚¢ãƒƒãƒ‘ãƒ¼ãƒ™ã‚¯ãƒˆãƒ«
 		Vector3 Up;
-		// ‘OƒtƒŒ[ƒ€‚ÌƒAƒbƒp[ƒxƒNƒgƒ‹
+		// å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã®ã‚¢ãƒƒãƒ‘ãƒ¼ãƒ™ã‚¯ãƒˆãƒ«
 		Vector3 previousUp;
 
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		tag_View() : Up(0, 1, 0) { }
 
 	}ViewInfo, *pViewInfo;
 
 	typedef struct tag_Perspective
 	{
-		// ‰æŠp
+		// ç”»è§’
 		float Angle;
-		// ƒAƒXƒyƒNƒg”ä
+		// ã‚¢ã‚¹ãƒšã‚¯ãƒˆæ¯”
 		float Aspect;
-		// •½–Ê‚ÌÅ‹ß‹——£
+		// å¹³é¢ã®æœ€è¿‘è·é›¢
 		float Near;
-		// •½–Ê‚ÌÅ‰“‹——£
+		// å¹³é¢ã®æœ€é è·é›¢
 		float Far;
 
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		tag_Perspective();
 
 	}PerspectiveInfo, *pPerspectiveInfo;
 
-	// ƒrƒ…[s—ñEƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚ğ‚ÂƒIƒuƒWƒFƒNƒg‚ÌŠî–{î•ñƒNƒ‰ƒX
+	// ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—ãƒ»ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã‚’æŒã¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åŸºæœ¬æƒ…å ±ã‚¯ãƒ©ã‚¹
 	class CViewBehavior
 	{
 	public :
-		// s—ñ‚Ìí—Ş
+		// è¡Œåˆ—ã®ç¨®é¡
 		enum MatrixState{
 			VIEW,
 			PROJECTION
 		};
 
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		CViewBehavior();
-		// ƒfƒXƒgƒ‰ƒNƒ^
+		// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		virtual ~CViewBehavior();
 
-		// XV
+		// æ›´æ–°
 		virtual void updateView() = 0;
 
-		// ‹‘ä‚ÌZo
+		// è¦–éŒå°ã®ç®—å‡º
 		void calculateViewFructum();
-		// ‹…ƒIƒuƒWƒFƒNƒg‚É‚æ‚é‹‘äƒJƒŠƒ“ƒO”»’è
+		// çƒã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã‚ˆã‚‹è¦–éŒå°ã‚«ãƒªãƒ³ã‚°åˆ¤å®š
 		const bool isCullingFrustum(const SphereVolume& sphere) const;
 
-		// İ’è
+		// è¨­å®š
 		inline void setEye(const Vector3 &_Pt) { View.Eye = _Pt; }
 		inline void setEye(const float &_fx, const float &_fy, const float &_fz) { View.Eye = Vector3(_fx, _fy, _fz); }
 		inline void setLookAt(const Vector3 &_Pt) { View.LookAt = _Pt; }
@@ -75,15 +75,15 @@ namespace KMT {
 		inline void setUp(const float &_fx, const float &_fy, const float &_fz) { View.Up = Vector3(_fx, _fy, _fz); }
 		inline void setAspect(const float &_aspect) { Persective.Aspect = _aspect; }
 
-		// æ“¾ 
+		// å–å¾— 
 		inline Vector3 getEye() const { return View.Eye; }
 		inline Vector3 getLookAt() const { return View.LookAt; }
 		inline float getAngle() const { return Persective.Angle; }
-		/* s—ñ */
-		inline CMatrix getMatrix(const MatrixState& state) const { return Matrix[state]; }
+		/* è¡Œåˆ— */
+		inline Matrix getMatrix(const MatrixState& state) const { return Matrices[state]; }
 
 	protected :
-		// ‹‘ä•½–Ê—ñ‹“Œ^
+		// è¦–éŒå°å¹³é¢åˆ—æŒ™å‹
 		enum VIEW_FRUSTUM{
 			TOP,
 			BOTTOM,
@@ -91,18 +91,18 @@ namespace KMT {
 			RIGHT,
 			FRONT,
 			BACK,
-			// ‹‘ä‚Ì•½–Ê‚Ì”
+			// è¦–éŒå°ã®å¹³é¢ã®æ•°
 			FRUSTUM_MAX
 		};
-		// ‹‘ä‚Ì6•½–Ê
+		// è¦–éŒå°ã®6å¹³é¢
 		PlaneVolume viewFrustum[FRUSTUM_MAX];
 
-		// ƒrƒ…[s—ñ[0], ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ[1]
+		// ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—[0], ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—[1]
 		static const int VIEW_OR_PROJECTION = 2;
-		CMatrix Matrix[VIEW_OR_PROJECTION];
-		// ƒrƒ…[î•ñ
+		Matrix Matrices[VIEW_OR_PROJECTION];
+		// ãƒ“ãƒ¥ãƒ¼æƒ…å ±
 		ViewInfo View;
-		// ƒvƒƒWƒFƒNƒVƒ‡ƒ“
+		// ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³
 		PerspectiveInfo Persective;
 
 	};

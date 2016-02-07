@@ -1,30 +1,23 @@
-//*********************************************************************
-// ƒxƒNƒgƒ‹î•ñ
+ï»¿//*********************************************************************
+// ãƒ™ã‚¯ãƒˆãƒ«æƒ…å ±
 // Last Update : 2014.01.08
 // Yuta Komatsu
 //*********************************************************************
 #pragma once
 
+#include "DXUT.h"
 #include <DirectXMath.h>
 using namespace DirectX;
 
-namespace KMT {
+namespace KMT
+{
+	class Quaternion;
+	class Matrix;
 
-	class CQuaternion;
-	class CMatrix;
-
-	class Vector3;
-	float Vector3Length(const Vector3* pV);
-	float Vector3LengthSq(const Vector3 *pV);
-	float Vector3Dot(const Vector3 *pV1, const Vector3 *pV2);
-	Vector3* Vector3Cross(Vector3 *pOut, const Vector3 *pV1, const Vector3 *pV2);
-	Vector3* Vector3Lerp(Vector3 *pOut, const Vector3 *pV1, const Vector3 *pV2, float s);
-	Vector3* Vector3Normalize(Vector3 *pOut, const Vector3 *pV);
 	Vector3* Vector3Hermite();
 
 	//-----------------------------------------------------
 	// 3DVector
-
 	class Vector3
 	{
 	public:
@@ -35,287 +28,400 @@ namespace KMT {
 		// z
 		float z;
 
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		Vector3() : x(0), y(0), z(0) { }
-		// ”z—ñ‚Ì—v‘f012‚ğXYZ‚Æ‚·‚é
+		// é…åˆ—ã®è¦ç´ 012ã‚’XYZã¨ã™ã‚‹
 		Vector3(const float *pf) : x(pf[0]), y(pf[1]), z(pf[2]) { }
-		// w’èÀ•W‚Å¶¬
+		// æŒ‡å®šåº§æ¨™ã§ç”Ÿæˆ
 		Vector3(float fx, float fy, float fz) : x(fx), y(fy), z(fz) { }
-		// ‘ã“ü
-		Vector3& operator=(const Vector3& v) {
+		// ä»£å…¥
+		Vector3& operator=(const Vector3& v)
+		{
 			x = v.x, y = v.y, z = v.z;
 			return *this;
 		}
-		// D3DXVECTOR3‚©‚ç‚Ì•ÏŠ·
+		// D3DXVECTOR3ã‹ã‚‰ã®å¤‰æ›
 		Vector3(const D3DXVECTOR3& v) : x(v.x), y(v.y), z(v.z) { }
-		// D3DXVECTOR3‚Ö‚Ì•ÏŠ·
+		// D3DXVECTOR3ã¸ã®å¤‰æ›
 		operator D3DXVECTOR3() const { return D3DXVECTOR3(x, y, z); }
-		// D3DXVECTOR4‚©‚ç‚Ì•ÏŠ·
-		Vector3(const D3DXVECTOR4& v) : x(v.x), y(v.y), z(v.z) {}
-		// D3DXVECTOR4‚Ö‚Ì•ÏŠ·
-		operator D3DXVECTOR4() const { return D3DXVECTOR4(x, y, z, 1); }
-		// XMVECTOR‚©‚ç‚Ì•ÏŠ·
+		// D3DXVECTOR4ã‹ã‚‰ã®å¤‰æ›
+		Vector3(const D3DXVECTOR4& v) : x(v.x), y(v.y), z(v.z) { }
+		// D3DXVECTOR4ã¸ã®å¤‰æ›
+		operator D3DXVECTOR4() const { return D3DXVECTOR4(this->x, this->y, this->z, 1); }
+		// XMFLOAT3ã‹ã‚‰ã®å¤‰æ›
+		Vector3(const XMFLOAT3& v) : x(v.x), y(v.y), z(v.z) { }
+		// XMFLOAT3ã¸ã®å¤‰æ›
+		operator XMFLOAT3() const { return XMFLOAT3(this->x, this->y, this->z); }
+		// XMVECTORã‹ã‚‰ã®å¤‰æ›
 		Vector3(const XMVECTOR& v) : x(XMVectorGetX(v)), y(XMVectorGetY(v)), z(XMVectorGetZ(v)) { }
-		// XMVECTOR‚Ö‚Ì•ÏŠ·
-		operator XMVECTOR() const { return XMVectorSet(x, y, z, 1); }
-		// ”äŠr
+		// XMVECTORã¸ã®å¤‰æ›
+		operator XMVECTOR() const { return XMVectorSet(this->x, this->y, this->z, 1); }
+		// æ¯”è¼ƒ
 			// ==
-		bool operator== (const Vector3& v) { return x == v.x && y == v.y && z == v.z; }
+		bool operator== (const Vector3& v) { return this->x == v.x && this->y == v.y && this->z == v.z; }
 			// !=
-		bool operator!= (const Vector3& v) { return x != v.x || y != v.y || z != v.z; }
-		// ‰ÁZ
-		// Œ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		Vector3 operator+ (const Vector3& v) const {
-			return Vector3(x + v.x, y + v.y, z + v.z);
+		bool operator!= (const Vector3& v) { return this->x != v.x || this->y != v.y || this->z != v.z; }
+		// åŠ ç®—
+		// çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		Vector3 operator+ (const Vector3& v) const
+		{
+			return Vector3(this->x + v.x, this->y + v.y, this->z + v.z);
 		}
-		// ‰ÁZ
-		// Šù‘¶‚ÌƒxƒNƒgƒ‹‚É‘ã“ü
-		Vector3& operator+= (const Vector3& v) {
-			x += v.x;
-			y += v.y;
-			z += v.z;
+		// åŠ ç®—
+		// æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã«ä»£å…¥
+		Vector3& operator+= (const Vector3& v)
+		{
+			this->x += v.x;
+			this->y += v.y;
+			this->z += v.z;
 			return *this;
 		}
-		// •„†”½“]
-		// Œ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		Vector3 operator- () const {
-			return Vector3(-x, -y, -z);
+		// ç¬¦å·åè»¢
+		// çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		Vector3 operator- () const
+		{
+			return Vector3(-this->x, -this->y, -this->z);
 		}
-		// Œ¸Z
-		// Œ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		Vector3 operator- (const Vector3& v) const {
-			return Vector3(x - v.x, y - v.y, z - v.z);
+		// æ¸›ç®—
+		// çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		Vector3 operator- (const Vector3& v) const
+		{
+			return Vector3(this->x - v.x, this->y - v.y, this->z - v.z);
 		}
-		// Œ¸Z
-		// Šù‘¶‚ÌƒxƒNƒgƒ‹‚É‘ã“ü
-		Vector3& operator-= (const Vector3& v) {
-			x -= v.x;
-			y -= v.y;
-			z -= v.z;
+		// æ¸›ç®—
+		// æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã«ä»£å…¥
+		Vector3& operator-= (const Vector3& v)
+		{
+			this->x -= v.x;
+			this->y -= v.y;
+			this->z -= v.z;
 			return *this;
 		}
-		// æZ
-		// Œ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		Vector3 operator* (const Vector3& v) const {
+		// ä¹—ç®—
+		// çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		Vector3 operator* (const Vector3& v) const
+		{
 			return Vector3(x * v.x, y * v.y, z * v.z);
 		}
-		// æZ
-		// Šù‘¶‚ÌƒxƒNƒgƒ‹‚É‘ã“ü
-		Vector3& operator*= (const Vector3& v) {
+		// ä¹—ç®—
+		// æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã«ä»£å…¥
+		Vector3& operator*= (const Vector3& v)
+		{
 			x *= v.x;
 			y *= v.y;
 			z *= v.z;
 			return *this;
 		}
-		// œZ
-		// Œ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
+		// é™¤ç®—
+		// çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
 		Vector3 operator/ (const Vector3& v) const {
 			return Vector3(x / v.x, y / v.y, z / v.z);
 		}
-		// œZ
-		// Šù‘¶‚ÌƒxƒNƒgƒ‹‚É‘ã“ü
+		// é™¤ç®—
+		// æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã«ä»£å…¥
 		Vector3& operator/= (const Vector3& v) {
 			x /= v.x;
 			y /= v.y;
 			z /= v.z;
 			return *this;
 		}
-		// ƒXƒJƒ‰æZ
-		// Œ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		// ƒXƒJƒ‰*ƒxƒNƒgƒ‹‚Ìê‡
-		friend Vector3 operator* (float f, const Vector3& v) {
+		// ã‚¹ã‚«ãƒ©ä¹—ç®—
+		// çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		// ã‚¹ã‚«ãƒ©*ãƒ™ã‚¯ãƒˆãƒ«ã®å ´åˆ
+		friend Vector3 operator* (float f, const Vector3& v)
+		{
 			return Vector3(v.x * f, v.y * f, v.z * f);
 		}
-		// ƒXƒJƒ‰æZ
-		// Œ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		// ƒxƒNƒgƒ‹*ƒXƒJƒ‰‚Ìê‡
-		Vector3 operator*(float f) const {
+		// ã‚¹ã‚«ãƒ©ä¹—ç®—
+		// çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		// ãƒ™ã‚¯ãƒˆãƒ«*ã‚¹ã‚«ãƒ©ã®å ´åˆ
+		Vector3 operator*(float f) const
+		{
 			return Vector3(x * f, y * f, z * f);
 		}
-		// ƒXƒJƒ‰[æZ
-		// Œ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		Vector3 operator* (float f) {
+		// ã‚¹ã‚«ãƒ©ãƒ¼ä¹—ç®—
+		// çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		Vector3 operator* (float f)
+		{
 			return Vector3(x * f, y * f, z * f);
 		}
-		// ƒXƒJƒ‰[æZ
-		// Šù‘¶‚ÌƒxƒNƒgƒ‹‚É‘ã“ü
-		Vector3& operator*= (float f) {
+		// ã‚¹ã‚«ãƒ©ãƒ¼ä¹—ç®—
+		// æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã«ä»£å…¥
+		Vector3& operator*= (float f)
+		{
 			x *= f;
 			y *= f;
 			z *= f;
 			return *this;
 		}
-		// ƒXƒJƒ‰[œZ
-		// Œ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		Vector3 operator/ (float f) const {
+		// ã‚¹ã‚«ãƒ©ãƒ¼é™¤ç®—
+		// çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		Vector3 operator/ (float f) const
+		{
 			return Vector3(x / f, y / f, z / f);
 		}
-		// ƒXƒJƒ‰[œZ
-		// Šù‘¶‚ÌƒxƒNƒgƒ‹‚É‘ã“ü
-		Vector3& operator/= (float f) {
+		// ã‚¹ã‚«ãƒ©ãƒ¼é™¤ç®—
+		// æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã«ä»£å…¥
+		Vector3& operator/= (float f)
+		{
 			x /= f;
 			y /= f;
 			z /= f;
 			return *this;
 		}
-		// “àÏ
-		float Dot(const Vector3& pv) {
-			return Vector3Dot(this, &pv);
+
+		//----------------------------------------------------------
+		// static const field		
+		
+		// å·¦
+		static const Vector3 Left()
+		{
+			return Vector3(-1, 0, 0);
 		}
-		// “àÏ
-		friend float Dot(Vector3 a, const Vector3& b) {
+		// å³
+		static const Vector3 Right()
+		{
+			return Vector3(1, 0, 0);
+		}
+		// ä¸Š
+		static const Vector3 Up()
+		{
+			return Vector3(0, 1, 0);
+		}
+		// ä¸‹
+		static const Vector3 Down()
+		{
+			return Vector3(0, -1, 0);
+		}
+		// å‰
+		static const Vector3 Forward()
+		{
+			return Vector3(0, 0, 1);
+		}
+		// å¾Œ
+		static const Vector3 Back()
+		{
+			return Vector3(0, 0, -1);
+		}
+
+		//------------------------------------------------------------------
+		// Methods
+
+		// å†…ç©
+		float Dot(const Vector3& source)
+		{
+			auto v = (*this);
+			return v.x * source.x + v.y * source.y + v.z * source.z;
+		}
+		// å†…ç©
+		friend float Dot(Vector3 a, const Vector3& b)
+		{
 			return a.Dot(b);
 		}
-		// •½s¬•ª
-		Vector3& Parallel(Vector3 to) {
+		// å¹³è¡Œæˆåˆ†
+		Vector3& Parallel(Vector3 to)
+		{
 			to.Normalize();
 			return *this = Dot(to) * to;
 		}
-		// •½s¬•ª
-		friend Vector3 Parallel(Vector3 from, const Vector3& to) {
+		// å¹³è¡Œæˆåˆ†
+		friend Vector3 Parallel(Vector3 from, const Vector3& to)
+		{
 			return from.Parallel(to);
 		}
-		// ‚’¼¬•ª
-		Vector3& Vertical(Vector3 to) {
+		// å‚ç›´æˆåˆ†
+		Vector3& Vertical(Vector3 to)
+		{
 			to.Normalize();
 			return *this -= Dot(to) * to;
 		}
-		// ‚’¼¬•ª
-		friend Vector3 Vertical(Vector3 from, const Vector3& to) {
+		// å‚ç›´æˆåˆ†
+		friend Vector3 Vertical(Vector3 from, const Vector3& to)
+		{
 			return from.Vertical(to);
 		}
-		// Ë‰e
-		Vector3& Projection(Vector3 to) {
+		// å°„å½±
+		Vector3& Projection(Vector3 to)
+		{
 			return Parallel(to);
 		}
-		// Ë‰e
-		friend Vector3 Projection(Vector3 from, const Vector3& to) {
+		// å°„å½±
+		friend Vector3 Projection(Vector3 from, const Vector3& to)
+		{
 			return from.Parallel(to);
 		}
-		// ŠOÏ
-		Vector3& Cross(const Vector3& pv) {
-			return *Vector3Cross(this, this, &pv);
+		// å¤–ç©
+		Vector3& Cross(const Vector3& source)
+		{
+			//return *Vector3Cross(this, this, &pv);
+			auto v = (*this);
+			Vector3 cross;
+			cross.x = v.y * source.z - v.z * source.y;
+			cross.y = v.z * source.x - v.x * source.z;
+			cross.z = v.x * source.y - v.y * source.x;
+			return cross;
 		}
-		// ŠOÏ
-		friend Vector3 Cross(Vector3 a, Vector3& b) {
+		// å¤–ç©
+		friend Vector3 Cross(Vector3 a, Vector3& b)
+		{
 			return a.Cross(b);
 		}
-		// ’·‚³
-		float Length() const {
-			return Vector3Length(this);
+		// é•·ã•
+		float Length() const
+		{
+			auto v = (*this);
+			return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
 		}
-		// ’·‚³
-		friend float Length(const Vector3& v) {
+		// é•·ã•
+		friend float Length(const Vector3& v)
+		{
 			return v.Length();
 		}
-		// ’·‚³‚Ì2æ
-		float LengthSq() const {
-			return Vector3LengthSq(this);
+		// é•·ã•ã®2ä¹—
+		float LengthSq() const
+		{
+			auto v = (*this);
+			return v.x * v.x + v.y * v.y + v.z * v.z;
 		}
-		// ’·‚³‚Ì2æ
-		friend float LengthSq(const Vector3& v) {
+		// é•·ã•ã®2ä¹—
+		friend float LengthSq(const Vector3& v)
+		{
 			return v.LengthSq();
 		}
-		// üŒ`•âŠÔ
-		// tips: f = 0 ‚Ì‚Æ‚«V1, f = 1 ‚Ì‚Æ‚«V2‚Æ‚È‚é
-		friend Vector3 Lerp(const Vector3& a, const Vector3& b, float f) {
-			return a * (1 - f) + b * f;
+		// ç·šå½¢è£œé–“
+		// tips: t = 0 ã®ã¨ãV1, t = 1 ã®ã¨ãV2ã¨ãªã‚‹
+		friend Vector3 Lerp(const Vector3& a, const Vector3& b, float t)
+		{
+			return a * (1 - t) + b * t;
 		}
-		// ³‹K‰»
-		Vector3& Unit() {
-			Vector3Normalize(this, this);
-			return *this;
+		// æ­£è¦åŒ–
+		Vector3& Unit()
+		{
+			auto v = (*this);
+			auto f = 1 / sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+			return v * f;
 		}
-		// ³‹K‰»
-		friend Vector3 Unit(Vector3 v) {
+		// æ­£è¦åŒ–
+		friend Vector3 Unit(Vector3 v)
+		{
 			return v.Normalize();
 		}
-		// ³‹K‰»
-		Vector3& Normalize() {
+		// æ­£è¦åŒ–
+		Vector3& Normalize()
+		{
 			return Unit();
 		}
-		// ³‹K‰»
-		friend Vector3 Normalize(Vector3 v) {
+		// æ­£è¦åŒ–
+		friend Vector3 Normalize(Vector3 v)
+		{
 			return v.Unit();
 		}
-		// ‰ñ“]
-		// Šù‘¶‚ÌƒxƒNƒgƒ‹‚ğ•ÏX
-		Vector3& Rotate(const CQuaternion& q) {
+		// å›è»¢
+		// æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å¤‰æ›´
+		Vector3& Rotate(const Quaternion& q)
+		{
 			D3DXQUATERNION a(x, y, z, 0), &b(*(D3DXQUATERNION*)&q), c(-b.x, -b.y, -b.z, b.w);
 			D3DXQUATERNION d(c * a * b);
 			x = d.x; y = d.y; z = d.z;
 			return *this;
 		}
-		// ‰ñ“]
-		// Šù‘¶‚ÌƒxƒNƒgƒ‹‚ğ•ÏX
-		Vector3& operator*= (const CQuaternion& q) {
+		// å›è»¢
+		// æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å¤‰æ›´
+		Vector3& operator*= (const Quaternion& q)
+		{
 			return Rotate(q);
 		}
-		// ‰ñ“]
-		// Œ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		friend Vector3 Rotate(Vector3 v, const CQuaternion& q) {
+		// å›è»¢
+		// çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		friend Vector3 Rotate(Vector3 v, const Quaternion& q)
+		{
 			return v.Rotate(q);
 		}
-		// ‰ñ“]
-		// Œ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		friend Vector3 operator*(Vector3 v, const CQuaternion& q) {
+		// å›è»¢
+		// çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		friend Vector3 operator*(Vector3 v, const Quaternion& q)
+		{
 			return v.Rotate(q);
 		}
-		// ’†S‚ğw’è‚µ‚½‰ñ“]
-		Vector3& Rotate(const CQuaternion& q, const Vector3& center) {
+		// ä¸­å¿ƒã‚’æŒ‡å®šã—ãŸå›è»¢
+		Vector3& Rotate(const Quaternion& q, const Vector3& center)
+		{
 			return *this = (*this - center) * q + center;
 		}
-		// ’†S‚ğw’è‚µ‚½‰ñ“]
-		friend Vector3 Rotate(Vector3 v, const CQuaternion& q, const Vector3& center) {
+		// ä¸­å¿ƒã‚’æŒ‡å®šã—ãŸå›è»¢
+		friend Vector3 Rotate(Vector3 v, const Quaternion& q, const Vector3& center)
+		{
 			return v.Rotate(q, center);
 		}
-		// s—ñ‚É‚æ‚é•ÏŠ·
-		Vector3& Transform(const CMatrix& m) {
+		// è¡Œåˆ—ã«ã‚ˆã‚‹å¤‰æ›
+		Vector3& Transform(const Matrix& m)
+		{
 			D3DXVec3TransformCoord((D3DXVECTOR3*)this, (D3DXVECTOR3*)this, (D3DXMATRIX*)&m);
 			return *this;
 		}
-		// s—ñ‚É‚æ‚é•ÏŠ·
-		// Šù‘¶‚ÌƒxƒNƒgƒ‹‚É‘ã“ü
-		Vector3& operator*= (const CMatrix& m) {
+		// è¡Œåˆ—ã«ã‚ˆã‚‹å¤‰æ›
+		// æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã«ä»£å…¥
+		Vector3& operator*= (const Matrix& m)
+		{
 			return Transform(m);
 		}
-		// s—ñ‚É‚æ‚é•ÏŠ·
-		// Œ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		friend Vector3 Transform(Vector3 v, const CMatrix& m) {
+		// è¡Œåˆ—ã«ã‚ˆã‚‹å¤‰æ›
+		// çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		friend Vector3 Transform(Vector3 v, const Matrix& m)
+		{
 			return v.Transform(m);
 		}
-		// s—ñ‚É‚æ‚é•ÏŠ·
-		// Œ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		friend Vector3 operator* (Vector3 v, const CMatrix& m) {
+		// è¡Œåˆ—ã«ã‚ˆã‚‹å¤‰æ›
+		// çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		friend Vector3 operator* (Vector3 v, const Matrix& m)
+		{
 			return v.Transform(m);
 		}
-		// XYZ¬•ª‚ÌÅ‘å’l
-		float Max() {
+		// XYZæˆåˆ†ã®æœ€å¤§å€¤
+		float Max()
+		{
 			return max(x, max(y, z));
 		}
-		// XYZ¬•ª‚ÌÅ¬’l
-		float Min() {
+		// XYZæˆåˆ†ã®æœ€å°å€¤
+		float Min()
+		{
 			return min(x, min(y, z));
 		}
-		// XYZ¬•ª‚ÌÅ‘å’l
-		friend float Max(const Vector3& v) {
+		// XYZæˆåˆ†ã®æœ€å¤§å€¤
+		friend float Max(const Vector3& v)
+		{
 			return max(v.x, max(v.y, v.z));
 		}
-		// XYZ¬•ª‚ÌÅ¬’l
-		friend float Min(const Vector3& v) {
+		// XYZæˆåˆ†ã®æœ€å°å€¤
+		friend float Min(const Vector3& v)
+		{
 			return min(v.x, min(v.y, v.z));
 		}
-		// ‚QƒxƒNƒgƒ‹‚ÌXYZ¬•ª‚ÌÅ‘å’l‚ğ‘g‚İ‡‚í‚¹‚½ƒxƒNƒgƒ‹
-		friend Vector3 Max(const Vector3& a, const Vector3& b) {
+		// ï¼’ãƒ™ã‚¯ãƒˆãƒ«ã®XYZæˆåˆ†ã®æœ€å¤§å€¤ã‚’çµ„ã¿åˆã‚ã›ãŸãƒ™ã‚¯ãƒˆãƒ«
+		friend Vector3 Max(const Vector3& a, const Vector3& b)
+		{
 			return Vector3(max(a.x, b.x), max(a.y, b.y), max(a.z, b.z));
 		}
-		// ‚QƒxƒNƒgƒ‹‚Ì‚wC‚xC‚y¬•ª‚ÌÅ¬’l‚ğ‘g‚İ‡‚í‚¹‚½ƒxƒNƒgƒ‹
-		friend Vector3 Min(const Vector3& a, const Vector3& b) {
+		// ï¼’ãƒ™ã‚¯ãƒˆãƒ«ã®ï¼¸ï¼Œï¼¹ï¼Œï¼ºæˆåˆ†ã®æœ€å°å€¤ã‚’çµ„ã¿åˆã‚ã›ãŸãƒ™ã‚¯ãƒˆãƒ«
+		friend Vector3 Min(const Vector3& a, const Vector3& b)
+		{
 			return Vector3(min(a.x, b.x), min(a.y, b.y), min(a.z, b.z));
 		}
-		// “Yš‚ğg‚Á‚½XYZ¬•ª‚Ì‘€ì(0, 1, 2)
-		float& operator[](int index) const {
+		// æ·»å­—ã‚’ä½¿ã£ãŸXYZæˆåˆ†ã®æ“ä½œ(0, 1, 2)
+		float& operator[](int index) const
+		{
 			return *((float*)this + index);
+		}
+		
+		// ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³è£œé–“
+		Vector3& Hermite(const Vector3& position, const Vector3& tangentA, const Vector3& tangentB, float s)
+		{
+			Vector3 out;
+			D3DXVec3Hermite((D3DXVECTOR3*)&out,
+				(D3DXVECTOR3*)this, (D3DXVECTOR3*)&tangentA,
+				(D3DXVECTOR3*)&position, (D3DXVECTOR3*)&tangentB,
+				s);
+			return out;
 		}
 	};
 
@@ -330,147 +436,174 @@ namespace KMT {
 		// y
 		float y;
 
-		// ¬•ª0‚ÌƒxƒNƒgƒ‹‚ğ¶¬
+		// æˆåˆ†0ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
 		Vector2() : x(0), y(0) { }
-		// w’è‚µ‚½x,y‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		Vector2(float fx, float fy) : x(fx), y(fy) { }
-		// ‘ã“ü
-		Vector2& operator= (const Vector2& v) {
+		// æŒ‡å®šã—ãŸx,yã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		Vector2(float x_, float y_) : x(x_), y(y_) { }
+		// ä»£å…¥
+		Vector2& operator= (const Vector2& v)
+		{
 			x = v.x, y = v.y;
 			return *this;
 		}
-		// CVector3‚©‚ç‚Ì•ÏŠ·
+		// CVector3ã‹ã‚‰ã®å¤‰æ›
 		Vector2(const Vector3& v) : x(v.x), y(v.y) { }
-		// CVector3‚Ö‚Ì•ÏŠ·
-		operator Vector3() const {
+		// CVector3ã¸ã®å¤‰æ›
+		operator Vector3() const
+		{
 			return Vector3(x, y, 0);
 		}
-		// D3DXVECTOR3‚©‚ç‚Ì•ÏŠ·
+		// D3DXVECTOR3ã‹ã‚‰ã®å¤‰æ›
 		Vector2(const D3DXVECTOR3& v) : x(v.x), y(v.y) { }
-		// D3DXVECTOR3‚Ö‚Ì•ÏŠ·
-		operator D3DXVECTOR3() const {
+		// D3DXVECTOR3ã¸ã®å¤‰æ›
+		operator D3DXVECTOR3() const
+		{
 			return D3DXVECTOR3(x, y, 0);
 		}
-		// D3DXVECTOR2‚©‚ç‚Ì•ÏŠ·
+		// D3DXVECTOR2ã‹ã‚‰ã®å¤‰æ›
 		Vector2(const D3DXVECTOR2& v) : x(v.x), y(v.y) { }
-		// D3DXVECTOR2‚Ö‚Ì•ÏŠ·
-		operator D3DXVECTOR2() const {
+		// D3DXVECTOR2ã¸ã®å¤‰æ›
+		operator D3DXVECTOR2() const
+		{
 			return D3DXVECTOR2(x, y);
 		}
-		// ”äŠrBƒxƒNƒgƒ‹‚ª“™‚µ‚¢‚Æ‚«‚Étrue
-		bool operator== (const Vector2& v) {
+		// æ¯”è¼ƒã€‚ãƒ™ã‚¯ãƒˆãƒ«ãŒç­‰ã—ã„ã¨ãã«true
+		bool operator== (const Vector2& v)
+		{
 			return x == v.x && y == v.y;
 		}
-		// ”äŠrBƒxƒNƒgƒ‹‚ª“™‚µ‚­‚È‚¢‚Æ‚«‚Étrue
-		bool operator!= (const Vector2& v) {
+		// æ¯”è¼ƒã€‚ãƒ™ã‚¯ãƒˆãƒ«ãŒç­‰ã—ããªã„ã¨ãã«true
+		bool operator!= (const Vector2& v)
+		{
 			return x != v.x || y != v.y;
 		}
-		// ‰ÁZBŒ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		Vector2 operator+ (const Vector2& v) const {
+		// åŠ ç®—ã€‚çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		Vector2 operator+ (const Vector2& v) const
+		{
 			return Vector2(x + v.x, y + v.y);
 		}
-		// ‰ÁZBŠù‘¶‚ÌƒxƒNƒgƒ‹‚ğ•ÏX
+		// åŠ ç®—ã€‚æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å¤‰æ›´
 		Vector2& operator+= (const Vector2& v) {
 			x += v.x, y += v.y;
 			return *this;
 		}
-		// •„†”½“]BŒ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		Vector2 operator- () const {
+		// ç¬¦å·åè»¢ã€‚çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		Vector2 operator- () const
+		{
 			return Vector2(-x, -y);
 		}
-		// Œ¸ZBŒ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		Vector2 operator- (const Vector2& v) const {
+		// æ¸›ç®—ã€‚çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		Vector2 operator- (const Vector2& v) const
+		{
 			return Vector2(x - v.x, y - v.y);
 		}
-		// Œ¸ZBŠù‘¶‚ÌƒxƒNƒgƒ‹‚ğ•ÏX
-		Vector2& operator-= (const Vector2& v) {
+		// æ¸›ç®—ã€‚æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å¤‰æ›´
+		Vector2& operator-= (const Vector2& v)
+		{
 			x -= v.x, y -= v.y;
 			return *this;
 		}
-		// æZBŒ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		Vector2 operator* (const Vector2& v) const {
+		// ä¹—ç®—ã€‚çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		Vector2 operator* (const Vector2& v) const
+		{
 			return Vector2(x * v.x, y * v.y);
 		}
-		// æZBŠù‘¶‚ÌƒxƒNƒgƒ‹‚ğ•ÏX
-		Vector2& operator*= (const Vector2& v) {
+		// ä¹—ç®—ã€‚æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å¤‰æ›´
+		Vector2& operator*= (const Vector2& v)
+		{
 			x *= v.x, y *= v.y;
 			return *this;
 		}
-		// œZBŒ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		Vector2 operator/ (const Vector2& v) const {
+		// é™¤ç®—ã€‚çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		Vector2 operator/ (const Vector2& v) const
+		{
 			return Vector2(x / v.x, y / v.y);
 		}
-		// œZBŠù‘¶‚ÌƒxƒNƒgƒ‹‚ğ•ÏX
-		Vector2& operator/= (const Vector2& v) {
+		// é™¤ç®—ã€‚æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å¤‰æ›´
+		Vector2& operator/= (const Vector2& v)
+		{
 			x /= v.x, y /= v.y;
 			return *this;
 		}
 
-		// ƒXƒJƒ‰æZBŒ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬BƒXƒJƒ‰–ƒxƒNƒgƒ‹‚Ìê‡
-		friend Vector2 operator* (float f, const Vector2& v) {
+		// ã‚¹ã‚«ãƒ©ä¹—ç®—ã€‚çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆã€‚ã‚¹ã‚«ãƒ©ï¼Šãƒ™ã‚¯ãƒˆãƒ«ã®å ´åˆ
+		friend Vector2 operator* (float f, const Vector2& v)
+		{
 			return Vector2(v.x * f, v.y * f);
 		}
-		// ƒXƒJƒ‰æZBŒ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬BƒxƒNƒgƒ‹–ƒXƒJƒ‰‚Ìê‡
-		Vector2 operator* (float f) const {
+		// ã‚¹ã‚«ãƒ©ä¹—ç®—ã€‚çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆã€‚ãƒ™ã‚¯ãƒˆãƒ«ï¼Šã‚¹ã‚«ãƒ©ã®å ´åˆ
+		Vector2 operator* (float f) const
+		{
 			return Vector2(x * f, y * f);
 		}
-		// ƒXƒJƒ‰æZBŠù‘¶‚ÌƒxƒNƒgƒ‹‚ğ•ÏX
-		Vector2& operator*= (float f) {
+		// ã‚¹ã‚«ãƒ©ä¹—ç®—ã€‚æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å¤‰æ›´
+		Vector2& operator*= (float f)
+		{
 			x *= f, y *= f;
 			return *this;
 		}
-		// ƒXƒJƒ‰œZBŒ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		Vector2 operator/ (float f) const {
+		// ã‚¹ã‚«ãƒ©é™¤ç®—ã€‚çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		Vector2 operator/ (float f) const
+		{
 			return Vector2(x / f, y / f);
 		}
-		// ƒXƒJƒ‰œZBŠù‘¶‚ÌƒxƒNƒgƒ‹‚ğ•ÏX
-		Vector2& operator/= (float f) {
+		// ã‚¹ã‚«ãƒ©é™¤ç®—ã€‚æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å¤‰æ›´
+		Vector2& operator/= (float f)
+		{
 			x /= f, y /= f;
 			return *this;
 		}
-		// ’·‚³
-		float Length() const {
+		// é•·ã•
+		float Length() const
+		{
 			return D3DXVec2Length((D3DXVECTOR2*)this);
 		}
-		// ’·‚³‚Ì2æ ©g‚ğ•Ô‚·
-		float LengthSq() const {
+		// é•·ã•ã®2ä¹— è‡ªèº«ã‚’è¿”ã™
+		float LengthSq() const
+		{
 			return D3DXVec2LengthSq((D3DXVECTOR2*)this);
 		}
-		// “àÏBŒ‹‰Ê‚ÌƒXƒJƒ‰’l‚ğ¶¬
-		float Dot(const Vector2& v) const {
+		// å†…ç©ã€‚çµæœã®ã‚¹ã‚«ãƒ©å€¤ã‚’ç”Ÿæˆ
+		float Dot(const Vector2& v) const
+		{
 			return D3DXVec2Dot((D3DXVECTOR2*)this, (D3DXVECTOR2*)&v);
 		}
-		// “àÏBŒ‹‰Ê‚ÌƒXƒJƒ‰’l‚ğ¶¬
-		friend float Dot(const Vector2& a, const Vector2& b) {
+		// å†…ç©ã€‚çµæœã®ã‚¹ã‚«ãƒ©å€¤ã‚’ç”Ÿæˆ
+		friend float Dot(const Vector2& a, const Vector2& b)
+		{
 			return a.Dot(b);
 		}
-		// ³‹K‰»
-		Vector2& Normalize() {
+		// æ­£è¦åŒ–
+		Vector2& Normalize()
+		{
 			D3DXVec2Normalize((D3DXVECTOR2*)this, (D3DXVECTOR2*)this);
 			return *this;
 		}
-		// s—ñ‚É‚æ‚é•ÏŠ·
-		// Šù‘¶‚ÌƒxƒNƒgƒ‹‚É‘ã“ü
-		Vector2& Transform(const CMatrix& m) {
+		// è¡Œåˆ—ã«ã‚ˆã‚‹å¤‰æ›
+		// æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã«ä»£å…¥
+		Vector2& Transform(const Matrix& m)
+		{
 			D3DXVec2TransformCoord((D3DXVECTOR2*)this, (D3DXVECTOR2*)this, (D3DXMATRIX*)&m);
 			return *this;
 		}
-		// s—ñ‚É‚æ‚é•ÏŠ·
-		// Šù‘¶‚ÌƒxƒNƒgƒ‹‚É‘ã“ü
-		Vector2& operator*= (const CMatrix& m) {
+		// è¡Œåˆ—ã«ã‚ˆã‚‹å¤‰æ›
+		// æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã«ä»£å…¥
+		Vector2& operator*= (const Matrix& m)
+		{
 			return Transform(m);
 		}
-		// s—ñ‚É‚æ‚é•ÏŠ·
-		// Œ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		friend Vector2 Transform(Vector2 v, const CMatrix& m) {
+		// è¡Œåˆ—ã«ã‚ˆã‚‹å¤‰æ›
+		// çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		friend Vector2 Transform(Vector2 v, const Matrix& m)
+		{
 			return v.Transform(m);
 		}
-		// s—ñ‚É‚æ‚é•ÏŠ·
-		// Œ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		friend Vector2 operator* (Vector2 v, const CMatrix& m) {
+		// è¡Œåˆ—ã«ã‚ˆã‚‹å¤‰æ›
+		// çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		friend Vector2 operator* (Vector2 v, const Matrix& m)
+		{
 			return v.Transform(m);
 		}
-
 	};
 
 	//-----------------------------------------------------
@@ -488,144 +621,144 @@ namespace KMT {
 		// w
 		float w;
 
-		// ¬•ª0‚ÌƒxƒNƒgƒ‹‚ğ¶¬
+		// æˆåˆ†0ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
 		Vector4() : x(0), y(0), z(0), w(0) { }
-		// w’è‚µ‚½x, y, z, w‚ÌƒxƒNƒgƒ‹‚ğ¶¬
+		// æŒ‡å®šã—ãŸx, y, z, wã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
 		Vector4(float fx, float fy, float fz, float fw) : x(fx), y(fy), z(fz), w(fw) { }
-		// CVector3‚©‚ç‚Ì•ÏŠ·
+		// CVector3ã‹ã‚‰ã®å¤‰æ›
 		Vector4(const Vector3& v) : x(v.x), y(v.y), z(v.z), w(1.0f) { }
-		// CVector3‚Ö‚Ì•ÏŠ·
+		// CVector3ã¸ã®å¤‰æ›
 		operator Vector3() const {
 			return Vector3(x / w, y / w, z / w);
 		}
-		// D3DXVECTOR3‚©‚ç‚Ì•ÏŠ·
+		// D3DXVECTOR3ã‹ã‚‰ã®å¤‰æ›
 		Vector4(const D3DXVECTOR3& v) : x(v.x), y(v.y), z(v.z), w(1.0f) { }
-		// D3DXVECTOR3‚Ö‚Ì•ÏŠ·
+		// D3DXVECTOR3ã¸ã®å¤‰æ›
 		operator D3DXVECTOR3() const {
 			return D3DXVECTOR3(x / w, y / w, z / w);
 		}
-		// D3DXVECTOR4‚©‚ç‚Ì•ÏŠ·
+		// D3DXVECTOR4ã‹ã‚‰ã®å¤‰æ›
 		Vector4(const D3DXVECTOR4& v) : x(v.x), y(v.y), z(v.z), w(v.w) { }
-		// D3DXVECTOR4‚Ö‚Ì•ÏŠ·
+		// D3DXVECTOR4ã¸ã®å¤‰æ›
 		operator D3DXVECTOR4() const {
 			return D3DXVECTOR4(x, y, z, w);
 		}
-		// x‚ğİ’è
+		// xã‚’è¨­å®š
 		Vector4& SetX(float fx) {
 			x = fx;
 			return *this;
 		}
-		// y‚ğİ’è
+		// yã‚’è¨­å®š
 		Vector4& SetY(float fy) {
 			y = fy;
 			return *this;
 		}
-		// z‚ğİ’è
+		// zã‚’è¨­å®š
 		Vector4& SetZ(float fz) {
 			z = fz;
 			return *this;
 		}
-		// w‚ğİ’è
+		// wã‚’è¨­å®š
 		Vector4& SetW(float fw) {
 			w = fw;
 			return *this;
 		}
-		// ”äŠrBƒxƒNƒgƒ‹‚ª“™‚µ‚¢‚Æ‚«‚Étrue
+		// æ¯”è¼ƒã€‚ãƒ™ã‚¯ãƒˆãƒ«ãŒç­‰ã—ã„ã¨ãã«true
 		bool operator== (const Vector4& v) {
 			return x == v.x && y == v.y && z == v.z && w == v.w;
 		}
-		// ”äŠrBƒxƒNƒgƒ‹‚ª“™‚µ‚­‚È‚¢‚Æ‚«‚Étrue
+		// æ¯”è¼ƒã€‚ãƒ™ã‚¯ãƒˆãƒ«ãŒç­‰ã—ããªã„ã¨ãã«true
 		bool operator!= (const Vector4& v) {
 			return x != v.x || y != v.y || z != v.z || w != v.w;
 		}
-		// ‰ÁZBŒ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
+		// åŠ ç®—ã€‚çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
 		Vector4 operator+ (const Vector4& v) const {
 			return Vector4(x + v.x, y + v.y, z + v.z, w + v.w);
 		}
-		// ‰ÁZBŠù‘¶‚ÌƒxƒNƒgƒ‹‚ğ•ÏX
+		// åŠ ç®—ã€‚æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å¤‰æ›´
 		Vector4& operator+= (const Vector4& v) {
 			x += v.x, y += v.y, z += v.z, w += v.w;
 			return *this;
 		}
-		// •„†”½“]BŒ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
+		// ç¬¦å·åè»¢ã€‚çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
 		Vector4 operator- () const {
 			return Vector4(-x, -y, -z, -w);
 		}
-		// Œ¸ZBŒ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
+		// æ¸›ç®—ã€‚çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
 		Vector4 operator- (const Vector4& v) const {
 			return Vector4(x - v.x, y - v.y, z - v.z, w - v.w);
 		}
-		// Œ¸ZBŠù‘¶‚ÌƒxƒNƒgƒ‹‚ğ•ÏX
+		// æ¸›ç®—ã€‚æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å¤‰æ›´
 		Vector4& operator-= (const Vector4& v) {
 			x -= v.x, y -= v.y, z -= v.z, w -= v.w;
 			return *this;
 		}
-		// æZBŒ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
+		// ä¹—ç®—ã€‚çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
 		Vector4 operator* (const Vector4& v) const {
 			return Vector4(x * v.x, y * v.y, z * v.z, w * v.w);
 		}
-		// æZBŠù‘¶‚ÌƒxƒNƒgƒ‹‚ğ•ÏX
+		// ä¹—ç®—ã€‚æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å¤‰æ›´
 		Vector4& operator*=(const Vector4& v) {
 			x *= v.x, y *= v.y, z *= v.z, w *= v.w;
 			return *this;
 		}
-		// œZBŒ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
+		// é™¤ç®—ã€‚çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
 		Vector4 operator/ (const Vector4& v) const {
 			return Vector4(x / v.x, y / v.y, z / v.z, w / v.w);
 		}
-		// œZBŠù‘¶‚ÌƒxƒNƒgƒ‹‚ğ•ÏX
+		// é™¤ç®—ã€‚æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å¤‰æ›´
 		Vector4& operator/= (const Vector4& v) {
 			x /= v.x, y /= v.y, z /= v.z, w /= v.w;
 			return *this;
 		}
-		// ƒXƒJƒ‰æZBŒ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬BƒXƒJƒ‰–ƒxƒNƒgƒ‹‚Ìê‡
+		// ã‚¹ã‚«ãƒ©ä¹—ç®—ã€‚çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆã€‚ã‚¹ã‚«ãƒ©ï¼Šãƒ™ã‚¯ãƒˆãƒ«ã®å ´åˆ
 		friend Vector4 operator*(float f, const Vector4& v) {
 			return Vector4(v.x * f, v.y * f, v.z * f, v.w * f);
 		}
-		// ƒXƒJƒ‰æZBŒ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬BƒxƒNƒgƒ‹–ƒXƒJƒ‰‚Ìê‡
+		// ã‚¹ã‚«ãƒ©ä¹—ç®—ã€‚çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆã€‚ãƒ™ã‚¯ãƒˆãƒ«ï¼Šã‚¹ã‚«ãƒ©ã®å ´åˆ
 		Vector4 operator*(float f) const {
 			return Vector4(x * f, y * f, z * f, w * f);
 		}
-		// ƒXƒJƒ‰æZBŠù‘¶‚ÌƒxƒNƒgƒ‹‚ğ•ÏX
+		// ã‚¹ã‚«ãƒ©ä¹—ç®—ã€‚æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å¤‰æ›´
 		Vector4& operator*= (float f) {
 			x *= f, y *= f, z *= f, w *= f;
 			return *this;
 		}
-		// ƒXƒJƒ‰œZBŒ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
+		// ã‚¹ã‚«ãƒ©é™¤ç®—ã€‚çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
 		Vector4 operator/ (float f) const {
 			return Vector4(x / f, y / f, z / f, w / f);
 		}
-		// ƒXƒJƒ‰œZBŠù‘¶‚ÌƒxƒNƒgƒ‹‚ğ•ÏX
+		// ã‚¹ã‚«ãƒ©é™¤ç®—ã€‚æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å¤‰æ›´
 		Vector4& operator/= (float f) {
 			x /= f, y /= f, z /= f, w /= f;
 			return *this;
 		}
-		// “àÏBŒ‹‰Ê‚ÌƒXƒJƒ‰’l‚ğ¶¬
+		// å†…ç©ã€‚çµæœã®ã‚¹ã‚«ãƒ©å€¤ã‚’ç”Ÿæˆ
 		float Dot(const Vector4& v) const {
 			return D3DXVec4Dot((D3DXVECTOR4*)this, (D3DXVECTOR4*)&v);
 		}
-		// “àÏBŒ‹‰Ê‚ÌƒXƒJƒ‰’l‚ğ¶¬
+		// å†…ç©ã€‚çµæœã®ã‚¹ã‚«ãƒ©å€¤ã‚’ç”Ÿæˆ
 		friend float Dot(const Vector4& a, const Vector4& b) {
 			return a.Dot(b);
 		}
-		// s—ñ‚É‚æ‚é•ÏŠ·BŠù‘¶‚ÌƒxƒNƒgƒ‹‚ğ•ÏX
-		Vector4& Transform(const CMatrix& m) {
+		// è¡Œåˆ—ã«ã‚ˆã‚‹å¤‰æ›ã€‚æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å¤‰æ›´
+		Vector4& Transform(const Matrix& m) {
 			D3DXVec4Transform((D3DXVECTOR4*)this, (D3DXVECTOR4*)this, (D3DXMATRIX*)&m);
 			return *this;
 		}
-		// s—ñ‚É‚æ‚é•ÏŠ·BŠù‘¶‚ÌƒxƒNƒgƒ‹‚ğ•ÏX
-		Vector4& operator*= (const CMatrix& m) {
+		// è¡Œåˆ—ã«ã‚ˆã‚‹å¤‰æ›ã€‚æ—¢å­˜ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å¤‰æ›´
+		Vector4& operator*= (const Matrix& m) {
 			return Transform(m);
 		}
-		// s—ñ‚É‚æ‚é•ÏŠ·BŒ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		friend Vector4 Transform(Vector4 v, const CMatrix& m) {
+		// è¡Œåˆ—ã«ã‚ˆã‚‹å¤‰æ›ã€‚çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		friend Vector4 Transform(Vector4 v, const Matrix& m) {
 			return v.Transform(m);
 		}
-		// s—ñ‚É‚æ‚é•ÏŠ·BŒ‹‰Ê‚ÌƒxƒNƒgƒ‹‚ğ¶¬
-		friend Vector4 operator*(Vector4 v, const CMatrix& m) {
+		// è¡Œåˆ—ã«ã‚ˆã‚‹å¤‰æ›ã€‚çµæœã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆ
+		friend Vector4 operator*(Vector4 v, const Matrix& m) {
 			return v.Transform(m);
 		}
-		//“Yš‚ğg‚Á‚½‚w,‚x,‚y¬•ª‚Ì‘€ì(0, 1, 2)
+		//æ·»å­—ã‚’ä½¿ã£ãŸï¼¸,ï¼¹,ï¼ºæˆåˆ†ã®æ“ä½œ(0, 1, 2)
 		float& operator[](int index) const {
 			return *((float*)this + index);
 		}

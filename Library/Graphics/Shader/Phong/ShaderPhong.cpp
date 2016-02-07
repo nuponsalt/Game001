@@ -1,4 +1,4 @@
-#include "DXUT.h"
+ï»¿#include "DXUT.h"
 #include "ShaderPhong.h"
 
 #include "../../../Support/wsb_xml.h"
@@ -18,13 +18,13 @@ namespace KMT {
 		ShaderSP shader;
 		std::unordered_map<std::string, ShaderSP>::iterator it = _shaders.find(path);
 
-		// ‘¶Ý‚µ‚½‚ç‘æ“ñ—v‘f‚ð•Ô‚·
+		// å­˜åœ¨ã—ãŸã‚‰ç¬¬äºŒè¦ç´ ã‚’è¿”ã™
 		if(it != _shaders.end())
 		{
 			shader = (*it).second;
 			return shader;
 		}
-		// ‘¶Ý‚µ‚È‚¯‚ê‚ÎV‚µ‚­¶¬
+		// å­˜åœ¨ã—ãªã‘ã‚Œã°æ–°ã—ãç”Ÿæˆ
 		shader = ShaderSP(new ShaderPhong());
 
 		float directionX = xml->GetElement("LightDirection")->GetElement("X")->GetFloat();
@@ -39,25 +39,25 @@ namespace KMT {
 		shader->SetSpecular(specular);
 		shader->SetSpecularPower(specularpow);
 
-		// ƒnƒbƒVƒ…ƒ}ƒbƒv‚É‘}“ü
+		// ãƒãƒƒã‚·ãƒ¥ãƒžãƒƒãƒ—ã«æŒ¿å…¥
 		_shaders.insert(std::make_pair(path, shader));
 
 		return shader;
 	}
 
-	void ShaderPhong::ApplyEffect(const CMatrix& rotation, const Vector4& cameraPosition)
+	void ShaderPhong::ApplyEffect(const Matrix& rotation, const Vector4& cameraPosition)
 	{
-		// ƒ‰ƒCƒgŒvŽZ—p‚É‰ñ“]s—ñ‚ð“n‚·
+		// ãƒ©ã‚¤ãƒˆè¨ˆç®—ç”¨ã«å›žè»¢è¡Œåˆ—ã‚’æ¸¡ã™
 		_effect->SetMatrix(*GetHandle("ROT"), &rotation);
-		// ŠÂ‹«ŒõÝ’è
+		// ç’°å¢ƒå…‰è¨­å®š
 		_effect->SetVector(*GetHandle("Ambient"), &D3DXVECTOR4(_ambient, _ambient, _ambient, 1.0f));
-		// ƒXƒyƒLƒ…ƒ‰[”ÍˆÍÝ’è
+		// ã‚¹ãƒšã‚­ãƒ¥ãƒ©ãƒ¼ç¯„å›²è¨­å®š
 		_effect->SetFloat(*GetHandle("Specular"), _specular);
-		// ƒXƒyƒLƒ…ƒ‰[‹­“xÝ’è
+		// ã‚¹ãƒšã‚­ãƒ¥ãƒ©ãƒ¼å¼·åº¦è¨­å®š
 		_effect->SetFloat(*GetHandle("SpecularPower"), _specularPower);
-		// ƒJƒƒ‰Ý’è
+		// ã‚«ãƒ¡ãƒ©è¨­å®š
 		_effect->SetVector(*GetHandle("EyePos"), (D3DXVECTOR4*)&cameraPosition);
-		// ƒ‰ƒCƒgÝ’è(•½sŒõŒ¹)
+		// ãƒ©ã‚¤ãƒˆè¨­å®š(å¹³è¡Œå…‰æº)
 		_effect->SetVector(*GetHandle("LightDir"), (D3DXVECTOR4*)&_lightDirection);
 	}
 

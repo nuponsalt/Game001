@@ -1,5 +1,5 @@
-//*********************************************
-// ���Z�̊g���֐�
+﻿//*********************************************
+// 演算の拡張関数
 // Last Update : 2013.11.29
 // Yuta Komatsu
 //*********************************************
@@ -10,50 +10,50 @@
 namespace KMT {
 
 	class Vector3;
-	class CQuaternion;
+	class Quaternion;
 
 	extern const Vector3 AXIS_X;
 	extern const Vector3 AXIS_Y;
 	extern const Vector3 AXIS_Z;
 
-	// X������̉�]��\���N�H�[�^�j�I�����擾
-	CQuaternion RotationX(float angle);
-	// Y������̉�]��\���N�H�[�^�j�I�����擾
-	CQuaternion RotationY(float angle);
-	// Z������̉�]��\���N�H�[�^�j�I�����擾
-	CQuaternion RotationZ(float angle);
+	// X軸周りの回転を表すクォータニオンを取得
+	Quaternion RotationX(float angle);
+	// Y軸周りの回転を表すクォータニオンを取得
+	Quaternion RotationY(float angle);
+	// Z軸周りの回転を表すクォータニオンを取得
+	Quaternion RotationZ(float angle);
 
-	// ���`���
-	// ���ʂ�float�l�𐶐�
-	// f=0�̂Ƃ�a�Af=1�̂Ƃ�b�ƂȂ�
+	// 線形補間
+	// 結果のfloat値を生成
+	// f=0のときa、f=1のときbとなる
 	inline float Interpolate(float a, float b, float f)
 	{
 		return a * (1 - f) + b * f;
 	}
 
-	// ���`���
-	// ���ʂ�CVector3�𐶐�
-	// ��L��float���`��Ԋ֐����g�p
+	// 線形補間
+	// 結果のCVector3を生成
+	// 上記のfloat線形補間関数を使用
 	Vector3 Interpolate(const Vector3 &v1, const Vector3 &v2, float f);
 
-	// ���ʐ��`���
-	// f = 0�̂Ƃ�v1, f = 1�̂Ƃ�v2
-	// �@�\�͊Y������R���X�g���N�^�Ɠ���
-	CQuaternion Interpolate(const CQuaternion& q1, const CQuaternion& q2, float f);
+	// 球面線形補間
+	// f = 0のときv1, f = 1のときv2
+	// 機能は該当するコンストラクタと同等
+	Quaternion Interpolate(const Quaternion& q1, const Quaternion& q2, float f);
 
-	// �N�H�[�^��I���̍���
+	// クォータ二オンの差分
 	// pQ1 : 
 	// pQ2 : 
-	// return : ���Z���ʂ̃N�H�[�^�j�I��
-	// tips1 : pQ1 -> pQ2 �ւ̍���
-	// tips2 : ���̊֐��̖߂�l��pOut�̖߂�l�Ɠ����ł���B�ʂ̊֐��̈����Ƃ��Ă�������B
-	CQuaternion* QuaternionDelta(CQuaternion *pOut, const CQuaternion *pQ1, const CQuaternion *pQ2);
+	// return : 演算結果のクォータニオン
+	// tips1 : pQ1 -> pQ2 への差分
+	// tips2 : この関数の戻り値はpOutの戻り値と同じである。別の関数の引数としても扱える。
+	Quaternion* QuaternionDelta(Quaternion *pOut, const Quaternion *pQ1, const Quaternion *pQ2);
 
-	// �_�ƕ��ʂ̋������o��
-	// vPt : �_�̍��W
-	// vPNml : ���ʂ̖@��
-	// vPPt : ���ʏ�̍��W
-	// return : ���ʂ̋���
+	// 点と平面の距離を出す
+	// vPt : 点の座標
+	// vPNml : 平面の法線
+	// vPPt : 平面上の座標
+	// return : 結果の距離
 	float DistancePointPlane(D3DXVECTOR3 vPt, D3DXVECTOR3 vPNml, D3DXVECTOR3 vPPt);
 
 }

@@ -1,5 +1,5 @@
-//*********************************************************************
-// ƒNƒH[ƒ^ƒjƒIƒ“ƒNƒ‰ƒX
+ï»¿//*********************************************************************
+// ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚¯ãƒ©ã‚¹
 // Last Update : 2013.12.11
 // Yuta Komatsu
 //*********************************************************************
@@ -8,61 +8,70 @@
 #include "Vector.h"
 #include "Quaternion.h"
 
-namespace KMT {
-
-	CQuaternion::CQuaternion( const Vector3& axis, float angle ) {
-		D3DXQuaternionRotationAxis( this, ( D3DXVECTOR3*)&axis, angle ) ;
+namespace KMT
+{
+	Quaternion::Quaternion(const Vector3& axis, float angle)
+	{
+		D3DXQuaternionRotationAxis(this, (D3DXVECTOR3*)&axis, angle);
 	}
 
-	CQuaternion::CQuaternion( const Vector3& axis ){
-		D3DXQuaternionRotationAxis( this, (D3DXVECTOR3*)&axis, axis.Length() * 2 ) ;
+	Quaternion::Quaternion(const Vector3& axis)
+	{
+		D3DXQuaternionRotationAxis(this, (D3DXVECTOR3*)&axis, axis.Length() * 2);
 	}
 
-	CQuaternion::CQuaternion( Vector3 vfrom, Vector3 vto ){
-		Vector3 c = vfrom.Normalize().Cross( vto.Normalize() ) ;
-		float d = vfrom.Dot( vto ) ;
-		d = ( d > 1 ? 1 : ( d < - 1 ? - 1 : d ) ) ;
-		D3DXQuaternionRotationAxis( this, (D3DXVECTOR3*)&c, acosf( d ) ) ;
+	Quaternion::Quaternion(Vector3 from, Vector3 to)
+	{
+		Vector3 c = from.Normalize().Cross(to.Normalize());
+		float d = from.Dot(to);
+		d = (d > 1 ? 1 : (d < -1 ? -1 : d));
+		D3DXQuaternionRotationAxis(this, (D3DXVECTOR3*)&c, acosf(d));
 	}
 
-	CQuaternion::CQuaternion( Vector3 vfrom, Vector3 vto, Vector3 axis ) {
-		axis.Normalize() ;
-		Vector3 fa = ( vfrom - vfrom.Dot( axis ) * axis ).Normalize() ; 
-		Vector3 ta = ( vto - vto.Dot( axis ) * axis ).Normalize() ;
-		*this = CQuaternion( vfrom, fa ) * CQuaternion( fa, ta ) * CQuaternion ( ta, vto ) ;
+	Quaternion::Quaternion(Vector3 from, Vector3 to, Vector3 axis)
+	{
+		axis.Normalize();
+		Vector3 fa = (from - from.Dot(axis) * axis).Normalize();
+		Vector3 ta = (to - to.Dot(axis) * axis).Normalize();
+		*this = Quaternion(from, fa) * Quaternion(fa, ta) * Quaternion(ta, to);
 	}
 
-	CQuaternion::CQuaternion( const CQuaternion& v1, const CQuaternion& v2, float f ) {
-		D3DXQuaternionSlerp( this, &v1, &v2, f ) ;
+	Quaternion::Quaternion(const Quaternion& a, const Quaternion& b, float t)
+	{
+		D3DXQuaternionSlerp(this, &a, &b, t);
 	}
 
-	CQuaternion::CQuaternion( const D3DXQUATERNION& q ) {
-		x = q.x ; 
-		y = q.y ; 
-		z = q.z ; 
-		w = q.w ;
+	Quaternion::Quaternion(const D3DXQUATERNION& a)
+	{
+		x = a.x;
+		y = a.y;
+		z = a.z;
+		w = a.w;
 	}
 
-	CQuaternion::operator D3DXQUATERNION() const { return D3DXQUATERNION( x, y, z, w ) ; }
+	Quaternion::operator D3DXQUATERNION() const { return D3DXQUATERNION(x, y, z, w); }
 
-	CQuaternion& CQuaternion::operator= ( const CQuaternion& q ) {
-		x = q.x, y = q.y, z = q.z, w = q.w ;
-		return *this ;
+	Quaternion& Quaternion::operator= (const Quaternion& a)
+	{
+		x = a.x, y = a.y, z = a.z, w = a.w;
+		return *this;
 	}
 
-	CQuaternion& CQuaternion::Normalize() {
-		D3DXQuaternionNormalize( (D3DXQUATERNION*)this, (D3DXQUATERNION*)this ) ;
-		return *this ;
+	Quaternion& Quaternion::Normalize()
+	{
+		D3DXQuaternionNormalize((D3DXQUATERNION*)this, (D3DXQUATERNION*)this);
+		return *this;
 	}
 
-	CQuaternion& CQuaternion::Inverse() {
-		D3DXQuaternionInverse( (D3DXQUATERNION*)this, (D3DXQUATERNION*)this ) ;
-		return *this ;
+	Quaternion& Quaternion::Inverse()
+	{
+		D3DXQuaternionInverse((D3DXQUATERNION*)this, (D3DXQUATERNION*)this);
+		return *this;
 	}
 
-	CQuaternion& CQuaternion::Delta( CQuaternion q ) {
-		QuaternionDelta( this, this, &q ) ;
-		return *this ;
+	Quaternion& Quaternion::Delta(Quaternion a)
+	{
+		QuaternionDelta(this, this, &a);
+		return *this;
 	}
-
 }

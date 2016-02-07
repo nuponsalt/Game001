@@ -1,4 +1,4 @@
-#include "DXUT.h"
+ï»¿#include "DXUT.h"
 #include "Particle.h"
 
 #include "../../../Support/wsb_xml.h"
@@ -17,20 +17,20 @@ namespace KMT {
 
 		std::unordered_map<std::string, ShaderSP>::iterator it = _shaders.find(path);
 		ShaderSP shader;
-		// ‘¶İ‚µ‚½‚ç‘æ“ñ—v‘f‚ğ•Ô‚·
+		// å­˜åœ¨ã—ãŸã‚‰ç¬¬äºŒè¦ç´ ã‚’è¿”ã™
 		if(it != _shaders.end())
 		{
 			shader = (*it).second;
 			return shader;
 		}
-		// ‘¶İ‚µ‚È‚¯‚ê‚ÎV‚µ‚­ƒ[ƒh
+		// å­˜åœ¨ã—ãªã‘ã‚Œã°æ–°ã—ããƒ­ãƒ¼ãƒ‰
 		shader = ShaderSP(new ShaderParticle());
-		// ƒnƒbƒVƒ…ƒ}ƒbƒv‚É‘}“ü
+		// ãƒãƒƒã‚·ãƒ¥ãƒãƒƒãƒ—ã«æŒ¿å…¥
 		_shaders.insert(std::make_pair(path, shader));
 		return shader;
 	}
 
-	void ShaderParticle::ApplyEffect(const CMatrix& rotation, const Vector4& cameraPosition)
+	void ShaderParticle::ApplyEffect(const Matrix& rotation, const Vector4& cameraPosition)
 	{
 		return;
 	}
