@@ -69,7 +69,7 @@ namespace KMT
 		// 結果のクォータニオンを生成
 		friend Quaternion Normalize(Quaternion a)
 		{
-			return q.Normalize();
+			return a.Normalize();
 		}
 		// 逆クォータニオン
 		// 既存のクォータニオンに代入
@@ -78,7 +78,7 @@ namespace KMT
 		// 結果のクォータニオンを生成
 		friend Quaternion Inverse(Quaternion a)
 		{
-			return q.Inverse();
+			return a.Inverse();
 		}
 		// 差分
 		// 既存のクォータニオンに代入

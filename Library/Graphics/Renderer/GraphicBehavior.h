@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #pragma warning(disable : 4482)
 
@@ -12,8 +12,8 @@
 
 namespace KMT {
 
-	//* ‘O•ûéŒ¾ *//
-	class CCamera;
+	//* å‰æ–¹å®£è¨€ *//
+	class Camera;
 	class Shader;
 	typedef std::shared_ptr<Shader> ShaderSP;
 
@@ -24,37 +24,37 @@ namespace KMT {
 	class GraphicBehavior : public Transformation, public Material
 	{
 	public :
-		// ƒ\[ƒg—p‚Ì’l
+		// ã‚½ãƒ¼ãƒˆç”¨ã®å€¤
 		float _cameraDistance;
-		// •`‰æƒtƒ‰ƒO
+		// æç”»ãƒ•ãƒ©ã‚°
 		bool _renders;
-		// ƒrƒ‹ƒ{[ƒhƒtƒ‰ƒO
+		// ãƒ“ãƒ«ãƒœãƒ¼ãƒ‰ãƒ•ãƒ©ã‚°
 		bool _isBillBoard;
 
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		GraphicBehavior() : _cameraDistance(0), _renders(true), _isBillBoard(false), _cullingState(D3DCULL_CCW){ }
-		// ƒfƒXƒgƒ‰ƒNƒ^
+		// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		virtual ~GraphicBehavior() { }
 
-		//* æ“¾ *//
-		// ƒƒbƒVƒ…
+		//* å–å¾— *//
+		// ãƒ¡ãƒƒã‚·ãƒ¥
 		inline MeshSP GetMesh() { return _mesh; }
-		// ƒeƒNƒXƒ`ƒƒƒxƒNƒ^[”z—ñ
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ™ã‚¯ã‚¿ãƒ¼é…åˆ—
 		inline std::vector<TextureSP> GetTextures() { return _textures; }
-		// ƒeƒNƒXƒ`ƒƒƒxƒNƒ^[”z—ñ(’¼ÚƒCƒ“ƒfƒbƒNƒXw’è)
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ™ã‚¯ã‚¿ãƒ¼é…åˆ—(ç›´æ¥ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹æŒ‡å®š)
 		inline TextureSP GetTexturesElement(size_t index) { return _textures[index]; }
-		// ŠgU”½ËF(ƒfƒBƒtƒ…[ƒYF)
+		// æ‹¡æ•£åå°„è‰²(ãƒ‡ã‚£ãƒ•ãƒ¥ãƒ¼ã‚ºè‰²)
 		inline Vector4 GetDiffuseColors(size_t index) { return _diffuseColors[index]; }
 
-		//* İ’è *//
-		// ƒVƒF[ƒ_[
+		//* è¨­å®š *//
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼
 		inline void SetShader(ShaderSP shader) { _shader = shader; }
-		// ƒJƒŠƒ“ƒOƒ‚[ƒh
+		// ã‚«ãƒªãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰
 		inline void SetCullingState(const _D3DCULL cullingState) { _cullingState = cullingState; }
-		// ƒeƒNƒXƒ`ƒƒ
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£
 		inline void SetTexture(const TextureSP& texture) { _textures.push_back(texture); }
 		
-		//* std::list‚Ìsortg—pŠÖ” *
+		//* std::listã®sortä½¿ç”¨é–¢æ•° *
 		static inline bool Compare(const GraphicBehaviorWP riLeft, const GraphicBehaviorWP riRight)
 		{
 			return (riRight.lock()->_cameraDistance < riLeft.lock()->_cameraDistance);
@@ -65,26 +65,26 @@ namespace KMT {
 		}
 		static inline bool Compare2D(const GraphicBehaviorWP riLeft, const GraphicBehaviorWP riRight)
 		{
-			return (riRight.lock()->Position.z > riLeft.lock()->Position.z);
+			return (riRight.lock()->_position.z > riLeft.lock()->_position.z);
 		}
 
-		// •`‰æ
-		virtual void Render(const CCamera* camera) = 0;
+		// æç”»
+		virtual void Render(const Camera* camera) = 0;
 
 	private :
 	protected :
-		// ƒtƒ@ƒCƒ‹ƒpƒX
+		// ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
 		std::string _path;
-		// ƒƒbƒVƒ…
+		// ãƒ¡ãƒƒã‚·ãƒ¥
 		MeshSP _mesh;
-		// ƒVƒF[ƒ_[
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼
 		ShaderSP _shader;
-		// •`‰æ‚ÌƒJƒŠƒ“ƒOƒ‚[ƒh•Û‘¶•Ï”
+		// æç”»æ™‚ã®ã‚«ãƒªãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ä¿å­˜å¤‰æ•°
 		_D3DCULL _cullingState;
 		
-		// ƒeƒNƒXƒ`ƒƒ[”z—ñ(std::vector)
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼é…åˆ—(std::vector)
 		std::vector<TextureSP> _textures;
-		// ’¸“_ƒJƒ‰[”z—ñ(std::vector)
+		// é ‚ç‚¹ã‚«ãƒ©ãƒ¼é…åˆ—(std::vector)
 		std::vector<Vector4> _diffuseColors;
 
 	};

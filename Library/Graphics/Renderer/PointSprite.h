@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "DXUT.h"
 
@@ -6,43 +6,43 @@
 
 namespace KMT {
 
-	// ƒ|ƒCƒ“ƒgƒXƒvƒ‰ƒCƒg’¸“_ƒf[ƒ^
+	// ãƒã‚¤ãƒ³ãƒˆã‚¹ãƒ—ãƒ©ã‚¤ãƒˆé ‚ç‚¹ãƒ‡ãƒ¼ã‚¿
 	typedef struct tag_POINTSPRITE
 	{
-		// ’¸“_À•W
+		// é ‚ç‚¹åº§æ¨™
 		Vector3 _position;
-		// ƒ|ƒCƒ“ƒgƒXƒvƒ‰ƒCƒgƒTƒCƒY
+		// ãƒã‚¤ãƒ³ãƒˆã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã‚µã‚¤ã‚º
 		float _size;
-		// ’¸“_ƒJƒ‰[
+		// é ‚ç‚¹ã‚«ãƒ©ãƒ¼
 		DWORD _color;
 
-		// ’¸“_ƒtƒH[ƒ}ƒbƒg’è‹`
+		// é ‚ç‚¹ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆå®šç¾©
 		static const WORD FVF = (D3DFVF_XYZ | D3DFVF_PSIZE | D3DFVF_DIFFUSE);
 
 	}POINTSPRITE, *pPOINTSPRITE;
 
-	// ƒGƒ~ƒbƒ^[
+	// ã‚¨ãƒŸãƒƒã‚¿ãƒ¼
 	class Emitter
 	{
 	public :
-		// À•W
+		// åº§æ¨™
 		Vector3 _position;
-		// •úo•ûŒüƒxƒNƒgƒ‹
+		// æ”¾å‡ºæ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«
 		std::vector<Vector3> _directions;
-		// ‘¬“x
+		// é€Ÿåº¦
 		std::vector<float> _speeds;
-		// ‰Á‘¬“x
+		// åŠ é€Ÿåº¦
 		float _acceleration;
 
-		// ƒp[ƒeƒBƒNƒ‹‚Ìõ–½
+		// ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ã®å¯¿å‘½
 		int _span;
 
-		// •`‰æƒtƒ‰ƒO
+		// æç”»ãƒ•ãƒ©ã‚°
 		bool _renders;
 
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		Emitter() : _span(0), _renders(false) { }
-		// ƒfƒXƒgƒ‰ƒNƒ^
+		// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		~Emitter() { } 
 
 	};
@@ -50,35 +50,35 @@ namespace KMT {
 	class PointSprite;
 	typedef std::shared_ptr<PointSprite> PointSpriteSP;
 
-	// ƒ|ƒCƒ“ƒgƒXƒvƒ‰ƒCƒg(ƒp[ƒeƒBƒNƒ‹)
+	// ãƒã‚¤ãƒ³ãƒˆã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ(ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«)
 	class PointSprite : public GraphicBehavior
 	{
 	public :
-		// ƒfƒXƒgƒ‰ƒNƒ^
+		// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		virtual ~PointSprite();
 
-		// ƒ|ƒCƒ“ƒgƒXƒvƒ‰ƒCƒg¶¬
+		// ãƒã‚¤ãƒ³ãƒˆã‚¹ãƒ—ãƒ©ã‚¤ãƒˆç”Ÿæˆ
 		static PointSpriteSP Create(const std::string& path, const WORD pointNumber, const float size = 1);
-		// •`‰æ
-		void Render(const CCamera* camera);
+		// æç”»
+		void Render(const Camera* camera);
 
 	private :
-		// ’¸“_ƒoƒbƒtƒ@
+		// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡
 		LPDIRECT3DVERTEXBUFFER9 _vertexBuffer;
-		// ƒeƒNƒXƒ`ƒƒ
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£
 		TextureSP _texture;
-		// ƒGƒ~ƒbƒ^[”z—ñ(std::vector)
+		// ã‚¨ãƒŸãƒƒã‚¿ãƒ¼é…åˆ—(std::vector)
 		Emitter* _emitterData;
 
-		// ’¸“_1‚Â‚Ì‘å‚«‚³
+		// é ‚ç‚¹1ã¤ã®å¤§ãã•
 		float _pointSize;
-		// ’¸“_”
+		// é ‚ç‚¹æ•°
 		WORD _pointNumber;
 
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-		// path : “\‚è•t‚¯‚éƒeƒNƒXƒ`ƒƒƒpƒX
-		// pointNumber : ƒ|ƒCƒ“ƒg”
-		// size : ƒ|ƒCƒ“ƒgƒTƒCƒY
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		// path : è²¼ã‚Šä»˜ã‘ã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ‘ã‚¹
+		// pointNumber : ãƒã‚¤ãƒ³ãƒˆæ•°
+		// size : ãƒã‚¤ãƒ³ãƒˆã‚µã‚¤ã‚º
 		PointSprite(const std::string& path, const WORD pointNumber, const float size = 1);
 
 	};

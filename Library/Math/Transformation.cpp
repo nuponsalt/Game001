@@ -1,5 +1,5 @@
-//*********************************************************************
-// À•WE‰ñ“]EŠgk‚ÌŠÇ—ƒNƒ‰ƒX(ƒŠƒ“ƒNƒ‰ƒCƒuƒ‰ƒŠ‚Æ‚µ‚Ä‚Ì‹@”\À‘•—\’è)
+ï»¿//*********************************************************************
+// åº§æ¨™ãƒ»å›è»¢ãƒ»æ‹¡ç¸®ã®ç®¡ç†ã‚¯ãƒ©ã‚¹(ãƒªãƒ³ã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¨ã—ã¦ã®æ©Ÿèƒ½å®Ÿè£…äºˆå®š)
 // Last Update : 2013.12.11
 // Yuta Komatsu
 //*********************************************************************
@@ -10,6 +10,6 @@ namespace KMT {
 
 	const float DEFAULT_Y_POSITION = -20.0f;
 
-	Transformation::Transformation() : Position(0.0f, DEFAULT_Y_POSITION, 0.0f), vRotation(), qRotation(), Scale(1, 1, 1), CurrentRotateType(ROTATE_TYPE::QUATERNION) { }
+	Transformation::Transformation() : _position(0.0f, DEFAULT_Y_POSITION, 0.0f), _eulerAngles(), _rotation(), _scale(1, 1, 1), CurrentRotateType(RotationType::QUATERNION) { }
 
 }

@@ -1,4 +1,4 @@
-#pragma once 
+ï»¿#pragma once 
 
 #pragma warning( disable:4482 )
 
@@ -11,7 +11,7 @@
 
 namespace KMT {
 
-	class CCamera;
+	class Camera;
 
 	class ModelRenderer;
 	typedef std::shared_ptr<ModelRenderer> ModelRendererSP, GRendererSP;
@@ -20,18 +20,18 @@ namespace KMT {
 	typedef class ModelRenderer : public GraphicBehavior
 	{
 	public :
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		ModelRenderer();
-		// ƒfƒXƒgƒ‰ƒNƒ^
+		// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		virtual ~ModelRenderer(){ _textures.clear(); }
 		
-		// ¶¬
+		// ç”Ÿæˆ
 		static ModelRendererSP CreateFromX(const std::string &path, const ShaderSP &shader);
-		// •`‰æ
-		virtual void Render(const CCamera* camera);		
+		// æç”»
+		virtual void Render(const Camera* camera);		
 
 	private :		
-		// Xƒtƒ@ƒCƒ‹“Ç
+		// Xãƒ•ã‚¡ã‚¤ãƒ«èª­è¾¼
 		void LoadFromX(const std::string &path);
 
 	}GRenderer;

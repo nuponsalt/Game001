@@ -44,7 +44,7 @@ namespace KMT {
 	}PerspectiveInfo, *pPerspectiveInfo;
 
 	// ビュー行列・プロジェクション行列を持つオブジェクトの基本情報クラス
-	class CViewBehavior
+	class ViewBehavior
 	{
 	public :
 		// 行列の種類
@@ -54,33 +54,33 @@ namespace KMT {
 		};
 
 		// コンストラクタ
-		CViewBehavior();
+		ViewBehavior();
 		// デストラクタ
-		virtual ~CViewBehavior();
+		virtual ~ViewBehavior();
 
 		// 更新
-		virtual void updateView() = 0;
+		virtual void UpdateView() = 0;
 
 		// 視錐台の算出
-		void calculateViewFructum();
+		void CalculateViewFrustum();
 		// 球オブジェクトによる視錐台カリング判定
-		const bool isCullingFrustum(const SphereVolume& sphere) const;
+		const bool CullsFrustum(const SphereVolume& sphere) const;
 
 		// 設定
-		inline void setEye(const Vector3 &_Pt) { View.Eye = _Pt; }
-		inline void setEye(const float &_fx, const float &_fy, const float &_fz) { View.Eye = Vector3(_fx, _fy, _fz); }
-		inline void setLookAt(const Vector3 &_Pt) { View.LookAt = _Pt; }
-		inline void setLookAt(const float &_fx, const float &_fy, const float &_fz) { View.LookAt = Vector3(_fx, _fy, _fz); }
-		inline void setUp(const Vector3 &_Pt) { View.Up = _Pt; }
-		inline void setUp(const float &_fx, const float &_fy, const float &_fz) { View.Up = Vector3(_fx, _fy, _fz); }
-		inline void setAspect(const float &_aspect) { Persective.Aspect = _aspect; }
+		inline void SetEye(const Vector3 &eye) { _view.Eye = eye; }
+		inline void SetEye(const float &x, const float &y, const float &z) { _view.Eye = Vector3(x, y, z); }
+		inline void SetLookAt(const Vector3 &lookAt) { _view.LookAt = lookAt; }
+		inline void SetLookAt(const float &x, const float &y, const float &z) { _view.LookAt = Vector3(x, y, z); }
+		inline void SetUp(const Vector3 &upDirection) { _view.Up = upDirection; }
+		inline void SetUp(const float &x, const float &y, const float &z) { _view.Up = Vector3(x, y, z); }
+		inline void SetAspect(const float &aspect) { _persective.Aspect = aspect; }
 
 		// 取得 
-		inline Vector3 getEye() const { return View.Eye; }
-		inline Vector3 getLookAt() const { return View.LookAt; }
-		inline float getAngle() const { return Persective.Angle; }
+		inline Vector3 GetEye() const { return _view.Eye; }
+		inline Vector3 GetLookAt() const { return _view.LookAt; }
+		inline float GetAngle() const { return _persective.Angle; }
 		/* 行列 */
-		inline Matrix getMatrix(const MatrixState& state) const { return Matrices[state]; }
+		inline Matrix GetMatrix(const MatrixState& state) const { return _matrices[state]; }
 
 	protected :
 		// 視錐台平面列挙型
@@ -95,15 +95,16 @@ namespace KMT {
 			FRUSTUM_MAX
 		};
 		// 視錐台の6平面
-		PlaneVolume viewFrustum[FRUSTUM_MAX];
+		PlaneVolume _viewFrustum[FRUSTUM_MAX];
 
 		// ビュー行列[0], プロジェクション行列[1]
-		static const int VIEW_OR_PROJECTION = 2;
-		Matrix Matrices[VIEW_OR_PROJECTION];
+		static const int ViewOrProjection = 2;
+
+		Matrix _matrices[ViewOrProjection];
 		// ビュー情報
-		ViewInfo View;
+		ViewInfo _view;
 		// プロジェクション
-		PerspectiveInfo Persective;
+		PerspectiveInfo _persective;
 
 	};
 

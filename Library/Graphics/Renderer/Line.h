@@ -1,16 +1,16 @@
-#pragma once
+ï»¿#pragma once
 
 #include <memory>
 #include "GraphicBehavior.h"
 
 namespace KMT {
 
-	// ƒ‰ƒCƒ“‚Ì’¸“_‚ğ’è‹`
+	// ãƒ©ã‚¤ãƒ³ã®é ‚ç‚¹ã‚’å®šç¾©
 	typedef struct LineVertex {
 		float _x, _y, _z;
 		DWORD _color;
 
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		LineVertex() { }
 		LineVertex(Vector3 v, DWORD color) : _x(v.x), _y(v.y), _z(v.z), _color(color) { }
 
@@ -20,23 +20,23 @@ namespace KMT {
 	typedef std::shared_ptr<Line> LineSP;
 	typedef std::weak_ptr<Line> LineWP;
 
-	// ƒ‰ƒCƒ“•`‰æ
+	// ãƒ©ã‚¤ãƒ³æç”»
 	class Line : public GraphicBehavior
 	{
 	public :
-		// ƒfƒXƒgƒ‰ƒNƒ^
+		// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		~Line() { }
-		// ¶¬
+		// ç”Ÿæˆ
 		static LineSP Create(const Vector3& positionA, const Vector3& positionB, DWORD color);
 
-		// •`‰æ
-		void Render(const CCamera* camera);
+		// æç”»
+		void Render(const Camera* camera);
 
 	private :
-		// ƒ‰ƒCƒ“‚Ì’¸“_
+		// ãƒ©ã‚¤ãƒ³ã®é ‚ç‚¹
 		LineVertex _vertices[2];
 
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		Line() { }
 
 	protected :

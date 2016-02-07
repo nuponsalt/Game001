@@ -102,47 +102,30 @@ namespace KMT {
 		return GRendererSP(object);
 	}
 
-	void ModelRenderer::Render(const CCamera* camera)
+	void ModelRenderer::Render(const Camera* camera)
 	{
 		if(!_renders)
 			return;
 		// ワールド行列設定
 		Matrix SclMtx, RotMtx, PosMtx, WldMtx, WVPMtx;
 		// 拡縮
-		D3DXMatrixScaling(&SclMtx, Scale.x, Scale.y, Scale.z);
+		D3DXMatrixScaling(&SclMtx, _scale.x, _scale.y, _scale.z);
 		// 回転 : switch-case…クォータニオンか回転行列かXYZ指定か
-		switch(CurrentRotateType)
-		{
-		case ROTATE_TYPE::QUATERNION :
-			D3DXMatrixRotationQuaternion(&RotMtx, &qRotation);
-			break;
-
-		case ROTATE_TYPE::MATRIX :
-			mRotationWorld = mRotationX * mRotationY * mRotationZ;
-			RotMtx = mRotationWorld;
-			break;
-
-		case ROTATE_TYPE::XYZ :
-			D3DXMatrixRotationYawPitchRoll(&RotMtx, vRotation.y, vRotation.x, vRotation.z);
-			break;
-		}
+		this->Evaluate();
+		RotMtx = this->_worldRotationMatrix;
 		// 位置
-		D3DXMatrixTranslation(&PosMtx, Position.x, Position.y, Position.z);
+		D3DXMatrixTranslation(&PosMtx, _position.x, _position.y, _position.z);
 		GraphicsManager::_device->SetRenderState(D3DRS_CULLMODE, _cullingState);
 		// デバッグ用
 		//GraphicsManager::_device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 		// シェーダを使用する場合カメラのビュー行列(0)、プロジェクション行列(1)をワールド行列に合成
 		WldMtx = SclMtx * RotMtx * PosMtx;
-		WVPMtx = WldMtx * camera->getMatrix(CViewBehavior::VIEW) * camera->getMatrix(CViewBehavior::PROJECTION);
+		WVPMtx = WldMtx * camera->GetMatrix(ViewBehavior::VIEW) * camera->GetMatrix(ViewBehavior::PROJECTION);
 		// カメラの座標をシェーダに使用するための行列変換
-		Matrix CamMtx = WldMtx * camera->getMatrix(CViewBehavior::VIEW);
+		Matrix CamMtx = WldMtx * camera->GetMatrix(ViewBehavior::VIEW);
 		D3DXMatrixInverse(&CamMtx, NULL, &CamMtx);
-		Vector4 EyePos = Vector4(
-			camera->getEye().x, 
-			camera->getEye().y, 
-			camera->getEye().z, 
-			1
-			);
+		auto eye = camera->GetEye();
+		Vector4 EyePos = Vector4(eye.x, eye.y, eye.z, 1);
 		EyePos.Transform(CamMtx);
 		D3DXVec4Normalize((D3DXVECTOR4*)&EyePos, (D3DXVECTOR4*)&EyePos);
 		// シェーダ設定

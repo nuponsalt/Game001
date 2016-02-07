@@ -14,8 +14,6 @@ namespace KMT
 	class Quaternion;
 	class Matrix;
 
-	Vector3* Vector3Hermite();
-
 	//-----------------------------------------------------
 	// 3DVector
 	class Vector3
@@ -299,7 +297,7 @@ namespace KMT
 		{
 			auto v = (*this);
 			auto f = 1 / sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
-			return v * f;
+			return (v * f);
 		}
 		// 正規化
 		friend Vector3 Unit(Vector3 v)
@@ -624,142 +622,172 @@ namespace KMT
 		// 成分0のベクトルを生成
 		Vector4() : x(0), y(0), z(0), w(0) { }
 		// 指定したx, y, z, wのベクトルを生成
-		Vector4(float fx, float fy, float fz, float fw) : x(fx), y(fy), z(fz), w(fw) { }
+		Vector4(float x_, float y_, float z_, float w_) : x(x_), y(y_), z(z_), w(w_) { }
 		// CVector3からの変換
 		Vector4(const Vector3& v) : x(v.x), y(v.y), z(v.z), w(1.0f) { }
 		// CVector3への変換
-		operator Vector3() const {
+		operator Vector3() const
+		{
 			return Vector3(x / w, y / w, z / w);
 		}
 		// D3DXVECTOR3からの変換
 		Vector4(const D3DXVECTOR3& v) : x(v.x), y(v.y), z(v.z), w(1.0f) { }
 		// D3DXVECTOR3への変換
-		operator D3DXVECTOR3() const {
+		operator D3DXVECTOR3() const
+		{
 			return D3DXVECTOR3(x / w, y / w, z / w);
 		}
 		// D3DXVECTOR4からの変換
 		Vector4(const D3DXVECTOR4& v) : x(v.x), y(v.y), z(v.z), w(v.w) { }
 		// D3DXVECTOR4への変換
-		operator D3DXVECTOR4() const {
+		operator D3DXVECTOR4() const
+		{
 			return D3DXVECTOR4(x, y, z, w);
 		}
 		// xを設定
-		Vector4& SetX(float fx) {
+		Vector4& SetX(float fx)
+		{
 			x = fx;
 			return *this;
 		}
 		// yを設定
-		Vector4& SetY(float fy) {
+		Vector4& SetY(float fy)
+		{
 			y = fy;
 			return *this;
 		}
 		// zを設定
-		Vector4& SetZ(float fz) {
+		Vector4& SetZ(float fz)
+		{
 			z = fz;
 			return *this;
 		}
 		// wを設定
-		Vector4& SetW(float fw) {
+		Vector4& SetW(float fw)
+		{
 			w = fw;
 			return *this;
 		}
 		// 比較。ベクトルが等しいときにtrue
-		bool operator== (const Vector4& v) {
+		bool operator== (const Vector4& v)
+		{
 			return x == v.x && y == v.y && z == v.z && w == v.w;
 		}
 		// 比較。ベクトルが等しくないときにtrue
-		bool operator!= (const Vector4& v) {
+		bool operator!= (const Vector4& v)
+		{
 			return x != v.x || y != v.y || z != v.z || w != v.w;
 		}
 		// 加算。結果のベクトルを生成
-		Vector4 operator+ (const Vector4& v) const {
+		Vector4 operator+ (const Vector4& v) const
+		{
 			return Vector4(x + v.x, y + v.y, z + v.z, w + v.w);
 		}
 		// 加算。既存のベクトルを変更
-		Vector4& operator+= (const Vector4& v) {
+		Vector4& operator+= (const Vector4& v)
+		{
 			x += v.x, y += v.y, z += v.z, w += v.w;
 			return *this;
 		}
 		// 符号反転。結果のベクトルを生成
-		Vector4 operator- () const {
+		Vector4 operator- () const
+		{
 			return Vector4(-x, -y, -z, -w);
 		}
 		// 減算。結果のベクトルを生成
-		Vector4 operator- (const Vector4& v) const {
+		Vector4 operator- (const Vector4& v) const
+		{
 			return Vector4(x - v.x, y - v.y, z - v.z, w - v.w);
 		}
 		// 減算。既存のベクトルを変更
-		Vector4& operator-= (const Vector4& v) {
+		Vector4& operator-= (const Vector4& v)
+		{
 			x -= v.x, y -= v.y, z -= v.z, w -= v.w;
 			return *this;
 		}
 		// 乗算。結果のベクトルを生成
-		Vector4 operator* (const Vector4& v) const {
+		Vector4 operator* (const Vector4& v) const
+		{
 			return Vector4(x * v.x, y * v.y, z * v.z, w * v.w);
 		}
 		// 乗算。既存のベクトルを変更
-		Vector4& operator*=(const Vector4& v) {
+		Vector4& operator*=(const Vector4& v)
+		{
 			x *= v.x, y *= v.y, z *= v.z, w *= v.w;
 			return *this;
 		}
 		// 除算。結果のベクトルを生成
-		Vector4 operator/ (const Vector4& v) const {
+		Vector4 operator/ (const Vector4& v) const
+		{
 			return Vector4(x / v.x, y / v.y, z / v.z, w / v.w);
 		}
 		// 除算。既存のベクトルを変更
-		Vector4& operator/= (const Vector4& v) {
+		Vector4& operator/= (const Vector4& v)
+		{
 			x /= v.x, y /= v.y, z /= v.z, w /= v.w;
 			return *this;
 		}
 		// スカラ乗算。結果のベクトルを生成。スカラ＊ベクトルの場合
-		friend Vector4 operator*(float f, const Vector4& v) {
+		friend Vector4 operator*(float f, const Vector4& v)
+		{
 			return Vector4(v.x * f, v.y * f, v.z * f, v.w * f);
 		}
 		// スカラ乗算。結果のベクトルを生成。ベクトル＊スカラの場合
-		Vector4 operator*(float f) const {
+		Vector4 operator*(float f) const
+		{
 			return Vector4(x * f, y * f, z * f, w * f);
 		}
 		// スカラ乗算。既存のベクトルを変更
-		Vector4& operator*= (float f) {
+		Vector4& operator*= (float f)
+		{
 			x *= f, y *= f, z *= f, w *= f;
 			return *this;
 		}
 		// スカラ除算。結果のベクトルを生成
-		Vector4 operator/ (float f) const {
+		Vector4 operator/ (float f) const
+		{
 			return Vector4(x / f, y / f, z / f, w / f);
 		}
 		// スカラ除算。既存のベクトルを変更
-		Vector4& operator/= (float f) {
+		Vector4& operator/= (float f)
+		{
 			x /= f, y /= f, z /= f, w /= f;
 			return *this;
 		}
 		// 内積。結果のスカラ値を生成
-		float Dot(const Vector4& v) const {
+		float Dot(const Vector4& v) const
+		{
 			return D3DXVec4Dot((D3DXVECTOR4*)this, (D3DXVECTOR4*)&v);
 		}
 		// 内積。結果のスカラ値を生成
-		friend float Dot(const Vector4& a, const Vector4& b) {
+		friend float Dot(const Vector4& a, const Vector4& b)
+		{
 			return a.Dot(b);
 		}
 		// 行列による変換。既存のベクトルを変更
-		Vector4& Transform(const Matrix& m) {
+		Vector4& Transform(const Matrix& m)
+		{
 			D3DXVec4Transform((D3DXVECTOR4*)this, (D3DXVECTOR4*)this, (D3DXMATRIX*)&m);
 			return *this;
 		}
 		// 行列による変換。既存のベクトルを変更
-		Vector4& operator*= (const Matrix& m) {
+		Vector4& operator*= (const Matrix& m)
+		{
 			return Transform(m);
 		}
 		// 行列による変換。結果のベクトルを生成
-		friend Vector4 Transform(Vector4 v, const Matrix& m) {
+		friend Vector4 Transform(Vector4 v, const Matrix& m)
+		{
 			return v.Transform(m);
 		}
 		// 行列による変換。結果のベクトルを生成
-		friend Vector4 operator*(Vector4 v, const Matrix& m) {
+		friend Vector4 operator*(Vector4 v, const Matrix& m)
+		{
 			return v.Transform(m);
 		}
 		//添字を使ったＸ,Ｙ,Ｚ成分の操作(0, 1, 2)
-		float& operator[](int index) const {
+		float& operator[](int index) const
+		{
 			return *((float*)this + index);
 		}
 

@@ -1,4 +1,4 @@
-#include "DXUT.h"
+ï»¿#include "DXUT.h"
 
 #include "Counter.h"
 
@@ -15,7 +15,7 @@ namespace KMT {
 	CounterSP Counter::CreateCounter()
 	{
 		CounterSP object(new Counter());
-		// “Ç‚İ‚İ
+		// èª­ã¿è¾¼ã¿
 		object->LoadFromFile("Resource/Texture/Number.png");
 		object->GetImage()->SetPlayMode(PlayMode::SELECT_FRAME);
 
@@ -25,7 +25,7 @@ namespace KMT {
 	CounterSP Counter::CreateCounter(const std::string &_path)
 	{
 		CounterSP object(new Counter());
-		// “Ç‚İ‚İ
+		// èª­ã¿è¾¼ã¿
 		object->LoadFromFile(_path);
 		object->GetImage()->SetPlayMode(PlayMode::SELECT_FRAME);
 
@@ -34,29 +34,29 @@ namespace KMT {
 
 	void Counter::Render(const AlignState &type, const int &number)
 	{
-		// ó‚¯æ‚Á‚½”’l‚Ì•¶š”‚ğæ“¾‚·‚é
+		// å—ã‘å–ã£ãŸæ•°å€¤ã®æ–‡å­—æ•°ã‚’å–å¾—ã™ã‚‹
 		int place = 0;
 		char buffer[MAX_NUM] = {0};
 
 		place = sprintf_s(buffer, "%d", number);
 
-		// ¶Šñ‚¹‚Ìê‡
+		// å·¦å¯„ã›ã®å ´åˆ
 		if(LEFT_ALIGN == type) 
 		{
 			for(int i = 0 ; i < place ; i++)
 			{
-				_image->Position = D3DXVECTOR3(_position.x + (i * _interval), _position.y, 0);
+				_image->_position = D3DXVECTOR3(_position.x + (i * _interval), _position.y, 0);
 				_image->UpdateAnimation((buffer[ i ] - '0'));
 				_image->Render();
 			}
 		}
 		
-		// ‰EŠñ‚¹‚Ìê‡
+		// å³å¯„ã›ã®å ´åˆ
 		if(RIGHT_ALIGN == type)
 		{
 			for( int i = 0 ; i < place ; ++i )
 			{
-				_image->Position = D3DXVECTOR3(_position.x - ((place - i) * _interval), _position.y, 0);
+				_image->_position = D3DXVECTOR3(_position.x - ((place - i) * _interval), _position.y, 0);
 				_image->UpdateAnimation((buffer[ i ] - '0'));
 				_image->Render();
 			}

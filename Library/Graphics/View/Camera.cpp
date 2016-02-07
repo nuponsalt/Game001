@@ -5,31 +5,31 @@
 
 namespace KMT {
 
-	CCamera::CCamera() : Size(1)
+	Camera::Camera() : _size(1)
 	{ }
 
-	CCamera::~CCamera() { }
+	Camera::~Camera() { }
 
-	CCameraSP CCamera::Create()
+	CameraSP Camera::Create()
 	{
-		return CCameraSP(new CCamera());
+		return CameraSP(new Camera());
 	}
 
-	void CCamera::setSizeIPO(const float &_Size){ Size = Interpolate(Size, _Size, 0.1f); }
+	void Camera::SetSizeIPO(const float &_Size){ _size = Lerp(_size, _Size, 0.1f); }
 
-	void CCamera::updateView()
+	void Camera::UpdateView()
 	{
 		// ビュー行列, プロジェクション行列を DirectX に設定
-		D3DXMatrixLookAtLH(&Matrices[VIEW], (D3DXVECTOR3*)&View.Eye, (D3DXVECTOR3*)&View.LookAt, (D3DXVECTOR3*)&View.Up);
-		D3DXMatrixPerspectiveFovLH(&Matrices[PROJECTION], Persective.Angle, Persective.Aspect, Persective.Near, Persective.Far);
+		D3DXMatrixLookAtLH(&_matrices[VIEW], (D3DXVECTOR3*)&_view.Eye, (D3DXVECTOR3*)&_view.LookAt, (D3DXVECTOR3*)&_view.Up);
+		D3DXMatrixPerspectiveFovLH(&_matrices[PROJECTION], _persective.Angle, _persective.Aspect, _persective.Near, _persective.Far);
 	}
 
-	void CCamera::Calculate()
+	void Camera::Calculate()
 	{
 		// カメラ座標履歴を取得
-		View.previousEye = View.Eye;
+		_view.previousEye = _view.Eye;
 		// カメラ方向
-		Direction = (View.LookAt - View.Eye).Normalize();
+		_direction = (_view.LookAt - _view.Eye).Normalize();
 	}
 
 }
