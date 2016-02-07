@@ -6,94 +6,94 @@ const int FPSCOUNTER_TIMEGETTIME = 2;
 
 namespace KMT {
 
-	CFrameRateCounter::CFrameRateCounter(unsigned int smp)
+	FrameRateCounter::FrameRateCounter(unsigned int sample)
 	{
 		// サンプル数の設定
-		setSampleNumber_(smp);
+		SetSampleNumber(sample);
 		// 計測する時計の選択
-		if(QueryPerformanceCounter(&Counter_) != 0)
+		if(QueryPerformanceCounter(&_counter) != 0)
 		{
 			// QueryPerformanceCounter関数を使うフラグ
-			CounterFlag_ = FPSCOUNTER_QUERYPER_COUNTER;
+			_counterFlag = FPSCOUNTER_QUERYPER_COUNTER;
 			// 生成時の時刻（クロック数）を取得
-			PreviousCount_ = Counter_.QuadPart;
-			LARGE_INTEGER Freq;
+			_previousCount = _counter.QuadPart;
+			LARGE_INTEGER frequency;
 			// 1秒当たりクロック数を取得
-			QueryPerformanceFrequency(&Freq);
-			Frequency_ = (double)Freq.QuadPart;
+			QueryPerformanceFrequency(&frequency);
+			_frequency = (double)frequency.QuadPart;
 		}
 		else
 		{
 			// timeGetTime関数を使うフラグ
-			CounterFlag_ = FPSCOUNTER_TIMEGETTIME;
+			_counterFlag = FPSCOUNTER_TIMEGETTIME;
 			// 精度を上げる
 			timeBeginPeriod(1);
 			// 生成時の時刻（ミリ秒）を取得
-			TGTPreviousCount_ = timeGetTime();
+			_tgtPreviousCount = timeGetTime();
 		}
 		// 計測
-		getFrameRate_();
+		GetFrameRate();
 	}
 
-	CFrameRateCounter::~CFrameRateCounter()
+	FrameRateCounter::~FrameRateCounter()
 	{
-		if(CounterFlag_ == FPSCOUNTER_TIMEGETTIME)
+		if(_counterFlag == FPSCOUNTER_TIMEGETTIME)
 			// タイマーの精度を戻す
 			timeEndPeriod(1);
 	}
 
-	double CFrameRateCounter::getFrameRate_()
+	double FrameRateCounter::GetFrameRate()
 	{
-		double Diff = getCurrentDiffTime_();
+		double diff = GetCurrentDiffTime();
 		// 計算できないので返す
-		if (Diff == 0)	return 0;
+		if (diff == 0)	return 0;
 
-		return updateFrameRate_(Diff);
+		return UpdateFrameRate(diff);
 	}
 
-	double CFrameRateCounter::getCurrentDiffTime_()
+	double FrameRateCounter::GetCurrentDiffTime()
 	{
 		// 差分時間を計測
-		if(CounterFlag_ == FPSCOUNTER_QUERYPER_COUNTER)
+		if(_counterFlag == FPSCOUNTER_QUERYPER_COUNTER)
 		{
 			// QueryPerformanceCounter関数による計測
-			QueryPerformanceCounter(&Counter_); // 現在の時刻を取得し、
-			LONGLONG LongDef = Counter_.QuadPart - PreviousCount_; // 差分カウント数を算出する。
-			double dDef = (double)LongDef; // 倍精度浮動小数点に変換
-			PreviousCount_ = Counter_.QuadPart; // 現在の時刻を保持
-			return dDef*1000 / Frequency_; // 差分時間をミリ秒単位で返す
+			QueryPerformanceCounter(&_counter); // 現在の時刻を取得し、
+			LONGLONG diff = _counter.QuadPart - _previousCount; // 差分カウント数を算出する。
+			//double dDef = (double)diff; // 倍精度浮動小数点に変換
+			_previousCount = _counter.QuadPart; // 現在の時刻を保持
+			return (double)diff * 1000 / _frequency; // 差分時間をミリ秒単位で返す
 		}
 		// timeGetTime関数による計測
 		DWORD CurrentTime = timeGetTime();
-		DWORD CurrentDiff = CurrentTime - TGTPreviousCount_; // 差分カウント数を算出する
-		TGTPreviousCount_ = CurrentTime; // 現在の時刻を保持
+		DWORD CurrentDiff = CurrentTime - _tgtPreviousCount; // 差分カウント数を算出する
+		_tgtPreviousCount = CurrentTime; // 現在の時刻を保持
 		return CurrentDiff;
 	}
 
-	double CFrameRateCounter::updateFrameRate_(double _Diff)
+	double FrameRateCounter::UpdateFrameRate(double diff)
 	{
 		// 最も古いデータを消去
-		diffTimeList_.pop_front();
+		_diffTimeList.pop_front();
 		// 新しいデータを追加
-		diffTimeList_.push_back(_Diff);
+		_diffTimeList.push_back(diff);
 		// フレームレート算出
-		double FPS = 0.0;
-		double AveDiff = (summationTimes_ + _Diff) / Number_;
-		if (AveDiff != 0)
-			FPS = 1000.0 / AveDiff;
+		double fps = 0.0;
+		double averagingDiff = (_summationTimes + diff) / _number;
+		if (averagingDiff != 0)
+			fps = 1000.0 / averagingDiff;
 		// 共通加算部分の更新
-		summationTimes_ += _Diff - *diffTimeList_.begin();
+		_summationTimes += diff - *_diffTimeList.begin();
 		// 結果が戻る
-		return FPS;
+		return fps;
 	}
 
-	void CFrameRateCounter::setSampleNumber_(unsigned int smp)
+	void FrameRateCounter::SetSampleNumber(unsigned int sample)
 	{
 		// 平均を計算する個数
-		Number_ = smp;
+		_number = sample;
 		// リスト初期化
-		diffTimeList_.resize(Number_, 0.0);
-		summationTimes_ = 0;
+		_diffTimeList.resize(_number, 0.0);
+		_summationTimes = 0;
 	}
 
 }

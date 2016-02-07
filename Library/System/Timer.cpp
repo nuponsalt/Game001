@@ -5,13 +5,15 @@ namespace KMT
 {
 
 	// タイマーを進める関数
-	const bool CTimer::TimeCount()
+	const bool Timer::Count()
 	{
-		if( count < time ){
-			++count ;
+		if( _count < _time )
+		{
+			++_count ;
 			return false ;
 		}
-		else{
+		else
+		{
 			ResetCount() ;
 			return true ;
 		}
@@ -19,17 +21,20 @@ namespace KMT
 
 
 	// タイマーを進める関数その2
-	const bool CTimer::TimeCountZero()
+	const bool Timer::CountZero()
 	{
-		if( 0 == count ){
-			++count ;
+		if( 0 == _count )
+		{
+			++_count ;
 			return true ;
 		}
-		else if( count > 0 && count < time ){
-			++count ;
+		else if( _count > 0 && _count < _time )
+		{
+			++_count ;
 			return false ;
 		}
-		else{
+		else
+		{
 			ResetCount() ;
 			return false ;
 		}

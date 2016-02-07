@@ -1,5 +1,5 @@
 #pragma once
-// 
+
 #pragma comment(lib, "winmm.lib")
 
 #include <windows.h>
@@ -9,42 +9,42 @@ using namespace std;
 
 namespace KMT {
 
-	class CFrameRateCounter
+	class FrameRateCounter
 	{
 	public :
 		// コンストラクタ
-		CFrameRateCounter(unsigned int smp = 10);
+		FrameRateCounter(unsigned int sample = 10);
 		// デストラクタ
-		virtual ~CFrameRateCounter();
+		virtual ~FrameRateCounter();
 
 		// FPS値を取得
-		double getFrameRate_();
+		double GetFrameRate();
 		// サンプル数を変更
-		void setSampleNumber_(unsigned int smp);
+		void SetSampleNumber(unsigned int sample);
 
 	private :
 		// 使用する計測関数の判定フラグ
-		int CounterFlag_;
+		int _counterFlag;
 		// クロックカウント数
-		LARGE_INTEGER Counter_;
+		LARGE_INTEGER _counter;
 		// 1秒当たりクロックカウント数(周波数)
-		double Frequency_;
+		double _frequency;
 		// 以前のクロックカウント数
-		LONGLONG PreviousCount_;
+		LONGLONG _previousCount;
 		// 以前の時刻（ミリ秒）
-		DWORD TGTPreviousCount_;
+		DWORD _tgtPreviousCount;
 		// 時間リスト
-		list<double> diffTimeList_;
+		list<double> _diffTimeList;
 		// 移動平均計算時のデータ数
-		UINT Number_;
+		UINT _number;
 		// 共通部分の合計値
-		double summationTimes_;
+		double _summationTimes;
 
 	protected :
 		// 現在の時刻を取得
-		double getCurrentDiffTime_();
+		double GetCurrentDiffTime();
 		// フレームレートを更新
-		double updateFrameRate_(double _Diff);
+		double UpdateFrameRate(double diff);
 
 	};
 

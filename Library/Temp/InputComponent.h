@@ -7,6 +7,6 @@ class InputComponent
 {
 public :
 protected :
-	virtual CCommand CreateCommand();
+	virtual Command CreateCommand();
 
 };

@@ -6,40 +6,40 @@
 
 namespace KMT {
 
-	class CCounter ;
-	typedef std::shared_ptr<CCounter> CCounterSP ;
+	class Counter ;
+	typedef std::shared_ptr<Counter> CounterSP ;
 
-	class CCounter
+	class Counter
 	{
 	public :
 		// 寄せタイプ
-		enum ALIGN_TYPE{
+		enum AlignState{
 			// 左寄せ
-			LEFT_ALI,	
+			LEFT_ALIGN,	
 			// 右寄せ
-			RIGHT_ALI	
+			RIGHT_ALIGN	
 		};
 
 		// コンストラクタ
-		CCounter();
+		Counter();
 		// デストラクタ
-		~CCounter(){ Image.reset(); }
+		~Counter(){ _image.reset(); }
 		// 生成
-		static CCounterSP CreateCounter() ;
-		static CCounterSP CreateCounter(const std::string &_path);
+		static CounterSP CreateCounter() ;
+		static CounterSP CreateCounter(const std::string &_path);
 		/* 取得 */
 		// 基点座標の取得関数
-		inline const Vector3 getPosition() const { return Position; }
+		inline const Vector3 GetPosition() const { return _position; }
 		
-		inline SpriteSP getImage() const { return Image; }
+		inline SpriteSP GetImage() const { return _image; }
 		/* 設定 */
 		// 座標
-		inline void setPosition(const Vector3& _position){ Position = _position; }
-		inline void setPosition(const float &_x, const float &_y, const float &_z) { Position = Vector3(_x, _y, _z); }
+		inline void SetPosition(const Vector3& position){ _position = position; }
+		inline void SetPosition(const float &x, const float &y, const float &z) { _position = Vector3(x, y, z); }
 		// 描画感覚
-		inline void setInterval(const float _interval){ Interval = _interval; }
+		inline void SetInterval(const float interval){ _interval = interval; }
 		// 描画関数
-		void Render(const ALIGN_TYPE &_type, const int &_num);
+		void Render(const AlignState &type, const int &num);
 		
 
 	private :
@@ -51,11 +51,11 @@ namespace KMT {
 		static const int MAX_NUM = 10;
 
 		// 数字画像
-		SpriteSP Image;
+		SpriteSP _image;
 		// 描画する際の基点座標
-		Vector3 Position;
+		Vector3 _position;
 		// 描画間隔
-		float Interval;
+		float _interval;
 
 		// 数字画像のロード関数
 		// _path : 使用する数字画像のファイル名
