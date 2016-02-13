@@ -21,7 +21,7 @@ namespace KMT
 			_11 = XMVectorGetX(m.r[0]);
 			_12 = XMVectorGetY(m.r[0]);
 			_13 = XMVectorGetZ(m.r[0]);
-			_14 = XMVectorGetZ(m.r[0]);
+			_14 = XMVectorGetW(m.r[0]);
 
 			_21 = XMVectorGetX(m.r[1]);
 			_22 = XMVectorGetY(m.r[1]);
@@ -29,14 +29,14 @@ namespace KMT
 			_24 = XMVectorGetW(m.r[1]);
 
 			_31 = XMVectorGetX(m.r[2]);
-			_32 = XMVectorGetX(m.r[2]);
-			_33 = XMVectorGetX(m.r[2]);
-			_34 = XMVectorGetX(m.r[2]);
+			_32 = XMVectorGetY(m.r[2]);
+			_33 = XMVectorGetZ(m.r[2]);
+			_34 = XMVectorGetW(m.r[2]);
 
 			_41 = XMVectorGetX(m.r[3]);
-			_42 = XMVectorGetX(m.r[3]);
-			_43 = XMVectorGetX(m.r[3]);
-			_44 = XMVectorGetX(m.r[3]);			
+			_42 = XMVectorGetY(m.r[3]);
+			_43 = XMVectorGetZ(m.r[3]);
+			_44 = XMVectorGetW(m.r[3]);			
 		}
 		// 拡大縮小率、回転、平行移動を組み合わせた行列の生成
 		Matrix(const Vector3& scale, const Quaternion& rotation, const Vector3& position);
