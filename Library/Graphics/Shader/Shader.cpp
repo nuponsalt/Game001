@@ -1,4 +1,4 @@
-#include "DXUT.h"
+ï»¿#include "DXUT.h"
 #include "Shader.h"
 #include "../GraphicsManager.h"
 
@@ -28,7 +28,7 @@ namespace KMT {
 		WCHAR bufferName[256] = {0};
 		DXconvAnsiToWide(bufferName, path.c_str(), (path.length()+1));
 		
-		// ƒVƒF[ƒ_ ƒtƒ@ƒCƒ‹‚Ìƒ[ƒh
+		// ã‚·ã‚§ãƒ¼ãƒ€ ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ­ãƒ¼ãƒ‰
 		LPD3DXBUFFER compilationErrors = NULL;
 
 		HRESULT hr = D3DXCreateEffectFromFile( 
@@ -42,7 +42,7 @@ namespace KMT {
 					&compilationErrors
 					);
 
-		// ƒ[ƒh‚É¸”s‚µ‚½ê‡
+		// ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—ã—ãŸå ´åˆ
 		if(FAILED(hr))
 		{
 			if(compilationErrors)	
@@ -51,16 +51,16 @@ namespace KMT {
 			SAFE_RELEASE(compilationErrors);
 			return;
 		}
-		// ƒnƒ“ƒhƒ‹‚Ì“Ç‚İ‚İ
+		// ãƒãƒ³ãƒ‰ãƒ«ã®èª­ã¿è¾¼ã¿
 		_technique = _effect->GetTechniqueByName(xml->GetElement("technique")->GetString().c_str());
 		_wvp = _effect->GetParameterByName(NULL, xml->GetElement("wvp")->GetString().c_str());
 		_color = _effect->GetParameterByName(NULL, xml->GetElement("color")->GetString().c_str());
 		_sourceTexture = _effect->GetParameterByName(NULL, xml->GetElement("srctex")->GetString().c_str());
 
-		// ‘¼Aƒ[ƒh
+		// ä»–ã€ãƒ­ãƒ¼ãƒ‰
 		for (int i = 0; i < xml->GetElementNum("handle"); i++)
 		{
-			// XML‚©‚çKey‚ğ“Ç‚İ‚İƒ[ƒh‚·‚é
+			// XMLã‹ã‚‰Keyã‚’èª­ã¿è¾¼ã¿ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
 			D3DXHANDLE shaderTemporary = _effect->GetParameterByName(NULL, xml->GetElement("handle", i)->GetString().c_str());
 			_handles.insert(std::make_pair(xml->GetElement("handle", i)->GetString(), shaderTemporary));
 		}
@@ -73,11 +73,11 @@ namespace KMT {
 	
 	void Shader::Destroy(std::string _name)
 	{
-		// ƒCƒeƒŒ[ƒ^‚ğ—pˆÓ
-		// ƒCƒeƒŒ[ƒ^‚ğƒnƒbƒVƒ…ƒ}ƒbƒv‚Ìæ“ª‚ÉƒZƒbƒg
+		// ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã‚’ç”¨æ„
+		// ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã‚’ãƒãƒƒã‚·ãƒ¥ãƒãƒƒãƒ—ã®å…ˆé ­ã«ã‚»ãƒƒãƒˆ
 		std::unordered_map< std::string, ShaderSP >::iterator it = _shaders.begin();
 
-		// ‘S•”‰ğ•ú
+		// å…¨éƒ¨è§£æ”¾
 		if(_name == "all")
 		{
 			while(it != _shaders.end())
@@ -86,7 +86,7 @@ namespace KMT {
 				_shaders.erase(it++);
 			}
 		}
-		// ƒeƒNƒXƒ`ƒƒ‚ğ‚P‚Â‚¾‚¯‰ğ•ú
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ï¼‘ã¤ã ã‘è§£æ”¾
 		else
 		{
 			it = _shaders.find(_name);
@@ -103,7 +103,7 @@ namespace KMT {
 		_effect->SetTechnique(_technique);
 	}
 
-	void Shader::SetWVPMatrix(const CMatrix& wvp) const
+	void Shader::SetWVPMatrix(const Matrix& wvp) const
 	{
 		_effect->SetMatrix(_wvp, (D3DXMATRIX*)&wvp);
 	}
@@ -140,12 +140,12 @@ namespace KMT {
 
 	D3DXHANDLE* Shader::GetHandle(const std::string &path) 
 	{
-		// ƒCƒeƒŒ[ƒ^‚ğ—pˆÓ
+		// ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã‚’ç”¨æ„
 		std::unordered_map<std::string, D3DXHANDLE>::iterator it = _handles.find(path);
 
 		if(it != _handles.end())
 			return &(*it).second;
-		// Œ©‚Â‚©‚ç‚È‚¢ê‡(‚±‚±‚É—ˆ‚½ê‡ƒGƒ‰[”­¶)
+		// è¦‹ã¤ã‹ã‚‰ãªã„å ´åˆ(ã“ã“ã«æ¥ãŸå ´åˆã‚¨ãƒ©ãƒ¼ç™ºç”Ÿ)
 		return NULL;
 	}
 
@@ -164,20 +164,20 @@ namespace KMT {
 		
 		std::unordered_map<std::string, ShaderSP>::iterator it = _shaders.find(path);
 		ShaderSP shader;
-		// ‘¶İ‚µ‚½‚ç‘æ“ñ—v‘f‚ğ•Ô‚·
+		// å­˜åœ¨ã—ãŸã‚‰ç¬¬äºŒè¦ç´ ã‚’è¿”ã™
 		if(it != _shaders.end())
 		{
 			shader = (*it).second;
 			return shader;
 		}
-		// ‘¶İ‚µ‚È‚¯‚ê‚ÎV‚µ‚­ƒ[ƒh
+		// å­˜åœ¨ã—ãªã‘ã‚Œã°æ–°ã—ããƒ­ãƒ¼ãƒ‰
 		shader = ShaderSP(new ShaderNormal());
-		// ƒnƒbƒVƒ…ƒ}ƒbƒv‚É‘}“ü
+		// ãƒãƒƒã‚·ãƒ¥ãƒãƒƒãƒ—ã«æŒ¿å…¥
 		_shaders.insert(std::make_pair(path, shader));
 		return shader;
 	}
 
-	void ShaderNormal::ApplyEffect(const CMatrix& rotation, const Vector4& cameraPosition)
+	void ShaderNormal::ApplyEffect(const Matrix& rotation, const Vector4& cameraPosition)
 	{
 		return;
 	}

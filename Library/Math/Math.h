@@ -1,5 +1,5 @@
-//*********************************************
-// ‰‰Z‚ÌŠg’£ŠÖ”
+ï»¿//*********************************************
+// æ¼”ç®—ã®æ‹¡å¼µé–¢æ•°
 // Last Update : 2013.11.29
 // Yuta Komatsu
 //*********************************************
@@ -10,50 +10,31 @@
 namespace KMT {
 
 	class Vector3;
-	class CQuaternion;
+	class Quaternion;
 
-	extern const Vector3 AXIS_X;
-	extern const Vector3 AXIS_Y;
-	extern const Vector3 AXIS_Z;
+	// Xè»¸å‘¨ã‚Šã®å›è»¢ã‚’è¡¨ã™ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’å–å¾—
+	Quaternion RotationX(float angle);
+	// Yè»¸å‘¨ã‚Šã®å›è»¢ã‚’è¡¨ã™ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’å–å¾—
+	Quaternion RotationY(float angle);
+	// Zè»¸å‘¨ã‚Šã®å›è»¢ã‚’è¡¨ã™ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‚’å–å¾—
+	Quaternion RotationZ(float angle);
 
-	// X²ü‚è‚Ì‰ñ“]‚ğ•\‚·ƒNƒH[ƒ^ƒjƒIƒ“‚ğæ“¾
-	CQuaternion RotationX(float angle);
-	// Y²ü‚è‚Ì‰ñ“]‚ğ•\‚·ƒNƒH[ƒ^ƒjƒIƒ“‚ğæ“¾
-	CQuaternion RotationY(float angle);
-	// Z²ü‚è‚Ì‰ñ“]‚ğ•\‚·ƒNƒH[ƒ^ƒjƒIƒ“‚ğæ“¾
-	CQuaternion RotationZ(float angle);
-
-	// üŒ`•âŠÔ
-	// Œ‹‰Ê‚Ìfloat’l‚ğ¶¬
-	// f=0‚Ì‚Æ‚«aAf=1‚Ì‚Æ‚«b‚Æ‚È‚é
-	inline float Interpolate(float a, float b, float f)
+	// ç·šå½¢è£œé–“
+	// çµæœã®floatå€¤ã‚’ç”Ÿæˆ
+	// f=0ã®ã¨ãaã€f=1ã®ã¨ãbã¨ãªã‚‹
+	inline float Lerp(float a, float b, float f)
 	{
 		return a * (1 - f) + b * f;
 	}
 
-	// üŒ`•âŠÔ
-	// Œ‹‰Ê‚ÌCVector3‚ğ¶¬
-	// ã‹L‚ÌfloatüŒ`•âŠÔŠÖ”‚ğg—p
-	Vector3 Interpolate(const Vector3 &v1, const Vector3 &v2, float f);
+	// çƒé¢ç·šå½¢è£œé–“
+	// f = 0ã®ã¨ãa, f = 1ã®ã¨ãb
+	// æ©Ÿèƒ½ã¯è©²å½“ã™ã‚‹ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã¨åŒç­‰
+	Quaternion SphericalLerp(const Quaternion& a, const Quaternion& b, float f);
 
-	// ‹…–ÊüŒ`•âŠÔ
-	// f = 0‚Ì‚Æ‚«v1, f = 1‚Ì‚Æ‚«v2
-	// ‹@”\‚ÍŠY“–‚·‚éƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Æ“¯“™
-	CQuaternion Interpolate(const CQuaternion& q1, const CQuaternion& q2, float f);
-
-	// ƒNƒH[ƒ^“ñƒIƒ“‚Ì·•ª
-	// pQ1 : 
-	// pQ2 : 
-	// return : ‰‰ZŒ‹‰Ê‚ÌƒNƒH[ƒ^ƒjƒIƒ“
-	// tips1 : pQ1 -> pQ2 ‚Ö‚Ì·•ª
-	// tips2 : ‚±‚ÌŠÖ”‚Ì–ß‚è’l‚ÍpOut‚Ì–ß‚è’l‚Æ“¯‚¶‚Å‚ ‚éB•Ê‚ÌŠÖ”‚Ìˆø”‚Æ‚µ‚Ä‚àˆµ‚¦‚éB
-	CQuaternion* QuaternionDelta(CQuaternion *pOut, const CQuaternion *pQ1, const CQuaternion *pQ2);
-
-	// “_‚Æ•½–Ê‚Ì‹——£‚ğo‚·
-	// vPt : “_‚ÌÀ•W
-	// vPNml : •½–Ê‚Ì–@ü
-	// vPPt : •½–Êã‚ÌÀ•W
-	// return : Œ‹‰Ê‚Ì‹——£
-	float DistancePointPlane(D3DXVECTOR3 vPt, D3DXVECTOR3 vPNml, D3DXVECTOR3 vPPt);
-
+	// ã‚¯ã‚©ãƒ¼ã‚¿äºŒã‚ªãƒ³ã®å·®åˆ†1
+	// return : æ¼”ç®—çµæœã®ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³
+	// tips1 : a -> b ã¸ã®å·®åˆ†
+	// tips2 : ã“ã®é–¢æ•°ã®æˆ»ã‚Šå€¤ã¯outã®æˆ»ã‚Šå€¤ã¨åŒã˜ã§ã‚ã‚‹ã€‚åˆ¥ã®é–¢æ•°ã®å¼•æ•°ã¨ã—ã¦ã‚‚æ‰±ãˆã‚‹ã€‚
+	Quaternion* QuaternionDelta(Quaternion *out, const Quaternion *a, const Quaternion *b);
 }

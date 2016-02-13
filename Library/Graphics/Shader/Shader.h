@@ -1,5 +1,5 @@
-//*********************************************************************
-// ƒVƒF[ƒ_[ƒNƒ‰ƒX
+ï»¿//*********************************************************************
+// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚¯ãƒ©ã‚¹
 // Last Update : 2013.12.11
 // Yuta Komatsu
 //*********************************************************************
@@ -30,7 +30,7 @@ namespace KMT {
 			END = false
 		};
 
-		// ƒtƒHƒO‚Ìí—Ş
+		// ãƒ•ã‚©ã‚°ã®ç¨®é¡
 		enum FogType
 		{
 			LINEAR_DISTANCE_FOG,
@@ -38,73 +38,73 @@ namespace KMT {
 			HEIGHT_FOG
 		};
 
-		// ƒfƒXƒgƒ‰ƒNƒ^
+		// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		~Shader();
 		
-		// ”jŠü
+		// ç ´æ£„
 		static void Destroy(std::string name = "all");
 
-		//* æ“¾ *//
-		// ƒGƒtƒFƒNƒg
+		//* å–å¾— *//
+		// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
 		inline LPD3DXEFFECT GetEffect() { return _effect; }
-		// ƒnƒ“ƒhƒ‹
-		inline D3DXHANDLE* GetWVP() { return &_wvp; }	// ƒ[ƒ‹ƒh * ƒrƒ…[ * ƒvƒƒWƒFƒNƒVƒ‡ƒ“
-		D3DXHANDLE* GetHandle(const std::string &path);	// w’è‚µ‚Äæ“¾
+		// ãƒãƒ³ãƒ‰ãƒ«
+		inline D3DXHANDLE* GetWVP() { return &_wvp; }	// ãƒ¯ãƒ¼ãƒ«ãƒ‰ * ãƒ“ãƒ¥ãƒ¼ * ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³
+		D3DXHANDLE* GetHandle(const std::string &path);	// æŒ‡å®šã—ã¦å–å¾—
 		
-		//* ƒVƒF[ƒ_[İ’è *//
-		// ƒAƒNƒeƒBƒu‚ÈƒeƒNƒjƒbƒN‚ğƒVƒF[ƒ_[‚Éİ’è
+		//* ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼è¨­å®š *//
+		// ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªãƒ†ã‚¯ãƒ‹ãƒƒã‚¯ã‚’ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«è¨­å®š
 		void SetTechnique() const;
-		// ƒ[ƒ‹ƒh * ƒrƒ…[ * ƒvƒƒWƒFƒNƒVƒ‡ƒ“ s—ñ‚ğƒVƒF[ƒ_[‚Éİ’è
-		void SetWVPMatrix(const CMatrix& wvp) const;
-		// ƒJƒ‰[‚ğƒVƒF[ƒ_[‚Éİ’è
+		// ãƒ¯ãƒ¼ãƒ«ãƒ‰ * ãƒ“ãƒ¥ãƒ¼ * ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³ è¡Œåˆ—ã‚’ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«è¨­å®š
+		void SetWVPMatrix(const Matrix& wvp) const;
+		// ã‚«ãƒ©ãƒ¼ã‚’ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«è¨­å®š
 		void SetColor(const Vector4& color) const;
-		// ƒeƒNƒXƒ`ƒƒ‚ğƒVƒF[ƒ_[‚Éİ’è
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«è¨­å®š
 		void SetTexture(const LPDIRECT3DTEXTURE9 texture) const;
-		// ƒVƒF[ƒ_[‚Ìg—pŠJn
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ä½¿ç”¨é–‹å§‹
 		void BeginShader() const;
-		// ƒVƒF[ƒ_[‚Ìg—pI—¹
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ä½¿ç”¨çµ‚äº†
 		void EndShader() const;
-		// ƒpƒX‚Ìg—p
+		// ãƒ‘ã‚¹ã®ä½¿ç”¨
 		void BeginPass(const bool addsBlend);
-		// ƒpƒX‚ÌI—¹
+		// ãƒ‘ã‚¹ã®çµ‚äº†
 		void EndPass();
-		// “Á—L‚ÌƒVƒF[ƒ_[İ’è(ƒˆ‰¼‘zŠÖ”)
-		// rotation : ‰ñ“]s—ñ
-		// cameraPosition : ƒJƒƒ‰‚Ì‹“_‚ÌÀ•W
-		virtual void ApplyEffect(const CMatrix &rotation, const Vector4& cameraPosition) = 0;
+		// ç‰¹æœ‰ã®ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼è¨­å®š(ç´”ç²‹ä»®æƒ³é–¢æ•°)
+		// rotation : å›è»¢è¡Œåˆ—
+		// cameraPosition : ã‚«ãƒ¡ãƒ©ã®è¦–ç‚¹ã®åº§æ¨™
+		virtual void ApplyEffect(const Matrix &rotation, const Vector4& cameraPosition) = 0;
 
-		//* ƒpƒ‰ƒ[ƒ^[İ’è *//
-		// ƒ‰ƒCƒg‚ÌÀ•W
+		//* ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼è¨­å®š *//
+		// ãƒ©ã‚¤ãƒˆã®åº§æ¨™
 		inline void SetLightDirection(Vector4 direction) { _lightDirection = direction; }
 		inline void SetLightDirection(const float x, const float y, const float z) { _lightDirection = Vector4(x, y, z, 0.0f); }
-		// ŠÂ‹«Œõ
+		// ç’°å¢ƒå…‰
 		inline void SetAmbient(const float ambient) { _ambient = ambient; }
-		// ƒXƒyƒLƒ…ƒ‰[”ÍˆÍ
+		// ã‚¹ãƒšã‚­ãƒ¥ãƒ©ãƒ¼ç¯„å›²
 		inline void SetSpecular(const float specular) { _specular = specular; }
-		// ƒXƒyƒLƒ…ƒ‰[‹­“x
+		// ã‚¹ãƒšã‚­ãƒ¥ãƒ©ãƒ¼å¼·åº¦
 		inline void SetSpecularPower(const float specularPower) { _specularPower = specularPower; }
-		// ƒtƒHƒOƒJƒ‰[
+		// ãƒ•ã‚©ã‚°ã‚«ãƒ©ãƒ¼
 		inline void SetFogColor(const Vector4& fogColor) { _fogColor = fogColor; }
-		// ƒtƒHƒO‚Ìƒpƒ‰ƒ[ƒ^[‚Ìİ’è
+		// ãƒ•ã‚©ã‚°ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãƒ¼ã®è¨­å®š
 		inline void SetFogRange(const float param1, const float param2) { _fogRange = Vector4(param1, param2, 0, 0); }
 
 	protected :
-		// g—p‚·‚éƒVƒF[ƒ_[ƒtƒ@ƒCƒ‹–¼
+		// ä½¿ç”¨ã™ã‚‹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«å
 		std::string	_path;
-		// ŠÂ‹«Œõ
+		// ç’°å¢ƒå…‰
 		float _ambient;
-		// •½sŒõŒ¹
+		// å¹³è¡Œå…‰æº
 		Vector4 _lightDirection;
-		// ƒXƒyƒLƒ…ƒ‰[‚Ì”ÍˆÍ
+		// ã‚¹ãƒšã‚­ãƒ¥ãƒ©ãƒ¼ã®ç¯„å›²
 		float _specular;
-		// ƒXƒyƒLƒ…ƒ‰[‚Ì‹­“x
+		// ã‚¹ãƒšã‚­ãƒ¥ãƒ©ãƒ¼ã®å¼·åº¦
 		float _specularPower;
-		// ƒtƒHƒOƒJƒ‰[
+		// ãƒ•ã‚©ã‚°ã‚«ãƒ©ãƒ¼
 		Vector4 _fogColor;
-		// ƒtƒHƒO‚Ì”ÍˆÍ
+		// ãƒ•ã‚©ã‚°ã®ç¯„å›²
 		Vector4 _fogRange;
 
-		// ƒVƒF[ƒ_[‚Ìƒ^ƒCƒv‚Ì—ñ‹“Œ^
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ã‚¿ã‚¤ãƒ—ã®åˆ—æŒ™å‹
 		enum ShaderType_
 		{
 			SHADER_NORMAL,
@@ -114,27 +114,27 @@ namespace KMT {
 			SHADER_TOON,
 			SHADER_TYPEMAX
 		};
-		// ƒVƒF[ƒ_[‚Ìƒ^ƒCƒv
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ã‚¿ã‚¤ãƒ—
 		size_t _type;
 
-		// ƒGƒtƒFƒNƒg‚Ìİ’è‚Æ–â‚¢‡‚í‚¹A‚¨‚æ‚ÑƒeƒNƒjƒbƒN‚Ì‘I‘ğ
-		// “Š‡‚·‚éƒ|ƒCƒ“ƒ^
-		// ƒVƒF[ƒ_–{‘Ì
+		// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®è¨­å®šã¨å•ã„åˆã‚ã›ã€ãŠã‚ˆã³ãƒ†ã‚¯ãƒ‹ãƒƒã‚¯ã®é¸æŠ
+		// çµ±æ‹¬ã™ã‚‹ãƒã‚¤ãƒ³ã‚¿
+		// ã‚·ã‚§ãƒ¼ãƒ€æœ¬ä½“
 		LPD3DXEFFECT _effect;
-		// ƒeƒNƒjƒbƒN
+		// ãƒ†ã‚¯ãƒ‹ãƒƒã‚¯
 		D3DXHANDLE _technique;
-		// ƒ[ƒ‹ƒh x ƒrƒ…[ x ƒvƒƒWƒFƒNƒVƒ‡ƒ“
+		// ãƒ¯ãƒ¼ãƒ«ãƒ‰ x ãƒ“ãƒ¥ãƒ¼ x ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³
 		D3DXHANDLE _wvp;
-		// ƒfƒBƒtƒ…[ƒYF
+		// ãƒ‡ã‚£ãƒ•ãƒ¥ãƒ¼ã‚ºè‰²
 		D3DXHANDLE _color;
-		// ƒeƒNƒXƒ`ƒƒ
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£
 		D3DXHANDLE _sourceTexture;
-		// ƒVƒF[ƒ_[‚É“n‚·ƒnƒ“ƒhƒ‹‚ğ“o˜^‚µ‚½ƒnƒbƒVƒ…ƒ}ƒbƒv
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«æ¸¡ã™ãƒãƒ³ãƒ‰ãƒ«ã‚’ç™»éŒ²ã—ãŸãƒãƒƒã‚·ãƒ¥ãƒãƒƒãƒ—
 		std::unordered_map<std::string, D3DXHANDLE> _handles;
-		// ƒVƒF[ƒ_[ŠÇ—ƒnƒbƒVƒ…ƒ}ƒbƒv”z—ñ
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ç®¡ç†ãƒãƒƒã‚·ãƒ¥ãƒãƒƒãƒ—é…åˆ—
 		static std::unordered_map<std::string, ShaderSP> _shaders;
 
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		Shader();
 		Shader(std::string xmlPath);
 
@@ -147,15 +147,15 @@ namespace KMT {
 	class ShaderNormal : public Shader
 	{
 	public :
-		// ƒfƒXƒgƒ‰ƒNƒ^
+		// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		~ShaderNormal() { }
-		// ƒVƒF[ƒ_[¶¬
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ç”Ÿæˆ
 		static ShaderSP Create();
-		// ƒ‚ƒfƒ‹‚É‘Î‚·‚éƒGƒtƒFƒNƒg“K—p
-		void ApplyEffect(const CMatrix& rotation, const Vector4& cameraPosition);
+		// ãƒ¢ãƒ‡ãƒ«ã«å¯¾ã™ã‚‹ã‚¨ãƒ•ã‚§ã‚¯ãƒˆé©ç”¨
+		void ApplyEffect(const Matrix& rotation, const Vector4& cameraPosition);
 
 	private :
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		ShaderNormal();
 
 	};

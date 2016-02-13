@@ -1,4 +1,4 @@
-#include "DXUT.h"
+ï»¿#include "DXUT.h"
 #include "GraphicalPlane.h"
 
 #include "../../Shader/Shader.h"
@@ -9,7 +9,7 @@
 #include <sstream>
 
 using namespace KMT;
-static void GetBillBoardRotation(Vector3* billBoardPosition, Vector3* targetPosition, CMatrix* rotation )
+static void GetBillBoardRotation(Vector3* billBoardPosition, Vector3* targetPosition, Matrix* rotation )
 {
 	D3DXMatrixIdentity((D3DXMATRIX*)rotation);
 	D3DXMatrixLookAtLH(rotation, (D3DXVECTOR3*)targetPosition, (D3DXVECTOR3*)billBoardPosition, &D3DXVECTOR3(0, 1, 0));
@@ -31,18 +31,18 @@ namespace KMT
 
 	bool GraphicalPlane::GenerateBoard(const std::string& path, const int &width, const int &height, const TextureSP &texture)
 	{
-		// ƒL[ƒl[ƒ€İ’è
+		// ã‚­ãƒ¼ãƒãƒ¼ãƒ è¨­å®š
 		std::stringstream nameBuffer("");
-		// ƒtƒ@ƒCƒ‹ƒpƒX¨¶¬”Ô†¨•‚‚³‚Ì‡‚Å’Ç‰Á
+		// ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹â†’ç”Ÿæˆç•ªå·â†’å¹…é«˜ã•ã®é †ã§è¿½åŠ 
 		nameBuffer << path << ++_createCount << width << height;
 		std::string name = nameBuffer.str();
-		// ƒƒbƒVƒ…ƒCƒ“ƒXƒ^ƒ“ƒX‚Ì¶¬
+		// ãƒ¡ãƒƒã‚·ãƒ¥ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ç”Ÿæˆ
 		_mesh = Mesh::CreateEmpty(name);
-		// ƒTƒCƒY‚ğ‹L˜^
+		// ã‚µã‚¤ã‚ºã‚’è¨˜éŒ²
 		_size.x = (float)width ;
 		_size.y = (float)height ;
 		//_size.z = 0 ;
-		// ƒeƒNƒXƒ`ƒƒw’è‚ª‚ ‚éê‡‚»‚ÌƒTƒCƒY‚ğæ“¾
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£æŒ‡å®šãŒã‚ã‚‹å ´åˆãã®ã‚µã‚¤ã‚ºã‚’å–å¾—
 		if(texture != NULL)
 		{
 			while(UINT(_textureSize.x) < _texture->GetImageInfo().Width)
@@ -54,14 +54,14 @@ namespace KMT
 				_textureSize.y *= 2;
 			}
 		}
-		// ƒVƒF[ƒ_[İ’è
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼è¨­å®š
 		_shader = ShaderNormal::Create();
-		// ƒƒbƒVƒ…‚ğ¶¬‚·‚é
+		// ãƒ¡ãƒƒã‚·ãƒ¥ã‚’ç”Ÿæˆã™ã‚‹
 		LPD3DXMESH mesh;
 		if (FAILED(D3DXCreateMeshFVF(2, 4, D3DXMESH_MANAGED, Vertex::FVF, GraphicsManager::_device, &mesh)))
 			return false;
 
-		//’¸“_ƒf[ƒ^‚Ìì¬
+		//é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿ã®ä½œæˆ
 		Vertex* vertex;
 		mesh->LockVertexBuffer(0, (void**)&vertex);
 		for (int y = 0 ; y < 2 ; y++) {
@@ -94,7 +94,7 @@ namespace KMT
 			vertex[3]._uv.y = (float)_rects[_number].top / _texture->GetImageInfo().Height;
 		}
 		mesh->UnlockVertexBuffer();
-		//ƒCƒ“ƒfƒbƒNƒXƒf[ƒ^‚Ìì¬
+		//ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒ‡ãƒ¼ã‚¿ã®ä½œæˆ
 		WORD *index;
 		mesh->LockIndexBuffer(0, (void **)&index);
 		index[0] = 0;
@@ -124,11 +124,11 @@ namespace KMT
 
 	void GraphicalPlane::LoadTexture(const std::string &path, const int &divisionX, const int &divisionY, const int &sizeX, const int &sizeY)
 	{
-		// ƒŠƒ\[ƒX‚©‚çƒeƒNƒXƒ`ƒƒ‚ğ¶¬
+		// ãƒªã‚½ãƒ¼ã‚¹ã‹ã‚‰ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ç”Ÿæˆ
 		LoadTextureAndAnimation(path, divisionX, divisionY, D3DX_DEFAULT);
-		// ƒCƒ[ƒWƒTƒCƒY‚É‡‚í‚¹‚Ä”Âƒ|ƒŠƒSƒ“‚ğ¶¬
+		// ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚µã‚¤ã‚ºã«åˆã‚ã›ã¦æ¿ãƒãƒªã‚´ãƒ³ã‚’ç”Ÿæˆ
 		(sizeX == 0 && sizeY == 0) ? GenerateBoard(path, (int)_imageSize.x, (int)_imageSize.y, _texture) : GenerateBoard(_path, sizeX, sizeY, _texture);
-		// ƒeƒNƒXƒ`ƒƒ[‚ğ‘}“ü
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ã‚’æŒ¿å…¥
 		SetTexture(_texture);
 	}
 
@@ -141,11 +141,11 @@ namespace KMT
 
 	GraphicalPlaneSP GraphicalPlane::CreateFromTexture(const std::string &path, const int &divisionX, const int &divisionY, const int &sizeX, const int &sizeY)
 	{
-		// ƒCƒ[ƒWƒTƒCƒY‚É‡‚í‚¹‚Ä”Âƒ|ƒŠ‚ğ¶¬
+		// ã‚¤ãƒ¡ãƒ¼ã‚¸ã‚µã‚¤ã‚ºã«åˆã‚ã›ã¦æ¿ãƒãƒªã‚’ç”Ÿæˆ
 		GraphicalPlane *object = new GraphicalPlane();
-		// ƒeƒNƒXƒ`ƒƒ¶¬
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ç”Ÿæˆ
 		object->LoadTexture(path, divisionX, divisionY, sizeX, sizeY);
-		// ì¬‚µ‚½ƒIƒuƒWƒFƒNƒg‚ğ•Ô‚·
+		// ä½œæˆã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿”ã™
 		return GraphicalPlaneSP(object);
 	}
 
@@ -157,12 +157,12 @@ namespace KMT
 		return GraphicalPlaneSP(object);
 	}
 
-	void GraphicalPlane::Render(const CCamera* camera) 
+	void GraphicalPlane::Render(const Camera* camera) 
 	{
-		// •`‰æ‚µ‚È‚¢‚È‚ç‚±‚±‚ÅŠÖ”I—¹
+		// æç”»ã—ãªã„ãªã‚‰ã“ã“ã§é–¢æ•°çµ‚äº†
 		if(!_renders)
 			return;
-		// •ªŠ„“Ç‚İ‚İ‚µ‚½ê‡‚Ì‰æ‘œ”ÍˆÍ‘I‘ğ
+		// åˆ†å‰²èª­ã¿è¾¼ã¿ã—ãŸå ´åˆã®ç”»åƒç¯„å›²é¸æŠ
 		if(_previousNumber != _number)
 		{
 			Vertex* vertex;
@@ -178,90 +178,77 @@ namespace KMT
 			_mesh->GetMesh()->UnlockIndexBuffer();
 			_previousNumber = _number;
 		}
-		// ƒ[ƒ‹ƒhs—ñİ’è
-		CMatrix SclMtx, RotMtx, PosMtx, WldMtx, WVPMtx;
-		// Šgk
-		D3DXMatrixScaling(&SclMtx, Scale.x, Scale.y, Scale.z);
-		// ‰ñ“]
-		// ƒNƒH[ƒ^ƒjƒIƒ“‚©‰ñ“]s—ñ‚©XYZw’è‚©
-		switch(CurrentRotateType)
-		{
-		case ROTATE_TYPE::QUATERNION :
-			D3DXMatrixRotationQuaternion(&RotMtx, &qRotation);
-			break;
-
-		case ROTATE_TYPE::MATRIX :
-			mRotationWorld = mRotationX * mRotationY * mRotationZ;
-			RotMtx = mRotationWorld;
-			break;
-
-		case ROTATE_TYPE::XYZ :
-			D3DXMatrixRotationYawPitchRoll( &RotMtx, vRotation.y, vRotation.x, vRotation.z );
-			break;
-		}
-		// ƒrƒ‹ƒ{[ƒh‚Ìê‡
+		// ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—è¨­å®š
+		Matrix SclMtx, RotMtx, PosMtx, WldMtx, WVPMtx;
+		// æ‹¡ç¸®
+		D3DXMatrixScaling(&SclMtx, _scale.x, _scale.y, _scale.z);
+		// å›è»¢
+		// ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‹å›è»¢è¡Œåˆ—ã‹XYZæŒ‡å®šã‹
+		this->Evaluate();
+		RotMtx = _worldRotationMatrix;
+		// ãƒ“ãƒ«ãƒœãƒ¼ãƒ‰ã®å ´åˆ
 		if(_isBillBoard)
 		{
-			Vector3 cameraPosition = camera->getEye() ;
-			GetBillBoardRotation(&Position, &cameraPosition, &RotMtx);
+			Vector3 cameraPosition = camera->GetEye() ;
+			GetBillBoardRotation(&_position, &cameraPosition, &RotMtx);
 		}
-		// ˆÊ’u
-		D3DXMatrixTranslation(&PosMtx, Position.x, Position.y, Position.z);
-		// ƒJƒŠƒ“ƒO‚ğİ’è
+		// ä½ç½®
+		D3DXMatrixTranslation(&PosMtx, _position.x, _position.y, _position.z);
+		// ã‚«ãƒªãƒ³ã‚°ã‚’è¨­å®š
 		GraphicsManager::_device->SetRenderState(D3DRS_CULLMODE, _cullingState);
-		// ƒfƒoƒbƒO—p
+		// ãƒ‡ãƒãƒƒã‚°ç”¨
 		//GraphicsManager::_device->SetRenderState( D3DRS_FILLMODE, D3DFILL_WIREFRAME );
-		// ƒVƒF[ƒ_‚ğg—p‚·‚éê‡ƒJƒƒ‰‚Ìƒrƒ…[s—ñ(0)AƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ(1)‚ğƒ[ƒ‹ƒhs—ñ‚É‡¬
+		// ã‚·ã‚§ãƒ¼ãƒ€ã‚’ä½¿ç”¨ã™ã‚‹å ´åˆã‚«ãƒ¡ãƒ©ã®ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—(0)ã€ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—(1)ã‚’ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã«åˆæˆ
 		WldMtx = SclMtx * RotMtx * PosMtx;
-		WVPMtx = WldMtx * camera->getMatrix(CViewBehavior::VIEW) * camera->getMatrix(CViewBehavior::PROJECTION);
-		// ƒJƒƒ‰‚ÌÀ•W‚ğƒVƒF[ƒ_‚Ég—p‚·‚é‚½‚ß‚Ìs—ñ•ÏŠ·
-		CMatrix CamMtx = WldMtx * camera->getMatrix(CViewBehavior::VIEW);
+		WVPMtx = WldMtx * camera->GetMatrix(ViewBehavior::VIEW) * camera->GetMatrix(ViewBehavior::PROJECTION);
+		// ã‚«ãƒ¡ãƒ©ã®åº§æ¨™ã‚’ã‚·ã‚§ãƒ¼ãƒ€ã«ä½¿ç”¨ã™ã‚‹ãŸã‚ã®è¡Œåˆ—å¤‰æ›
+		Matrix CamMtx = WldMtx * camera->GetMatrix(ViewBehavior::VIEW);
 		D3DXMatrixInverse(&CamMtx, NULL, &CamMtx);
 		Vector4 EyePos = Vector4(
-			camera->getEye().x, 
-			camera->getEye().y, 
-			camera->getEye().z, 
+			camera->GetEye().x, 
+			camera->GetEye().y, 
+			camera->GetEye().z, 
 			1
 			);
 		EyePos.Transform(CamMtx);
 		D3DXVec4Normalize((D3DXVECTOR4*)&EyePos, (D3DXVECTOR4*)&EyePos);
-		// ƒVƒF[ƒ_İ’è
+		// ã‚·ã‚§ãƒ¼ãƒ€è¨­å®š
 		_shader->SetTechnique();
-		// ƒVƒF[ƒ_‚Éƒ[ƒ‹ƒh * ƒrƒ…[ * ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚ğ“n‚·
+		// ã‚·ã‚§ãƒ¼ãƒ€ã«ãƒ¯ãƒ¼ãƒ«ãƒ‰ * ãƒ“ãƒ¥ãƒ¼ * ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã‚’æ¸¡ã™
 		_shader->SetWVPMatrix(WVPMtx);
-		// ƒVƒF[ƒ_[“Á—L‚Ì’l‚Ìİ’è
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ç‰¹æœ‰ã®å€¤ã®è¨­å®š
 		_shader->ApplyEffect(RotMtx, EyePos);
 
 		HRESULT hr;
-		// 3D ƒ‚ƒfƒ‹‚Ìƒp[ƒc•ªƒ‹[ƒv‚µ‚Ä•`‰æ
+		// 3D ãƒ¢ãƒ‡ãƒ«ã®ãƒ‘ãƒ¼ãƒ„åˆ†ãƒ«ãƒ¼ãƒ—ã—ã¦æç”»
 		for(size_t i = 0 ; i < _mesh->GetMaterialNumber(); i++)
 		{
-			// ƒeƒNƒXƒ`ƒƒ‚ª‘¶İ‚µ‚È‚¢ê‡‚ÌƒJƒ‰[
+			// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãŒå­˜åœ¨ã—ãªã„å ´åˆã®ã‚«ãƒ©ãƒ¼
 			D3DXVECTOR4 vec4 = D3DXVECTOR4(1.0,1.0,1.0,1.0);
-			// Šiƒp[ƒc‚É‘Î‰‚·‚éƒeƒNƒXƒ`ƒƒ‚ğİ’è
-			// ƒVƒF[ƒ_‚ÉƒeƒNƒXƒ`ƒƒ‚ğ“n‚·
+			// æ ¼ãƒ‘ãƒ¼ãƒ„ã«å¯¾å¿œã™ã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’è¨­å®š
+			// ã‚·ã‚§ãƒ¼ãƒ€ã«ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’æ¸¡ã™
 			if(NULL != _textures[i])
 			{
 				LPDIRECT3DTEXTURE9 texture = _textures[i]->GetTextureData();
-				// ƒVƒF[ƒ_‚ÉƒJƒ‰[‚ğ“n‚·
+				// ã‚·ã‚§ãƒ¼ãƒ€ã«ã‚«ãƒ©ãƒ¼ã‚’æ¸¡ã™
 				_shader->SetColor(_colorRGBA);
 				_shader->SetTexture(texture);
 			}else
 				_shader->SetColor(vec4);
 
-			// ƒVƒF[ƒ_‚Ìg—pŠJn
+			// ã‚·ã‚§ãƒ¼ãƒ€ã®ä½¿ç”¨é–‹å§‹
 			_shader->BeginShader();
-			// ƒVƒF[ƒ_‚ÌƒpƒXİ’è
+			// ã‚·ã‚§ãƒ¼ãƒ€ã®ãƒ‘ã‚¹è¨­å®š
 			_shader->BeginPass(_addsBlend);
-			// ƒp[ƒc‚Ì•`‰æ	
+			// ãƒ‘ãƒ¼ãƒ„ã®æç”»	
 			if(SUCCEEDED(GraphicsManager::_device->BeginScene()))
 			{
 				_mesh->GetMesh()->DrawSubset(i); 
 				V(GraphicsManager::_device->EndScene());
 			}
-			// ƒpƒXI—¹
+			// ãƒ‘ã‚¹çµ‚äº†
 			_shader->EndPass();
-			// ƒVƒF[ƒ_I—¹
+			// ã‚·ã‚§ãƒ¼ãƒ€çµ‚äº†
 			_shader->EndShader();
 		}
 	}

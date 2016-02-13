@@ -1,5 +1,5 @@
-//*********************************************************************
-// ƒIƒtƒXƒNƒŠ[ƒ“ƒŒƒ“ƒ_ƒŠƒ“ƒOƒNƒ‰ƒX
+ï»¿//*********************************************************************
+// ã‚ªãƒ•ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã‚¯ãƒ©ã‚¹
 // Last Update : 2014.2.5
 // Yuta Komatsu
 //*********************************************************************
@@ -35,38 +35,38 @@ namespace KMT {
 	class Layer
 	{
 	public :
-		// ƒJƒƒ‰
-		CCameraSP _camera3D;
-		CCameraSP _camera2D;
-		// ”Âƒ|ƒŠƒ‚ƒfƒ‹
+		// ã‚«ãƒ¡ãƒ©
+		CameraSP _camera3D;
+		CameraSP _camera2D;
+		// æ¿ãƒãƒªãƒ¢ãƒ‡ãƒ«
 		GPlaneSP _board;
 
-		// ƒfƒXƒgƒ‰ƒNƒ^
+		// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		~Layer();
 
-		// ¶¬
+		// ç”Ÿæˆ
 		static LayerSP Create(size_t width, size_t height);
-		// ƒŒƒ“ƒ_ƒŠƒ“ƒOƒŠƒXƒg‚Ì’†g‚ð‚·‚×‚Ä•`‰æ
+		// ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ãƒªã‚¹ãƒˆã®ä¸­èº«ã‚’ã™ã¹ã¦æç”»
 		void Render();
-		// ƒŒƒ“ƒ_ƒŠƒ“ƒOƒŠƒXƒg‚ÉƒIƒuƒWƒFƒNƒg‚ð’Ç‰Á‚·‚é
-		// object ’Ç‰Á‚·‚éƒIƒuƒWƒFƒNƒg
-		// list ‚Ç‚ÌƒŒƒ“ƒ_ƒŠƒ“ƒOƒŠƒXƒg‚É’Ç‰Á‚·‚é‚©
+		// ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ãƒªã‚¹ãƒˆã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿½åŠ ã™ã‚‹
+		// object è¿½åŠ ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		// list ã©ã®ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ãƒªã‚¹ãƒˆã«è¿½åŠ ã™ã‚‹ã‹
 		inline void Add(GraphicBehaviorWP object, RenderState list) 
 		{
 			_renderLists[list]->push_back(object);
 		}
 
 	private :
-		// ƒŒƒ“ƒ_ƒŠƒ“ƒOƒŠƒXƒg(•`‰æƒŠƒXƒg‚ÌƒnƒbƒVƒ…ƒ}ƒbƒv)
+		// ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ãƒªã‚¹ãƒˆ(æç”»ãƒªã‚¹ãƒˆã®ãƒãƒƒã‚·ãƒ¥ãƒžãƒƒãƒ—)
 		std::vector<std::list<GraphicBehaviorWP>*> _renderLists;
-		// ƒŒƒ“ƒ_ƒŠƒ“ƒO‘ÎÛ‚ÌƒeƒNƒXƒ`ƒƒ
+		// ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°å¯¾è±¡ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£
 		TextureSP _texture;
-		// ã‹LƒŒƒ“ƒ_ƒŠƒ“ƒO‘ÎÛ‚ÌƒeƒNƒXƒ`ƒƒ‚ÌƒT[ƒtƒFƒCƒX
+		// ä¸Šè¨˜ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°å¯¾è±¡ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ã‚µãƒ¼ãƒ•ã‚§ã‚¤ã‚¹
 		LPDIRECT3DSURFACE9 _textureSurface;
-		// ƒŒƒ“ƒ_ƒŠƒ“ƒO‘ÎÛ‚ÌƒeƒNƒXƒ`ƒƒ—p[“xƒoƒbƒtƒ@
+		// ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°å¯¾è±¡ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ç”¨æ·±åº¦ãƒãƒƒãƒ•ã‚¡
 		LPDIRECT3DSURFACE9 _depthSurface;
 
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		Layer();
 
 	};

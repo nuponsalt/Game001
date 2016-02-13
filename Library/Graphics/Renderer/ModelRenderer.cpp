@@ -1,4 +1,4 @@
-#include "DXUT.h"
+ï»¿#include "DXUT.h"
 #include "ModelRenderer.h"
 #include "../GraphicsManager.h"
 
@@ -11,19 +11,19 @@ namespace KMT {
 
 	void ModelRenderer::LoadFromX(const std::string &path)
 	{
-		// X ƒtƒ@ƒCƒ‹ ‚ÆƒeƒNƒXƒ`ƒƒ‚Ìƒ[ƒh
+		// X ãƒ•ã‚¡ã‚¤ãƒ« ã¨ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ãƒ­ãƒ¼ãƒ‰
 		_mesh = Mesh::CreateFromX(path);
-		// ƒ}ƒeƒŠƒAƒ‹î•ñ‚Ìæ“¾
+		// ãƒãƒ†ãƒªã‚¢ãƒ«æƒ…å ±ã®å–å¾—
 		D3DXMATERIAL *materials = (D3DXMATERIAL*)(_mesh->GetMaterialBuffer()->GetBufferPointer());
-		// ƒeƒNƒXƒ`ƒƒ‚Ìƒ[ƒh
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ãƒ­ãƒ¼ãƒ‰
 		TextureSP texture;
 		for(size_t i = 0; i < _mesh->GetMaterialNumber(); i++){
-			// “Á’è‚Ì•”•ª‚ÅƒeƒNƒXƒ`ƒƒ‚ª‘¶İ‚µ‚È‚¢ê‡
+			// ç‰¹å®šã®éƒ¨åˆ†ã§ãƒ†ã‚¯ã‚¹ãƒãƒ£ãŒå­˜åœ¨ã—ãªã„å ´åˆ
 			if(NULL == materials[i].pTextureFilename){
 				texture = NULL;
 				_textures.push_back(texture);
 				D3DCOLORVALUE value = materials[i].MatD3D.Diffuse;
-				// ƒ}ƒeƒŠƒAƒ‹‚©‚çFî•ñ‚ğæ“¾
+				// ãƒãƒ†ãƒªã‚¢ãƒ«ã‹ã‚‰è‰²æƒ…å ±ã‚’å–å¾—
 				D3DXVECTOR4 color = D3DXVECTOR4(value.r, value.g, value.b, value.a);
 				_diffuseColors.push_back(color);
 				continue;
@@ -31,39 +31,39 @@ namespace KMT {
 			_diffuseColors.push_back(D3DXVECTOR4(0,0,0,0));
 
 			//---------------------------------------------------
-			// ƒeƒNƒXƒ`ƒƒ‚ÌƒpƒX‚ğ©“®“I‚É¶¬
+			// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ãƒ‘ã‚¹ã‚’è‡ªå‹•çš„ã«ç”Ÿæˆ
 
-			// ƒtƒ@ƒCƒ‹ƒpƒX‚Ì‘O•”•ª‚ğŠi”[‚·‚é
+			// ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã®å‰éƒ¨åˆ†ã‚’æ ¼ç´ã™ã‚‹
 			std::string texturePath;
-			// Xƒtƒ@ƒCƒ‹‚ÌƒpƒX‚©‚ç•K—v•”•ª‚¾‚¯”²‚«o‚·
+			// Xãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ã‹ã‚‰å¿…è¦éƒ¨åˆ†ã ã‘æŠœãå‡ºã™
 
-			// "/" "\\"‚ğŒŸõ‚µƒpƒX‚Ì‹æØ‚è‚ÌÅŒã‚Ì•”•ª‚ğŒŸõ‚·‚é
-			// Xƒtƒ@ƒCƒ‹‚ÆƒeƒNƒXƒ`ƒƒ‚Í“¯‚¶ƒtƒHƒ‹ƒ_‚É‚ ‚é‚Æ‚µA
-			// Xƒtƒ@ƒCƒ‹‚Ì‚ ‚éƒtƒHƒ‹ƒ_‚ÌƒpƒX‚Ü‚Å‚ğ”²‚«æ‚é
+			// "/" "\\"ã‚’æ¤œç´¢ã—ãƒ‘ã‚¹ã®åŒºåˆ‡ã‚Šã®æœ€å¾Œã®éƒ¨åˆ†ã‚’æ¤œç´¢ã™ã‚‹
+			// Xãƒ•ã‚¡ã‚¤ãƒ«ã¨ãƒ†ã‚¯ã‚¹ãƒãƒ£ã¯åŒã˜ãƒ•ã‚©ãƒ«ãƒ€ã«ã‚ã‚‹ã¨ã—ã€
+			// Xãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ã‚‹ãƒ•ã‚©ãƒ«ãƒ€ã®ãƒ‘ã‚¹ã¾ã§ã‚’æŠœãå–ã‚‹
 
-			// ƒpƒX‚ÌÅŒã‚Ì"/"‚ğŒŸõ
+			// ãƒ‘ã‚¹ã®æœ€å¾Œã®"/"ã‚’æ¤œç´¢
 			std::size_t index = path.find_last_of("/");
 			if(index != std::string::npos)
 			{
 				texturePath = path.substr(0, index + 1);
 			}
-			// ŠY“–‚È‚µ‚È‚ç"\\"‚ÅÄŒŸõ
+			// è©²å½“ãªã—ãªã‚‰"\\"ã§å†æ¤œç´¢
 			else
 			{
 				index = path.find_last_of("\\");
 				if(index != std::string::npos)
 				{
-					// ƒpƒX‚Ì‹æØ‚è‚ª"\\"‚Ì‚Æ‚«‚Í"\\"‚Ì•”•ª‚ğ‚Í‚¸‚µ‚©‚í‚è‚É"/"‚ğ‚Â‚¯‚é
+					// ãƒ‘ã‚¹ã®åŒºåˆ‡ã‚ŠãŒ"\\"ã®ã¨ãã¯"\\"ã®éƒ¨åˆ†ã‚’ã¯ãšã—ã‹ã‚ã‚Šã«"/"ã‚’ã¤ã‘ã‚‹
 					texturePath = path.substr(0, index);
 					texturePath += "/";
 				}
 			}
 
 			//------------------------------------------------------------------
-			// Xƒtƒ@ƒCƒ‹‚É‹Lq‚³‚ê‚Ä‚¢‚éƒeƒNƒXƒ`ƒƒ‚ÌƒpƒX‚ÌÅŒã‚Ì•”•ª‚¾‚¯‚ğ”²‚«o‚µ‘O•”•ª‚É’Ç‰Á
+			// Xãƒ•ã‚¡ã‚¤ãƒ«ã«è¨˜è¿°ã•ã‚Œã¦ã„ã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ãƒ‘ã‚¹ã®æœ€å¾Œã®éƒ¨åˆ†ã ã‘ã‚’æŠœãå‡ºã—å‰éƒ¨åˆ†ã«è¿½åŠ 
 			std::string stringBuffer;
 			stringBuffer = materials[i].pTextureFilename;
-			// ƒpƒX‚ÌÅŒã‚Ì"/"‚ğŒŸõ
+			// ãƒ‘ã‚¹ã®æœ€å¾Œã®"/"ã‚’æ¤œç´¢
 			index = stringBuffer.find_last_of("/");
 			if(index != std::string::npos)
 			{
@@ -71,7 +71,7 @@ namespace KMT {
 				stringBuffer2 = stringBuffer.substr(index + 1);
 				texturePath += stringBuffer2;
 			}
-			// ŠY“–‚È‚µ‚È‚ç"\\"‚ÅÄŒŸõ
+			// è©²å½“ãªã—ãªã‚‰"\\"ã§å†æ¤œç´¢
 			else{
 				index = stringBuffer.find_last_of("\\");
 				if(index != std::string::npos)
@@ -80,12 +80,12 @@ namespace KMT {
 					stringBuffer2 = stringBuffer.substr(index + 1);
 					texturePath += stringBuffer2;
 				}
-				// ŠY“–‚È‚µ‚È‚ç‚»‚Ì‚Ü‚Ü’Ç‰Á
+				// è©²å½“ãªã—ãªã‚‰ãã®ã¾ã¾è¿½åŠ 
 				else{
 					texturePath += stringBuffer;
 				}
 			}
-			// “Æ©ƒeƒNƒXƒ`ƒƒƒNƒ‰ƒX‚Æ‚µ‚Ä¶¬
+			// ç‹¬è‡ªãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚¯ãƒ©ã‚¹ã¨ã—ã¦ç”Ÿæˆ
 			texture = Texture::CreateFromFile(texturePath, D3DX_DEFAULT);
 
 			_textures.push_back(texture);
@@ -95,92 +95,75 @@ namespace KMT {
 	GRendererSP ModelRenderer::CreateFromX(const std::string &path, const ShaderSP &shader)
 	{
 		GRendererSP object(new ModelRenderer());
-		// ƒVƒF[ƒ_[İ’è
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼è¨­å®š
 		object->SetShader(shader);
 		object->LoadFromX(path);
 
 		return GRendererSP(object);
 	}
 
-	void ModelRenderer::Render(const CCamera* camera)
+	void ModelRenderer::Render(const Camera* camera)
 	{
 		if(!_renders)
 			return;
-		// ƒ[ƒ‹ƒhs—ñİ’è
-		CMatrix SclMtx, RotMtx, PosMtx, WldMtx, WVPMtx;
-		// Šgk
-		D3DXMatrixScaling(&SclMtx, Scale.x, Scale.y, Scale.z);
-		// ‰ñ“] : switch-casecƒNƒH[ƒ^ƒjƒIƒ“‚©‰ñ“]s—ñ‚©XYZw’è‚©
-		switch(CurrentRotateType)
-		{
-		case ROTATE_TYPE::QUATERNION :
-			D3DXMatrixRotationQuaternion(&RotMtx, &qRotation);
-			break;
-
-		case ROTATE_TYPE::MATRIX :
-			mRotationWorld = mRotationX * mRotationY * mRotationZ;
-			RotMtx = mRotationWorld;
-			break;
-
-		case ROTATE_TYPE::XYZ :
-			D3DXMatrixRotationYawPitchRoll(&RotMtx, vRotation.y, vRotation.x, vRotation.z);
-			break;
-		}
-		// ˆÊ’u
-		D3DXMatrixTranslation(&PosMtx, Position.x, Position.y, Position.z);
+		// ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—è¨­å®š
+		Matrix SclMtx, RotMtx, PosMtx, WldMtx, WVPMtx;
+		// æ‹¡ç¸®
+		D3DXMatrixScaling(&SclMtx, _scale.x, _scale.y, _scale.z);
+		// å›è»¢ : switch-caseâ€¦ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‹å›è»¢è¡Œåˆ—ã‹XYZæŒ‡å®šã‹
+		this->Evaluate();
+		RotMtx = this->_worldRotationMatrix;
+		// ä½ç½®
+		D3DXMatrixTranslation(&PosMtx, _position.x, _position.y, _position.z);
 		GraphicsManager::_device->SetRenderState(D3DRS_CULLMODE, _cullingState);
-		// ƒfƒoƒbƒO—p
+		// ãƒ‡ãƒãƒƒã‚°ç”¨
 		//GraphicsManager::_device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
-		// ƒVƒF[ƒ_‚ğg—p‚·‚éê‡ƒJƒƒ‰‚Ìƒrƒ…[s—ñ(0)AƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ(1)‚ğƒ[ƒ‹ƒhs—ñ‚É‡¬
+		// ã‚·ã‚§ãƒ¼ãƒ€ã‚’ä½¿ç”¨ã™ã‚‹å ´åˆã‚«ãƒ¡ãƒ©ã®ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—(0)ã€ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—(1)ã‚’ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã«åˆæˆ
 		WldMtx = SclMtx * RotMtx * PosMtx;
-		WVPMtx = WldMtx * camera->getMatrix(CViewBehavior::VIEW) * camera->getMatrix(CViewBehavior::PROJECTION);
-		// ƒJƒƒ‰‚ÌÀ•W‚ğƒVƒF[ƒ_‚Ég—p‚·‚é‚½‚ß‚Ìs—ñ•ÏŠ·
-		CMatrix CamMtx = WldMtx * camera->getMatrix(CViewBehavior::VIEW);
+		WVPMtx = WldMtx * camera->GetMatrix(ViewBehavior::VIEW) * camera->GetMatrix(ViewBehavior::PROJECTION);
+		// ã‚«ãƒ¡ãƒ©ã®åº§æ¨™ã‚’ã‚·ã‚§ãƒ¼ãƒ€ã«ä½¿ç”¨ã™ã‚‹ãŸã‚ã®è¡Œåˆ—å¤‰æ›
+		Matrix CamMtx = WldMtx * camera->GetMatrix(ViewBehavior::VIEW);
 		D3DXMatrixInverse(&CamMtx, NULL, &CamMtx);
-		Vector4 EyePos = Vector4(
-			camera->getEye().x, 
-			camera->getEye().y, 
-			camera->getEye().z, 
-			1
-			);
+		auto eye = camera->GetEye();
+		Vector4 EyePos = Vector4(eye.x, eye.y, eye.z, 1);
 		EyePos.Transform(CamMtx);
 		D3DXVec4Normalize((D3DXVECTOR4*)&EyePos, (D3DXVECTOR4*)&EyePos);
-		// ƒVƒF[ƒ_İ’è
+		// ã‚·ã‚§ãƒ¼ãƒ€è¨­å®š
 		_shader->SetTechnique();
-		// ƒVƒF[ƒ_‚Éƒ[ƒ‹ƒh * ƒrƒ…[ * ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚ğ“n‚·
+		// ã‚·ã‚§ãƒ¼ãƒ€ã«ãƒ¯ãƒ¼ãƒ«ãƒ‰ * ãƒ“ãƒ¥ãƒ¼ * ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã‚’æ¸¡ã™
 		_shader->SetWVPMatrix(WVPMtx);
-		// ƒVƒF[ƒ_[“Á—L‚Ì’l‚Ìİ’è
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ç‰¹æœ‰ã®å€¤ã®è¨­å®š
 		_shader->ApplyEffect(RotMtx, EyePos);
 		
 		HRESULT hr;
-		// 3D ƒ‚ƒfƒ‹‚Ìƒp[ƒc•ªƒ‹[ƒv‚µ‚Ä•`‰æ
+		// 3D ãƒ¢ãƒ‡ãƒ«ã®ãƒ‘ãƒ¼ãƒ„åˆ†ãƒ«ãƒ¼ãƒ—ã—ã¦æç”»
 		for(size_t i = 0 ; i < _mesh->GetMaterialNumber(); i++)
 		{
-			// ƒeƒNƒXƒ`ƒƒ‚ª‘¶İ‚µ‚È‚¢ê‡‚ÌƒJƒ‰[
+			// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãŒå­˜åœ¨ã—ãªã„å ´åˆã®ã‚«ãƒ©ãƒ¼
 			D3DXVECTOR4 color = D3DXVECTOR4(1.0,1.0,1.0,1.0);
-			// Šiƒp[ƒc‚É‘Î‰‚·‚éƒeƒNƒXƒ`ƒƒ‚ğİ’è
-			// ƒVƒF[ƒ_‚ÉƒeƒNƒXƒ`ƒƒ‚ğ“n‚·
+			// æ ¼ãƒ‘ãƒ¼ãƒ„ã«å¯¾å¿œã™ã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’è¨­å®š
+			// ã‚·ã‚§ãƒ¼ãƒ€ã«ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’æ¸¡ã™
 			if(NULL != _textures[i])
 			{
 				LPDIRECT3DTEXTURE9 texture = _textures[i]->GetTextureData();
-				// ƒVƒF[ƒ_‚ÉƒJƒ‰[‚ğ“n‚·
+				// ã‚·ã‚§ãƒ¼ãƒ€ã«ã‚«ãƒ©ãƒ¼ã‚’æ¸¡ã™
 				_shader->SetColor(_colorRGBA);
 				_shader->SetTexture(texture);
 			}else
 				_shader->SetColor(color);
-			// ƒVƒF[ƒ_‚Ìg—pŠJn
+			// ã‚·ã‚§ãƒ¼ãƒ€ã®ä½¿ç”¨é–‹å§‹
 			_shader->BeginShader();
-			// ƒVƒF[ƒ_‚ÌƒpƒXİ’è
+			// ã‚·ã‚§ãƒ¼ãƒ€ã®ãƒ‘ã‚¹è¨­å®š
 			_shader->BeginPass(_addsBlend);
-			// ƒp[ƒc‚Ì•`‰æ	
+			// ãƒ‘ãƒ¼ãƒ„ã®æç”»	
 			if(SUCCEEDED(GraphicsManager::_device->BeginScene()))
 			{
 				_mesh->GetMesh()->DrawSubset(i); 
 				V(GraphicsManager::_device->EndScene());
 			}
-			// ƒpƒXI—¹
+			// ãƒ‘ã‚¹çµ‚äº†
 			_shader->EndPass();
-			// ƒVƒF[ƒ_I—¹
+			// ã‚·ã‚§ãƒ¼ãƒ€çµ‚äº†
 			_shader->EndShader();
 		}
 	}

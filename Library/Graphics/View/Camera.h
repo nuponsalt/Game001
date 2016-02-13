@@ -1,5 +1,5 @@
-//*********************************************
-// ƒJƒƒ‰‚ÌŠî–{î•ñŠÇ—ƒNƒ‰ƒX
+ï»¿//*********************************************
+// ã‚«ãƒ¡ãƒ©ã®åŸºæœ¬æƒ…å ±ç®¡ç†ã‚¯ãƒ©ã‚¹
 // Last Update : 2013.11.29
 // Yuta Komatsu
 //*********************************************
@@ -12,44 +12,44 @@
 
 namespace KMT { 
 
-	class CCamera;
-	typedef std::shared_ptr<CCamera> CCameraSP;
-	typedef std::weak_ptr<CCamera> CCameraWP;
+	class Camera;
+	typedef std::shared_ptr<Camera> CameraSP;
+	typedef std::weak_ptr<Camera> CameraWP;
 
-	class CCamera : public CViewBehavior
+	class Camera : public ViewBehavior
 	{
 	public :
-		// ƒfƒXƒgƒ‰ƒNƒ^
-		virtual ~CCamera();
+		// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		virtual ~Camera();
 
-		// ¶¬
-		static CCameraSP Create();
+		// ç”Ÿæˆ
+		static CameraSP Create();
 		
-		// İ’è
-		inline void setSize(const float &_Size) { Size = _Size; }
-		void setSizeIPO(const float &_Size);
-		/* ƒRƒ}ƒ“ƒh */
-		inline void setCommand(const Command& _command) { Command = _command; }
+		// è¨­å®š
+		inline void SetSize(const float &size) { _size = size; }
+		void SetSizeIPO(const float &_Size);
+		/* ã‚³ãƒãƒ³ãƒ‰ */
+		inline void AttachCommand(const Command& command) { _command = command; }
 		
-		// æ“¾
-		inline Vector3 getDirection() const { return Direction; } //0ƒxƒNƒgƒ‹‚É‚È‚é‚æ‚¤‚È•”•ª‚Å‚Ìˆø—p‚ÍƒoƒO‚Ì‰·°‚É‚È‚é‚©‚çNG
-		inline float getSize() const { return Size; }
+		// å–å¾—
+		inline Vector3 GetDirection() const { return _direction; } //0ãƒ™ã‚¯ãƒˆãƒ«ã«ãªã‚‹ã‚ˆã†ãªéƒ¨åˆ†ã§ã®å¼•ç”¨ã¯ãƒã‚°ã®æ¸©åºŠã«ãªã‚‹ã‹ã‚‰NG
+		inline float GetSize() const { return _size; }
 
-		// s—ñXV
-		void updateView();
-		// ŠeƒJƒƒ‰À•WZo
+		// è¡Œåˆ—æ›´æ–°
+		void UpdateView();
+		// å„ã‚«ãƒ¡ãƒ©åº§æ¨™ç®—å‡º
 		virtual void Calculate();
 
 	protected :
-		// ƒJƒƒ‰‚ÌŒü‚«
-		Vector3 Direction;		
-		// ƒTƒCƒY
-		float Size;
-		// ƒRƒ}ƒ“ƒh
-		Command Command;
+		// ã‚«ãƒ¡ãƒ©ã®å‘ã
+		Vector3 _direction;		
+		// ã‚µã‚¤ã‚º
+		float _size;
+		// ã‚³ãƒãƒ³ãƒ‰
+		Command _command;
 
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
-		CCamera();
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+		Camera();
 
 	} ;
 

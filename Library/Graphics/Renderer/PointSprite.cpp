@@ -1,4 +1,4 @@
-#include "DXUT.h"
+ï»¿#include "DXUT.h"
 #include "PointSprite.h"
 
 #include "../Shader/Particle/Particle.h"
@@ -16,7 +16,7 @@ namespace KMT {
 
 		_cullingState = D3DCULL_NONE;
 
-		// ’¸“_ƒoƒbƒtƒ@‚Ìì¬
+		// é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã®ä½œæˆ
 		if(FAILED(GraphicsManager::_device->CreateVertexBuffer(
 			sizeof(POINTSPRITE) * _pointNumber, 
 			D3DUSAGE_NPATCHES | D3DUSAGE_POINTS | D3DUSAGE_DYNAMIC, 
@@ -27,7 +27,7 @@ namespace KMT {
 			)))
 			MessageBox(NULL, TEXT("POINTSPRITE's VertexBuffer Create Err"), NULL, MB_OK | MB_ICONSTOP);
 
-		// ’¸“_î•ñ‚Ì‰Šú‰»
+		// é ‚ç‚¹æƒ…å ±ã®åˆæœŸåŒ–
 		pPOINTSPRITE pointSprite;
 		if(FAILED(_vertexBuffer->Lock(sizeof(POINTSPRITE), sizeof(POINTSPRITE) * _pointNumber, (void**)&pointSprite, D3DLOCK_DISCARD)))
 			MessageBox(NULL, TEXT("POINTSPRITE's VertexBuffer Lock Err"), NULL, MB_OK | MB_ICONSTOP);
@@ -41,12 +41,12 @@ namespace KMT {
 
 		_vertexBuffer->Unlock();
 
-		// ƒGƒ~ƒbƒ^[ƒf[ƒ^‚Ì¶¬
+		// ã‚¨ãƒŸãƒƒã‚¿ãƒ¼ãƒ‡ãƒ¼ã‚¿ã®ç”Ÿæˆ
 		_emitterData = new Emitter();
 
-		// ƒeƒNƒXƒ`ƒƒ‚Ìƒ[ƒh
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ãƒ­ãƒ¼ãƒ‰
 		_texture = Texture::CreateFromFile(path, D3DX_FILTER_NONE);
-		// ƒVƒF[ƒ_[‚ğİ’è
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’è¨­å®š
 		_shader = ShaderParticle::Create();
 	}
 
@@ -55,7 +55,7 @@ namespace KMT {
 		SAFE_RELEASE(_vertexBuffer);
 		_texture.reset();
 
-		// ƒGƒ~ƒbƒ^[ƒf[ƒ^‚Ì‰ğ•ú
+		// ã‚¨ãƒŸãƒƒã‚¿ãƒ¼ãƒ‡ãƒ¼ã‚¿ã®è§£æ”¾
 		SAFE_DELETE(_emitterData);
 		
 	}
@@ -65,78 +65,61 @@ namespace KMT {
 		return PointSpriteSP(new PointSprite(path, pointNumber, size));
 	}
 
-	void PointSprite::Render(const CCamera* camera)
+	void PointSprite::Render(const Camera* camera)
 	{
-		// •`‰æ‚·‚é‚©”Û‚©
+		// æç”»ã™ã‚‹ã‹å¦ã‹
 		if(!_renders)
 			return;
 
-		// ƒ[ƒ‹ƒhs—ñİ’è
-		CMatrix SclMtx, RotMtx, PosMtx, WldMtx, WVPMtx;
-		// Šgk
-		D3DXMatrixScaling(&SclMtx, Scale.x, Scale.y, Scale.z);
-		// ‰ñ“] : switch-casecƒNƒH[ƒ^ƒjƒIƒ“‚©‰ñ“]s—ñ‚©XYZw’è‚©
-		switch(CurrentRotateType)
-		{
-		case ROTATE_TYPE::QUATERNION :
-			D3DXMatrixRotationQuaternion(&RotMtx, &qRotation);
-			break;
-
-		case ROTATE_TYPE::MATRIX :
-			mRotationWorld = mRotationX * mRotationY * mRotationZ;
-			RotMtx = mRotationWorld;
-			break;
-
-		case ROTATE_TYPE::XYZ :
-			D3DXMatrixRotationYawPitchRoll(&RotMtx, vRotation.y, vRotation.x, vRotation.z);
-			break;
-		}
-		// ˆÊ’u
-		D3DXMatrixTranslation(&PosMtx, Position.x, Position.y, Position.z);
-		// ƒVƒF[ƒ_‚ğg—p‚·‚éê‡ƒJƒƒ‰‚Ìƒrƒ…[s—ñ(0)AƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ(1)‚ğƒ[ƒ‹ƒhs—ñ‚É‡¬
+		// ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—è¨­å®š
+		Matrix SclMtx, RotMtx, PosMtx, WldMtx, WVPMtx;
+		// æ‹¡ç¸®
+		D3DXMatrixScaling(&SclMtx, _scale.x, _scale.y, _scale.z);
+		// å›è»¢ : switch-caseâ€¦ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³ã‹å›è»¢è¡Œåˆ—ã‹XYZæŒ‡å®šã‹
+		this->Evaluate();
+		RotMtx = _worldRotationMatrix;
+		// ä½ç½®
+		D3DXMatrixTranslation(&PosMtx, _position.x, _position.y, _position.z);
+		// ã‚·ã‚§ãƒ¼ãƒ€ã‚’ä½¿ç”¨ã™ã‚‹å ´åˆã‚«ãƒ¡ãƒ©ã®ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—(0)ã€ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—(1)ã‚’ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã«åˆæˆ
 		WldMtx = SclMtx * RotMtx * PosMtx;
-		WVPMtx = WldMtx * camera->getMatrix(CViewBehavior::VIEW) * camera->getMatrix(CViewBehavior::PROJECTION);
-		// ƒJƒƒ‰‚ÌÀ•W‚ğƒVƒF[ƒ_‚Ég—p‚·‚é‚½‚ß‚Ìs—ñ•ÏŠ·
-		CMatrix CamMtx = WldMtx * camera->getMatrix(CViewBehavior::VIEW);
+		WVPMtx = WldMtx * camera->GetMatrix(ViewBehavior::VIEW) * camera->GetMatrix(ViewBehavior::PROJECTION);
+		// ã‚«ãƒ¡ãƒ©ã®åº§æ¨™ã‚’ã‚·ã‚§ãƒ¼ãƒ€ã«ä½¿ç”¨ã™ã‚‹ãŸã‚ã®è¡Œåˆ—å¤‰æ›
+		Matrix CamMtx = WldMtx * camera->GetMatrix(ViewBehavior::VIEW);
 		D3DXMatrixInverse(&CamMtx, NULL, &CamMtx);
-		Vector4 EyePos = Vector4(
-			camera->getEye().x, 
-			camera->getEye().y, 
-			camera->getEye().z, 
-			1
-			);
+		auto eye = camera->GetEye();
+		Vector4 EyePos = Vector4(eye.x, eye.y, eye.z, 1);
 		EyePos.Transform(CamMtx);
 		D3DXVec4Normalize((D3DXVECTOR4*)&EyePos, (D3DXVECTOR4*)&EyePos);
-		// ƒVƒF[ƒ_[İ’è
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼è¨­å®š
 		_shader->SetTechnique();
-		// ƒVƒF[ƒ_[‚Éƒ[ƒ‹ƒh*ƒrƒ…[*ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚É“n‚·
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«ãƒ¯ãƒ¼ãƒ«ãƒ‰*ãƒ“ãƒ¥ãƒ¼*ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã«æ¸¡ã™
 		_shader->SetWVPMatrix(WVPMtx);
-		// ƒVƒF[ƒ_[“Á—L‚Ì’l“n‚µ
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ç‰¹æœ‰ã®å€¤æ¸¡ã—
 		_shader->ApplyEffect(RotMtx, EyePos);
 
 		HRESULT hr;
-		// •`‰æˆ—
-		// ƒVƒF[ƒ_[‚ÉƒJƒ‰[‚ğ“n‚·
+		// æç”»å‡¦ç†
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«ã‚«ãƒ©ãƒ¼ã‚’æ¸¡ã™
 		_shader->SetColor(_colorRGBA);
-		// ƒeƒNƒXƒ`ƒƒ‚ğ“n‚·
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’æ¸¡ã™
 		if(NULL != _texture)
 			_shader->SetTexture(_texture->GetTextureData());
-		// ƒVƒF[ƒ_[‚Ìg—pŠJn
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ä½¿ç”¨é–‹å§‹
 		_shader->BeginShader();
-		// ƒVƒF[ƒ_[‚ÌƒpƒXŠJn
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ãƒ‘ã‚¹é–‹å§‹
 		_shader->BeginPass(_addsBlend);
-		// ƒp[ƒeƒBƒNƒ‹‚Ìg—p‚ğ—LŒø‚É‚·‚é
+		// ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ã®ä½¿ç”¨ã‚’æœ‰åŠ¹ã«ã™ã‚‹
 		GraphicsManager::_device->SetRenderState(D3DRS_POINTSPRITEENABLE, TRUE);
 		GraphicsManager::_device->SetRenderState(D3DRS_POINTSCALEENABLE, TRUE);
-		// ƒ|ƒCƒ“ƒg‚ÌÅ¬ƒTƒCƒY
+		// ãƒã‚¤ãƒ³ãƒˆã®æœ€å°ã‚µã‚¤ã‚º
 		GraphicsManager::_device->SetRenderState(D3DRS_POINTSIZE_MIN, 0);
-		// Zƒoƒbƒtƒ@(ƒp[ƒeƒBƒNƒ‹‚Ì‚İAZ’l‚Ì‘‚«‚İ‚ğs‚í‚È‚¢)
+		// Zãƒãƒƒãƒ•ã‚¡(ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ã®ã¿ã€Zå€¤ã®æ›¸ãè¾¼ã¿ã‚’è¡Œã‚ãªã„)
 		GraphicsManager::_device->SetRenderState(D3DRS_ZENABLE, D3DZB_TRUE);
 		GraphicsManager::_device->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
-		// ’¸“_‚Ìİ’è
+		// é ‚ç‚¹ã®è¨­å®š
 		GraphicsManager::_device->SetStreamSource(0, _vertexBuffer, 0, sizeof(POINTSPRITE));
 		GraphicsManager::_device->SetFVF(POINTSPRITE::FVF);
-		// ƒJƒŠƒ“ƒO‚ğİ’è
+		// ã‚«ãƒªãƒ³ã‚°ã‚’è¨­å®š
 		GraphicsManager::_device->SetRenderState(D3DRS_CULLMODE, _cullingState);
 
 		if(SUCCEEDED(GraphicsManager::_device->BeginScene()))
@@ -144,11 +127,11 @@ namespace KMT {
 			GraphicsManager::_device->DrawPrimitive(D3DPT_POINTLIST, 0, _pointNumber);
 			V(GraphicsManager::_device->EndScene());
 		}
-		// ƒpƒXI—¹
+		// ãƒ‘ã‚¹çµ‚äº†
 		_shader->EndPass();
-		// Zƒoƒbƒtƒ@İ’è‚ÌƒŠƒZƒbƒg
+		// Zãƒãƒƒãƒ•ã‚¡è¨­å®šã®ãƒªã‚»ãƒƒãƒˆ
 		GraphicsManager::_device->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
-		// ƒVƒF[ƒ_[I—¹
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼çµ‚äº†
 		_shader->EndShader();
 	}
 

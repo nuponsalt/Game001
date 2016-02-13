@@ -1,4 +1,4 @@
-#include "DXUT.h"
+ï»¿#include "DXUT.h"
 #include "Layer.h"
 #include "../GraphicsManager.h"
 
@@ -10,17 +10,17 @@ namespace KMT {
 
 	Layer::~Layer()
 	{
-		// ƒT[ƒtƒFƒCƒX‚ÌŠJ•ú
+		// ã‚µãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã®é–‹æ”¾
 		SAFE_RELEASE(_textureSurface);
-		// ƒXƒeƒ“ƒVƒ‹ƒpƒbƒtƒ@
+		// ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ãƒ‘ãƒƒãƒ•ã‚¡
 		SAFE_RELEASE(_depthSurface);
-		// ”Âƒ|ƒŠ‚Ì‰ğ•ú
+		// æ¿ãƒãƒªã®è§£æ”¾
 		_board.reset();
-		// ƒJƒƒ‰‚Ì‰ğ•ú
+		// ã‚«ãƒ¡ãƒ©ã®è§£æ”¾
 		_camera3D.reset();
 		_camera2D.reset();
 
-		// ƒŒƒ“ƒ_ƒŠƒ“ƒOƒŠƒXƒg‚ğ‰ğ•ú
+		// ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ãƒªã‚¹ãƒˆã‚’è§£æ”¾
 		for(int i = 0; i < RENDER_STATE_MAX; i++)
 		{
 			_renderLists[i]->clear();
@@ -36,17 +36,17 @@ namespace KMT {
 	{
 		LayerSP object = LayerSP(new Layer);
 
-		// ƒeƒNƒXƒ`ƒƒ‚Ì¶¬
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ç”Ÿæˆ
 		object->_texture = Texture::CreateEmpty(width, height);
 
-		// ƒT[ƒtƒFƒCƒX‚Ìæ“¾
+		// ã‚µãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã®å–å¾—
 		if (FAILED(object->_texture->GetTextureData()->GetSurfaceLevel(0, &object->_textureSurface)))
 		{
-			// ƒT[ƒtƒFƒCƒXæ“¾¸”s
-			// ƒGƒ‰[‚É‘Î‰‚·‚éƒR[ƒh
+			// ã‚µãƒ¼ãƒ•ã‚§ã‚¤ã‚¹å–å¾—å¤±æ•—
+			// ã‚¨ãƒ©ãƒ¼ã«å¯¾å¿œã™ã‚‹ã‚³ãƒ¼ãƒ‰
 		}
 
-		// ƒXƒeƒ“ƒVƒ‹ƒoƒbƒtƒ@‚Ìì¬
+		// ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ãƒãƒƒãƒ•ã‚¡ã®ä½œæˆ
 		if (FAILED(GraphicsManager::_device->CreateDepthStencilSurface( 
 			object->_texture->GetImageInfo().Width,
 			object->_texture->GetImageInfo().Height,
@@ -57,25 +57,25 @@ namespace KMT {
 			&object->_depthSurface, 
 			NULL)))
 		{
-			// ƒXƒeƒ“ƒVƒ‹ƒoƒbƒtƒ@‚Ìì¬‚É¸”s
-			// ƒGƒ‰[‚É‘Î‰‚·‚éƒR[ƒh‚ğ‚±‚±‚É‘‚­
+			// ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ãƒãƒƒãƒ•ã‚¡ã®ä½œæˆã«å¤±æ•—
+			// ã‚¨ãƒ©ãƒ¼ã«å¯¾å¿œã™ã‚‹ã‚³ãƒ¼ãƒ‰ã‚’ã“ã“ã«æ›¸ã
 		}
 
-		object->_camera3D = CCamera::Create();
-		object->_camera3D->setEye(0, 0, -10.0f);
+		object->_camera3D = Camera::Create();
+		object->_camera3D->SetEye(0, 0, -10.0f);
 
-		object->_camera2D = CCamera::Create();
-		float angle = object->_camera2D->getAngle();
-		object->_camera2D->setEye(0, 0, -(SCREEN_HEIGHT / (2.0f * tan(angle / 2.0f))));
-		// ”Âƒ|ƒŠ¶¬
+		object->_camera2D = Camera::Create();
+		float angle = object->_camera2D->GetAngle();
+		object->_camera2D->SetEye(0, 0, -(SCREEN_HEIGHT / (2.0f * tan(angle / 2.0f))));
+		// æ¿ãƒãƒªç”Ÿæˆ
 		object->_board = GraphicalPlane::Create(width, height);
 		float aspect = (float)width / height;
-		object->_camera3D->setAspect(aspect);
-		object->_camera2D->setAspect(aspect);
-		// ”Âƒ|ƒŠ‚ÉƒeƒNƒXƒ`ƒƒ‚ğƒZƒbƒg
+		object->_camera3D->SetAspect(aspect);
+		object->_camera2D->SetAspect(aspect);
+		// æ¿ãƒãƒªã«ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ã‚»ãƒƒãƒˆ
 		if(object->_board->GetTextures().size() < 1)
 			object->_board->SetTexture(object->_texture);
-		// ƒŒƒ“ƒ_ƒŠƒ“ƒOƒŠƒXƒg‚Ìì¬
+		// ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ãƒªã‚¹ãƒˆã®ä½œæˆ
 		for(int i = 0; i < RENDER_STATE_MAX; i++)
 		{
 			std::list<GraphicBehaviorWP> *list = new std::list<GraphicBehaviorWP>();
@@ -87,13 +87,13 @@ namespace KMT {
 
 	void Layer::Render()
 	{
-		// ƒXƒeƒ“ƒVƒ‹ƒoƒbƒtƒ@‚ğƒZƒbƒg
+		// ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ãƒãƒƒãƒ•ã‚¡ã‚’ã‚»ãƒƒãƒˆ
 		GraphicsManager::_device->SetDepthStencilSurface(_depthSurface);
 
-		// ƒŒƒ“ƒ_ƒŠƒ“ƒOƒ^[ƒQƒbƒg‚ğƒZƒbƒg
+		// ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚’ã‚»ãƒƒãƒˆ
 		GraphicsManager::_device->SetRenderTarget(0, _textureSurface);
 
-		// ƒT[ƒtƒFƒCƒX‚ğƒNƒŠƒA
+		// ã‚µãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã‚’ã‚¯ãƒªã‚¢
 		GraphicsManager::_device->Clear(0,
 			NULL, 
 			D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER,
@@ -101,51 +101,51 @@ namespace KMT {
 			1.0f,
 			0);
 
-		// ƒJƒƒ‰‚ÌXV
-		_camera3D->updateView();
-		_camera2D->updateView();
+		// ã‚«ãƒ¡ãƒ©ã®æ›´æ–°
+		_camera3D->UpdateView();
+		_camera2D->UpdateView();
 
 		//std::unordered_map<size_t, std::list<GraphicBehaviorWP>*>::iterator mapIterator;
 
-		// 2Dƒ\[ƒg
+		// 2Dã‚½ãƒ¼ãƒˆ
 		_renderLists[RENDER_BACK2D]->sort(GraphicBehavior::Compare2D);
 		_renderLists[RENDER_FRONT2D]->sort(GraphicBehavior::Compare2D);
 
-		// ƒŠƒXƒgƒAƒNƒZƒX—pƒCƒeƒŒ[ƒ^
+		// ãƒªã‚¹ãƒˆã‚¢ã‚¯ã‚»ã‚¹ç”¨ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿
 		std::list<GraphicBehaviorWP>::iterator listIterator;
-		// 3Dƒ\[ƒg
+		// 3Dã‚½ãƒ¼ãƒˆ
 		for(int i = 0; i < 2; i++)
 		{
 			listIterator = _renderLists[RENDER_NORMAL + i]->begin();
 
 			while(listIterator != _renderLists[RENDER_NORMAL + i]->end())
 			{
-				// ‚·‚Å‚ÉƒfƒŠ[ƒg‚³‚ê‚Ä‚¢‚½ê‡ƒŠƒXƒg‚©‚çœŠO‚µ‚ÄƒXƒLƒbƒv
+				// ã™ã§ã«ãƒ‡ãƒªãƒ¼ãƒˆã•ã‚Œã¦ã„ãŸå ´åˆãƒªã‚¹ãƒˆã‹ã‚‰é™¤å¤–ã—ã¦ã‚¹ã‚­ãƒƒãƒ—
 				if((*listIterator).lock() == NULL)
 				{
 					listIterator = _renderLists[RENDER_NORMAL + i]->erase(listIterator);
 					continue;
 				}
 
-				// ƒJƒƒ‰‚©‚ç‚Ì‹——£‚ğŒvZ
-				Vector3 cameraPosition = _camera3D->getEye();
-				Vector3 length = (*listIterator).lock()->Position - cameraPosition;
+				// ã‚«ãƒ¡ãƒ©ã‹ã‚‰ã®è·é›¢ã‚’è¨ˆç®—
+				Vector3 cameraPosition = _camera3D->GetEye();
+				Vector3 length = (*listIterator).lock()->_position - cameraPosition;
 				(*listIterator).lock()->_cameraDistance = length.Length();
 
 				++listIterator;
 			}
 		}
 
-		// ƒ\[ƒg
+		// ã‚½ãƒ¼ãƒˆ
 		_renderLists[RENDER_NORMAL]->sort(GraphicBehavior::Compare);
 		_renderLists[RENDER_ALPHA]->sort(GraphicBehavior::CompareBack);
 
-		// ƒŒƒ“ƒ_ƒŠƒ“ƒO[ƒŠƒXƒg‚Ì’†g‚ğ‚·‚×‚Ä•`‰æ
+		// ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ãƒ¼ãƒªã‚¹ãƒˆã®ä¸­èº«ã‚’ã™ã¹ã¦æç”»
 		for(int i = RENDER_BACK2D; i < RENDER_STATE_MAX; i++)
 		{
 			if(i != RENDER_ALPHA)
 			{
-				// Zƒoƒbƒtƒ@‚ÌƒNƒŠƒA
+				// Zãƒãƒƒãƒ•ã‚¡ã®ã‚¯ãƒªã‚¢
 				GraphicsManager::_device->Clear(0, 
 					NULL, 
 					D3DCLEAR_ZBUFFER,
@@ -154,7 +154,7 @@ namespace KMT {
 					0);
 			}
 
-			// Zƒoƒbƒtƒ@Ø‚è‘Ö‚¦
+			// Zãƒãƒƒãƒ•ã‚¡åˆ‡ã‚Šæ›¿ãˆ
 			(i == RENDER_NORMAL || i == RENDER_ALPHA) 
 				? GraphicsManager::_device->SetRenderState(D3DRS_ZENABLE, TRUE)
 				: GraphicsManager::_device->SetRenderState(D3DRS_ZENABLE, FALSE);
@@ -163,17 +163,17 @@ namespace KMT {
 			
 			while(listIterator != _renderLists[i]->end())
 			{
-				// ‚·‚Å‚ÉƒfƒŠ[ƒg‚³‚ê‚Ä‚¢‚½ê‡ƒŠƒXƒg‚©‚çœŠO‚µ‚ÄƒXƒLƒbƒv
+				// ã™ã§ã«ãƒ‡ãƒªãƒ¼ãƒˆã•ã‚Œã¦ã„ãŸå ´åˆãƒªã‚¹ãƒˆã‹ã‚‰é™¤å¤–ã—ã¦ã‚¹ã‚­ãƒƒãƒ—
 				if((*listIterator).lock() == NULL)
 				{
 					listIterator = _renderLists[i]->erase(listIterator);
 					continue ;
 				}
-				// ƒJƒƒ‰‘I‘ğ
-				CCameraSP camera = (i == RENDER_BACK2D || i == RENDER_FRONT2D) ? _camera2D : _camera3D;
-				// •`‰æ
+				// ã‚«ãƒ¡ãƒ©é¸æŠ
+				CameraSP camera = (i == RENDER_BACK2D || i == RENDER_FRONT2D) ? _camera2D : _camera3D;
+				// æç”»
 				(*listIterator).lock()->Render(camera.get());
-				// Ÿ‚ÌƒCƒeƒŒ[ƒ^‚Ö
+				// æ¬¡ã®ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã¸
 				listIterator ++;
 			}
 		}

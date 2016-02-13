@@ -1,4 +1,4 @@
-#include "DXUT.h"
+ï»¿#include "DXUT.h"
 #include "Collision.h"
 #include "../Extension.h"
 
@@ -7,21 +7,25 @@ namespace KMT {
 
 	bool CorrectInfinitePlane(const float &posY, float &posA,const float &radius)
 	{
-		// ‘ÎÛ”¼Œa‚Å”»’è
+		// å¯¾è±¡åŠå¾„ã§åˆ¤å®š
 		if(posY > (posA - radius))
 		{
-			// •â³
+			// è£œæ­£
 			posA = posY + radius ;
-			return true ;	// ^
+			return true ;	// çœŸ
 		}
-		return false ;	// ‹U
+		return false ;	// å½
 	}
 
-	Vector3* calculateReflectVector(Vector3 *pOut, const Vector3 &Front, const Vector3 &Normal)
+	Vector3* calculateReflectVector(Vector3 *out, const Vector3 &front, const Vector3 &normal)
 	{
 		Vector3 N;
-		Vector3Normalize(&N, &Normal);
-		return Vector3Normalize(pOut, &(Front - 2.0f * Vector3Dot(&Front, &N) * N));
+		auto nml = normal;
+		N = nml.Normalize();
+
+		auto forward = front;
+		out = &(forward - 2.0f * forward.Dot(N) * N).Normalize();//Vector3Dot(&Front, &N) * N).
+		return out;
 	}
 
 	void getReflectVelocity(Vector3 *pOut, Vector3 &Axis,Vector3 &V, float Ref)
@@ -32,12 +36,12 @@ namespace KMT {
 
 	void getReflectedPosition(float ResTime, Circle &circle, Vector3 &RefV)
 	{
-		// Õ“ËˆÊ’u
-		// 0.99‚Í•Ç‚É‚ß‚è‚Ü‚È‚¢‚½‚ß‚Ì•â³
+		// è¡çªä½ç½®
+		// 0.99ã¯å£ã«ã‚ã‚Šè¾¼ã¾ãªã„ãŸã‚ã®è£œæ­£
 		circle.Position = circle.PreviousPosition + circle.Velocity * (1 - ResTime) * 0.99f;
-		// ”½ËƒxƒNƒgƒ‹
+		// åå°„ãƒ™ã‚¯ãƒˆãƒ«
 		circle.Velocity = RefV;
-		// ˆÊ’u‚ğ•â³
+		// ä½ç½®ã‚’è£œæ­£
 		circle.Position += circle.Velocity * ResTime;
 	}
 
@@ -56,7 +60,7 @@ namespace KMT {
 
 		float C_v1_v2 = Vector2Cross(seg1_v, seg2_v);
 		if (C_v1_v2 == 0.0f) {
-			// •½só‘Ô
+			// å¹³è¡ŒçŠ¶æ…‹
 			return false;
 		}
 
@@ -68,7 +72,7 @@ namespace KMT {
 
 		const float eps = 0.00001f;
 		if ( t1 + eps < 0 || t1 - eps > 1 || t2 + eps < 0 || t2 - eps > 1 ) {
-			// Œğ·‚µ‚Ä‚¢‚È‚¢
+			// äº¤å·®ã—ã¦ã„ãªã„
 			return false;
 		}
 
@@ -80,31 +84,31 @@ namespace KMT {
 
 	//bool getCollideSegmentPlane(CVector3 *pOut, CVector3 A, CVector3 B, Plane PL)
 	//{
-	//	//•½–Êã‚Ì“_P
+	//	//å¹³é¢ä¸Šã®ç‚¹P
 	//	CVector3 P = CVector3(PL.a * PL.d, PL.b * PL.d, PL.c * PL.d);
-	//	//PA PBƒxƒNƒgƒ‹
+	//	//PA PBãƒ™ã‚¯ãƒˆãƒ«
 	//	CVector3 pA = P - A;
 	//	CVector3 pB = P - B;
-	//	//PA PB‚»‚ê‚¼‚ê‚ğ•½–Ê–@ü‚Æ“àÏ
+	//	//PA PBãã‚Œãã‚Œã‚’å¹³é¢æ³•ç·šã¨å†…ç©
 	//	double dotPA = (pA.x * PL.a) + (pA.y * PL.b) + (pA.z * PL.c);
 	//	double dotPB = (pB.x * PL.a) + (pB.y * PL.b) + (pB.z * PL.c);
-	//	//‚±‚ê‚Íü’[‚ª•½–Êã‚É‚ ‚Á‚½‚ÌŒvZ‚ÌŒë·‚ğ‹zû‚µ‚Ä‚¢‚Ü‚·B’²®‚µ‚Äg‚Á‚Ä‚­‚¾‚³‚¢B
+	//	//ã“ã‚Œã¯ç·šç«¯ãŒå¹³é¢ä¸Šã«ã‚ã£ãŸæ™‚ã®è¨ˆç®—ã®èª¤å·®ã‚’å¸åã—ã¦ã„ã¾ã™ã€‚èª¿æ•´ã—ã¦ä½¿ã£ã¦ãã ã•ã„ã€‚
 	//	if (abs(dotPA) < 0.000001) { dotPA = 0.0; }	
 	//	if (abs(dotPB) < 0.000001) { dotPB = 0.0; }
-	//	//Œğ·”»’è
+	//	//äº¤å·®åˆ¤å®š
 	//	if (dotPA == 0.0 && dotPB == 0.0) 
-	//		//—¼’[‚ª•½–Êã‚É‚ ‚èAŒğ“_‚ğŒvZ‚Å‚«‚È‚¢B
+	//		//ä¸¡ç«¯ãŒå¹³é¢ä¸Šã«ã‚ã‚Šã€äº¤ç‚¹ã‚’è¨ˆç®—ã§ããªã„ã€‚
 	//		return false;
 	//
 	//	else if ((dotPA >= 0.0 && dotPB <= 0.0) || (dotPA <= 0.0 && dotPB >= 0.0)) {
-	//		//“àÏ‚Ì•Ğ•û‚ªƒvƒ‰ƒX‚Å•Ğ•û‚ªƒ}ƒCƒiƒX‚È‚Ì‚ÅAŒğ·‚µ‚Ä‚¢‚é
+	//		//å†…ç©ã®ç‰‡æ–¹ãŒãƒ—ãƒ©ã‚¹ã§ç‰‡æ–¹ãŒãƒã‚¤ãƒŠã‚¹ãªã®ã§ã€äº¤å·®ã—ã¦ã„ã‚‹
 	//	} else 
-	//		//Œğ·‚µ‚Ä‚¢‚È‚¢
+	//		//äº¤å·®ã—ã¦ã„ãªã„
 	//		return false;
 	//
-	//	//ˆÈ‰ºAŒğ“_‚ğ‹‚ß‚é 
+	//	//ä»¥ä¸‹ã€äº¤ç‚¹ã‚’æ±‚ã‚ã‚‹ 
 	//	CVector3 AB = B - A;
-	//	//Œğ“_‚ÆA‚Ì‹——£ : Œğ“_‚ÆB‚Ì‹——£ = dot_PA : dot_PB
+	//	//äº¤ç‚¹ã¨Aã®è·é›¢ : äº¤ç‚¹ã¨Bã®è·é›¢ = dot_PA : dot_PB
 	//	float distance = (float)abs(dotPA) / ((float)abs(dotPA) + (float)abs(dotPB));
 	//
 	//	pOut = &(A + (AB * distance));
@@ -115,17 +119,17 @@ namespace KMT {
 
 	bool getisBackSpherePlane(const SphereVolume& sphere, const PlaneVolume& plane)
 	{
-		// •½–Ê‚É‘Î‚·‚é‹——£‚ğZo
+		// å¹³é¢ã«å¯¾ã™ã‚‹è·é›¢ã‚’ç®—å‡º
 		float dist = Dot(sphere.Position, plane.Normal) - plane.Distance;
 
-		// ‹——£‚ª•‰‚Ì”¼Œa‚æ‚è¬‚³‚¢ê‡‚Í— ‘¤‚É‚ ‚é
+		// è·é›¢ãŒè² ã®åŠå¾„ã‚ˆã‚Šå°ã•ã„å ´åˆã¯è£å´ã«ã‚ã‚‹
 		return dist < -sphere.Radius;
 	}
 
-	// ƒJƒƒ‰‚É‘Î‚·‚é‹‘ä•½–Ê‚ğ¶¬‚·‚é
+	// ã‚«ãƒ¡ãƒ©ã«å¯¾ã™ã‚‹è¦–éŒå°å¹³é¢ã‚’ç”Ÿæˆã™ã‚‹
 	//void CreateViewFrustumPlane(const CCamera* camera, PlaneVolume* outputs)
 	//{
-	//	// ƒXƒNƒŠ[ƒ“À•Wã‚Ì‹‘ä‚ÌŠe’¸“_‚ğZo‚·‚é
+	//	// ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ä¸Šã®è¦–éŒå°ã®å„é ‚ç‚¹ã‚’ç®—å‡ºã™ã‚‹
 	//	D3DXVECTOR4 NTL(-1,  1, 0, 1); // near top left
 	//	D3DXVECTOR4 NTR( 1,  1, 0, 1); // near top right
 	//	D3DXVECTOR4 NBL(-1, -1, 0, 1); // near bottom left
@@ -135,12 +139,12 @@ namespace KMT {
 	//	D3DXVECTOR4 FBL(-1, -1, 1, 1); // far bottom left
 	//	D3DXVECTOR4 FBR( 1, -1, 1, 1); // far bottom right
 
-	//	// ƒJƒƒ‰‚Ìƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚Ì‹ts—ñ‚ğZo‚·‚é
+	//	// ã‚«ãƒ¡ãƒ©ã®ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã®é€†è¡Œåˆ—ã‚’ç®—å‡ºã™ã‚‹
 	//	D3DXMATRIX INVCVP = 
 	//		camera->getMatrix(CViewBehavior::VIEW) * camera->getMatrix(CViewBehavior::PROJECTION);
 	//	D3DXMatrixInverse(&INVCVP, NULL, &INVCVP);
 
-	//	// ƒJƒƒ‰À•WŒn‚Ì‹‘ä‚ÌŠe’¸“_‚ğZo‚·‚é
+	//	// ã‚«ãƒ¡ãƒ©åº§æ¨™ç³»ã®è¦–éŒå°ã®å„é ‚ç‚¹ã‚’ç®—å‡ºã™ã‚‹
 	//	D3DXVec3Transform(&NTL, (D3DXVECTOR3*)&NTL, &INVCVP);
 	//	D3DXVec3Transform(&NTR, (D3DXVECTOR3*)&NTR, &INVCVP);
 	//	D3DXVec3Transform(&NBL, (D3DXVECTOR3*)&NBL, &INVCVP);
@@ -150,7 +154,7 @@ namespace KMT {
 	//	D3DXVec3Transform(&FBL, (D3DXVECTOR3*)&FBL, &INVCVP);
 	//	D3DXVec3Transform(&FBR, (D3DXVECTOR3*)&FBR, &INVCVP);
 
-	//	// w‚ÅœZ‚·‚é
+	//	// wã§é™¤ç®—ã™ã‚‹
 	//	NTL /= NTL.w;
 	//	NTR /= NTR.w;
 	//	NBL /= NBL.w;
@@ -160,7 +164,7 @@ namespace KMT {
 	//	FBL /= FBL.w;
 	//	FBR /= FBR.w;
 
-	//	// ƒXƒNƒŠ[ƒ“À•Wã‚Ì’¸“_‚©‚ç•½–Ê‚ğ‰Šú‰»‚·‚é
+	//	// ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ä¸Šã®é ‚ç‚¹ã‹ã‚‰å¹³é¢ã‚’åˆæœŸåŒ–ã™ã‚‹
 	//	outputs[0].Initialize((D3DXVECTOR3)NTR, (D3DXVECTOR3)NTL, (D3DXVECTOR3)NBL); // near
 	//	outputs[1].Initialize((D3DXVECTOR3)FBL, (D3DXVECTOR3)FTL, (D3DXVECTOR3)FTR); // far
 	//	outputs[2].Initialize((D3DXVECTOR3)NBR, (D3DXVECTOR3)FBR, (D3DXVECTOR3)FTR); // right
@@ -171,7 +175,7 @@ namespace KMT {
 
 	//bool getisCulingFrustumSphere(const CCamera* camera, const SphereVolume& sphere)
 	//{
-	//	// •½–Ê‚ğ¶¬‚·‚é
+	//	// å¹³é¢ã‚’ç”Ÿæˆã™ã‚‹
 	//	PlaneVolume planes[FRUSTUM_FACE];
 	//	CreateFrustumCullingPlane(camera, planes);
 	//}
@@ -187,33 +191,33 @@ namespace KMT {
 									float *pOutTime,
 									Vector3 *pOutCollidedA, Vector3 *pOutCollidedB)
 	{
-		// ‘OˆÊ’u‹y‚Ñ“’BˆÊ’u‚É‚¨‚¯‚éƒp[ƒeƒBƒNƒ‹ŠÔ‚ÌƒxƒNƒgƒ‹‚ğZo
+		// å‰ä½ç½®åŠã³åˆ°é”ä½ç½®ã«ãŠã‘ã‚‹ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«é–“ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç®—å‡º
 		Vector3 C0 = *pPrePosB - *pPrePosA;
 		Vector3 C1 = *pPosB - *pPosA;
 		Vector3 D = C1 - C0;
-		// Õ“Ë”»’è—p‚Ì2ŸŠÖ”ŒW”‚ÌZo
-		float P = LengthSq(D); if(P == 0) return false; // “¯‚¶•ûŒü‚ÉˆÚ“®
+		// è¡çªåˆ¤å®šç”¨ã®2æ¬¡é–¢æ•°ä¿‚æ•°ã®ç®—å‡º
+		float P = LengthSq(D); if(P == 0) return false; // åŒã˜æ–¹å‘ã«ç§»å‹•
 		float Q = Dot(C0, D);
 		float R = LengthSq(C0);
-		// ƒp[ƒeƒBƒNƒ‹‹——£
+		// ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«è·é›¢
 		float r = rA + rB;
-		// Õ“Ë”»’è®
+		// è¡çªåˆ¤å®šå¼
 		float Judge = (Q * Q) - (P * (R - (r * r)));
 		if(Judge < 0){
-			// Õ“Ë‚µ‚Ä‚¢‚È‚¢
+			// è¡çªã—ã¦ã„ãªã„
 			return false;
 		}
-		// Õ“ËŠÔ‚ÌZo
+		// è¡çªæ™‚é–“ã®ç®—å‡º
 		float t_plus = (-Q + sqrt(Judge)) / P;
 		float t_minus = (-Q - sqrt(Judge)) / P;
-		// Õ“ËŠÔ‚ª0–¢–1‚æ‚è‘å‚«‚¢ê‡AÕ“Ë‚µ‚È‚¢
+		// è¡çªæ™‚é–“ãŒ0æœªæº€1ã‚ˆã‚Šå¤§ãã„å ´åˆã€è¡çªã—ãªã„
 		if( (t_plus < 0 || t_plus > 1) && (t_minus < 0 || t_minus > 1)) return false;
-		// Õ“ËŠÔ‚ÌŒˆ’èit_minus‘¤‚ªí‚ÉÅ‰‚ÌÕ“Ëj
+		// è¡çªæ™‚é–“ã®æ±ºå®šï¼ˆt_minuså´ãŒå¸¸ã«æœ€åˆã®è¡çªï¼‰
 		*pOutTime = t_minus;
-		// Õ“ËˆÊ’u‚ÌŒˆ’è
+		// è¡çªä½ç½®ã®æ±ºå®š
 		*pOutCollidedA = *pPrePosA + t_minus * (*pPosA - *pPrePosA);
 		*pOutCollidedB = *pPrePosB + t_minus * (*pPosB - *pPrePosB);
-		// Õ“Ë•ñ
+		// è¡çªå ±å‘Š
 		return true;
 	}
 
@@ -225,22 +229,22 @@ namespace KMT {
 											Vector3 *pOutPosA, Vector3 *pOutVelocityA,
 											Vector3 *pOutPosB, Vector3 *pOutVelocityB)
 	{
-		// ¿—Ê‚Ì‡Œv
+		// è³ªé‡ã®åˆè¨ˆ
 		float TotalMass = massA + massB;
-		// ”½”­—¦
+		// åç™ºç‡
 		float RefRate = (1 + resA * resB);
-		// Õ“Ë²ƒxƒNƒgƒ‹
+		// è¡çªè»¸ãƒ™ã‚¯ãƒˆãƒ«
 		Vector3 C = *pColPosB - *pColPosA;
 		Normalize(C);
 		Vector3 V = (*pVelocityA - *pVelocityB);
-		// “àÏZo
+		// å†…ç©ç®—å‡º
 		float D = Dot(V, C);
-		// ’è”ƒxƒNƒgƒ‹
+		// å®šæ•°ãƒ™ã‚¯ãƒˆãƒ«
 		const Vector3 VEC = RefRate * D / TotalMass * C;
-		// Õ“ËŒã‘¬“xƒxƒNƒgƒ‹‚ÌZo
+		// è¡çªå¾Œé€Ÿåº¦ãƒ™ã‚¯ãƒˆãƒ«ã®ç®—å‡º
 		*pOutVelocityA = -massB * VEC + *pVelocityA;
 		*pOutVelocityB = massA * VEC + *pVelocityB;
-		// Õ“ËŒãˆÊ’u‚ÌZo
+		// è¡çªå¾Œä½ç½®ã®ç®—å‡º
 		*pOutPosA = *pColPosA + time * (*pOutVelocityA);
 		*pOutPosB = *pColPosB + time * (*pOutVelocityB);
 

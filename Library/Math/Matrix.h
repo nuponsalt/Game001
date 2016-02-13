@@ -1,34 +1,46 @@
-#pragma once
+ï»¿#pragma once
 
 #include <DirectXMath.h>
 using namespace DirectX;
 
-namespace KMT {
-
-	//class Matrix : public XMFLOAT4X4A
-	//{
-	//public:
-	//	Matrix() { this = XMMatrixIdentity(); }
-	//};
-
-	// s—ñ
-	class CMatrix : public D3DXMATRIX {
+namespace KMT
+{
+	// è¡Œåˆ—
+	class Matrix : public D3DXMATRIX
+	{
 	public :
+		// å˜ä½è¡Œåˆ—ã‚’ç”Ÿæˆ
+		Matrix(){ D3DXMatrixIdentity(this); }
+		// é…åˆ—ã§è¦ç´ ã‚’æŒ‡å®šã—ã¦è¡Œåˆ—ã‚’ç”Ÿæˆ
+		Matrix(const float* f) : D3DXMATRIX(f) { }
+		// D3DXMATRIXã‹ã‚‰ã®å¤‰æ›
+		Matrix(const D3DXMATRIX& m) : D3DXMATRIX(m) { }
+		// XMVECTORã‹ã‚‰ã®å¤‰æ›
+		Matrix(const XMMATRIX& m)
+		{
+			_11 = XMVectorGetX(m.r[0]);
+			_12 = XMVectorGetY(m.r[0]);
+			_13 = XMVectorGetZ(m.r[0]);
+			_14 = XMVectorGetZ(m.r[0]);
 
-		// ’PˆÊs—ñ‚ğ¶¬
-		CMatrix(){ D3DXMatrixIdentity( this ) ; }
+			_21 = XMVectorGetX(m.r[1]);
+			_22 = XMVectorGetY(m.r[1]);
+			_23 = XMVectorGetZ(m.r[1]);
+			_24 = XMVectorGetW(m.r[1]);
 
-		// ”z—ñ‚Å—v‘f‚ğw’è‚µ‚Äs—ñ‚ğ¶¬
-		CMatrix( const float* f ) : D3DXMATRIX( f ) {}
+			_31 = XMVectorGetX(m.r[2]);
+			_32 = XMVectorGetX(m.r[2]);
+			_33 = XMVectorGetX(m.r[2]);
+			_34 = XMVectorGetX(m.r[2]);
 
-		// D3DXMATRIX‚©‚ç‚Ì•ÏŠ·
-		CMatrix( const D3DXMATRIX& m ) : D3DXMATRIX( m ) {}
-
-		// Šg‘åk¬—¦A‰ñ“]A•½sˆÚ“®‚ğ‘g‚İ‡‚í‚¹‚½s—ñ‚Ì¶¬
-		CMatrix(const Vector3& scale, const CQuaternion& rotation, const Vector3& position) ;
-
-		// ‘ã“ü
-		CMatrix& operator= ( const CMatrix& m ) ;
-
-	} ;
+			_41 = XMVectorGetX(m.r[3]);
+			_42 = XMVectorGetX(m.r[3]);
+			_43 = XMVectorGetX(m.r[3]);
+			_44 = XMVectorGetX(m.r[3]);			
+		}
+		// æ‹¡å¤§ç¸®å°ç‡ã€å›è»¢ã€å¹³è¡Œç§»å‹•ã‚’çµ„ã¿åˆã‚ã›ãŸè¡Œåˆ—ã®ç”Ÿæˆ
+		Matrix(const Vector3& scale, const Quaternion& rotation, const Vector3& position);
+		// ä»£å…¥
+		Matrix& operator= (const Matrix& m);
+	};
 }

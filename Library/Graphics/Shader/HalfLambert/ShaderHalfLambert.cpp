@@ -1,4 +1,4 @@
-#include "DXUT.h"
+ï»¿#include "DXUT.h"
 #include "ShaderHalfLambert.h"
 
 #include "../../GraphicsManager.h"
@@ -25,13 +25,13 @@ namespace KMT {
 		ShaderSP shader ;
 		std::unordered_map<std::string, ShaderSP>::iterator it = _shaders.find(path);
 		
-		// ‘¶Ý‚µ‚½‚ç‘æ“ñ—v‘f‚ð•Ô‚·
+		// å­˜åœ¨ã—ãŸã‚‰ç¬¬äºŒè¦ç´ ã‚’è¿”ã™
 		if(it != _shaders.end())
 		{
 			shader = (*it).second ;
 			return shader ;
 		}
-		// ‘¶Ý‚µ‚È‚¯‚ê‚ÎV‚µ‚­ƒ[ƒh
+		// å­˜åœ¨ã—ãªã‘ã‚Œã°æ–°ã—ããƒ­ãƒ¼ãƒ‰
 		shader = ShaderSP(new ShaderHalfLambert());
 		
 		float directionX = xml->GetElement("LightDirection")->GetElement("X")->GetFloat();
@@ -40,17 +40,17 @@ namespace KMT {
 		
 		shader->SetLightDirection(directionX, directionY, directionZ);
 
-		// ƒnƒbƒVƒ…ƒ}ƒbƒv‚É‘}“ü
+		// ãƒãƒƒã‚·ãƒ¥ãƒžãƒƒãƒ—ã«æŒ¿å…¥
 		_shaders.insert(std::make_pair(path, shader));
 
 		return shader;
 	}
 
-	void ShaderHalfLambert::ApplyEffect(const CMatrix &rotation, const Vector4& cameraPosition)
+	void ShaderHalfLambert::ApplyEffect(const Matrix &rotation, const Vector4& cameraPosition)
 	{
-		// ƒ‰ƒCƒgŒvŽZ—p‚É‰ñ“]s—ñ‚ð“n‚·
+		// ãƒ©ã‚¤ãƒˆè¨ˆç®—ç”¨ã«å›žè»¢è¡Œåˆ—ã‚’æ¸¡ã™
 		_effect->SetMatrix(*GetHandle("ROT"), &rotation);
-		// ƒ‰ƒCƒgÝ’è(•½sŒõŒ¹)
+		// ãƒ©ã‚¤ãƒˆè¨­å®š(å¹³è¡Œå…‰æº)
 		_effect->SetVector(*GetHandle("LightDir"), (D3DXVECTOR4*)&_lightDirection);
 	}
 

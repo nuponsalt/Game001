@@ -1,35 +1,35 @@
-#include "DXUT.h"
+ï»¿#include "DXUT.h"
 #include "Camera.h"
 
 #include "../../Math/Math.h"
 
 namespace KMT {
 
-	CCamera::CCamera() : Size(1)
+	Camera::Camera() : _size(1)
 	{ }
 
-	CCamera::~CCamera() { }
+	Camera::~Camera() { }
 
-	CCameraSP CCamera::Create()
+	CameraSP Camera::Create()
 	{
-		return CCameraSP(new CCamera());
+		return CameraSP(new Camera());
 	}
 
-	void CCamera::setSizeIPO(const float &_Size){ Size = Interpolate(Size, _Size, 0.1f); }
+	void Camera::SetSizeIPO(const float &_Size){ _size = Lerp(_size, _Size, 0.1f); }
 
-	void CCamera::updateView()
+	void Camera::UpdateView()
 	{
-		// ƒrƒ…[s—ñ, ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚ğ DirectX ‚Éİ’è
-		D3DXMatrixLookAtLH(&Matrix[VIEW], (D3DXVECTOR3*)&View.Eye, (D3DXVECTOR3*)&View.LookAt, (D3DXVECTOR3*)&View.Up);
-		D3DXMatrixPerspectiveFovLH(&Matrix[PROJECTION], Persective.Angle, Persective.Aspect, Persective.Near, Persective.Far);
+		// ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—, ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã‚’ DirectX ã«è¨­å®š
+		D3DXMatrixLookAtLH(&_matrices[VIEW], (D3DXVECTOR3*)&_view.Eye, (D3DXVECTOR3*)&_view.LookAt, (D3DXVECTOR3*)&_view.Up);
+		D3DXMatrixPerspectiveFovLH(&_matrices[PROJECTION], _persective.Angle, _persective.Aspect, _persective.Near, _persective.Far);
 	}
 
-	void CCamera::Calculate()
+	void Camera::Calculate()
 	{
-		// ƒJƒƒ‰À•W—š—ğ‚ğæ“¾
-		View.previousEye = View.Eye;
-		// ƒJƒƒ‰•ûŒü
-		Direction = (View.LookAt - View.Eye).Normalize();
+		// ã‚«ãƒ¡ãƒ©åº§æ¨™å±¥æ­´ã‚’å–å¾—
+		_view.previousEye = _view.Eye;
+		// ã‚«ãƒ¡ãƒ©æ–¹å‘
+		_direction = (_view.LookAt - _view.Eye).Normalize();
 	}
 
 }

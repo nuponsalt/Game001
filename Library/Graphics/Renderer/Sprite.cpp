@@ -1,4 +1,4 @@
-#include "DXUT.h"
+ï»¿#include "DXUT.h"
 #include "Sprite.h"
 #include "../GraphicsManager.h"
 
@@ -6,7 +6,7 @@ namespace KMT {
 
 	Sprite::Sprite() : _turnVector(1, 1)
 	{
-		// ƒXƒvƒ‰ƒCƒg‚Ì¶¬
+		// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®ç”Ÿæˆ
 		D3DXCreateSprite(GraphicsManager::_device, &_sprite) ;
 	}
 
@@ -24,7 +24,7 @@ namespace KMT {
 	SpriteSP Sprite::CreateFromFile(const std::string &path)
 	{
 		SpriteSP object(new Sprite()) ;
-		// ƒeƒNƒXƒ`ƒƒ‚ðÝ’è
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’è¨­å®š
 		object->LoadTextureAndAnimation(path) ;
 
 		return object ;
@@ -33,43 +33,43 @@ namespace KMT {
 	SpriteSP Sprite::CreateFromFile(const std::string &path, const int &width, const int &height) 
 	{
 		SpriteSP object(new Sprite()) ;
-		// ƒeƒNƒXƒ`ƒƒ‚ÌÝ’è
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®è¨­å®š
 		object->LoadTextureAndAnimation(path, width, height) ;
 
 		return object ;
 	}
 
-	void Sprite::Render(const CCamera* camera)
+	void Sprite::Render(const Camera* camera)
 	{
-		// •`‰æ‚·‚é‚©
+		// æç”»ã™ã‚‹ã‹
 		if(!_renders)
 			return;
 
-		// ƒ[ƒ‹ƒhs—ñ‚ÉŠÖ‚·‚éì‹Æ
+		// ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã«é–¢ã™ã‚‹ä½œæ¥­
 		D3DXMATRIX WldMtx, PosMtx, SclMtx, RotMtx; 
-		// ƒgƒ‰ƒ“ƒXƒŒ[ƒVƒ‡ƒ“( •½sˆÚ“® ) s—ñ‚Ìì¬
-		D3DXMatrixTranslation(&PosMtx, Position.x, Position.y, Position.z);
-		// ƒXƒP[ƒ‹( Šgk ) s—ñ‚Ìì¬
-		D3DXMatrixScaling(&SclMtx, _turnVector.x * Scale.x, _turnVector.y * Scale.y, 1.0f);
-		// ƒ[ƒe[ƒVƒ‡ƒ“( ‰ñ“] ) s—ñ‚Ìì¬ 
-		// ¦ ¡‰ñ‚Í 2D‚È‚Ì‚Å Z‰ñ“]‚Ì‚Ý
-		D3DXMatrixRotationZ(&RotMtx, D3DXToRadian(vRotation.z));
-		//y !d—v! zƒ[ƒ‹ƒhs—ñ‚ÌŽZo 
-		// DirectX ‚Å‚Í ƒ[ƒ‹ƒhs—ñ‚ÌŽZo‚Í
-		// ƒXƒP[ƒ‹ * ƒ[ƒe[ƒVƒ‡ƒ“ * ƒgƒ‰ƒ“ƒXƒŒ[ƒVƒ‡ƒ“ ‚Ì‡‚Ås‚¤
+		// ãƒˆãƒ©ãƒ³ã‚¹ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³( å¹³è¡Œç§»å‹• ) è¡Œåˆ—ã®ä½œæˆ
+		D3DXMatrixTranslation(&PosMtx, _position.x, _position.y, _position.z);
+		// ã‚¹ã‚±ãƒ¼ãƒ«( æ‹¡ç¸® ) è¡Œåˆ—ã®ä½œæˆ
+		D3DXMatrixScaling(&SclMtx, _turnVector.x * _scale.x, _turnVector.y * _scale.y, 1.0f);
+		// ãƒ­ãƒ¼ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³( å›žè»¢ ) è¡Œåˆ—ã®ä½œæˆ 
+		// â€» ä»Šå›žã¯ 2Dãªã®ã§ Zå›žè»¢ã®ã¿
+		D3DXMatrixRotationZ(&RotMtx, D3DXToRadian(_eulerAngles.z));
+		//ã€ !é‡è¦! ã€‘ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã®ç®—å‡º 
+		// DirectX ã§ã¯ ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã®ç®—å‡ºã¯
+		// ã‚¹ã‚±ãƒ¼ãƒ« * ãƒ­ãƒ¼ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ * ãƒˆãƒ©ãƒ³ã‚¹ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ ã®é †ã§è¡Œã†
 		WldMtx = SclMtx * RotMtx * PosMtx;
-		// ƒXƒvƒ‰ƒCƒg‚Éƒ[ƒ‹ƒhs—ñ‚ðÝ’è
+		// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã«ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã‚’è¨­å®š
 		_sprite->SetTransform(&WldMtx);
 
 		HRESULT hr;
 		// Render the scene
 		if(SUCCEEDED( DXUTGetD3D9Device()->BeginScene()))
 		{		
-			// ƒXƒvƒ‰ƒCƒg‚Ì•`‰æ€”õ
-			_sprite->Begin(D3DXSPRITE_ALPHABLEND); // ”¼“§–¾A•s“§–¾‚Ì‚Æ‚«‚Í‚O‚ð“n‚·
+			// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®æç”»æº–å‚™
+			_sprite->Begin(D3DXSPRITE_ALPHABLEND); // åŠé€æ˜Žã€ä¸é€æ˜Žã®ã¨ãã¯ï¼ã‚’æ¸¡ã™
 			//----------------------------------------------------------------------------------
 			//
-			// ‰ÁŽZƒuƒŒƒ“ƒh‚ÌÝ’è
+			// åŠ ç®—ãƒ–ãƒ¬ãƒ³ãƒ‰ã®è¨­å®š
 			//
 			if(_addsBlend)
 			{
@@ -83,22 +83,22 @@ namespace KMT {
 				GraphicsManager::_device->SetRenderState( D3DRS_ALPHABLENDENABLE, FALSE ) ;
 			}*/
 
-			// ƒXƒvƒ‰ƒCƒg‚Ì•`‰æ–½—ß
+			// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®æç”»å‘½ä»¤
 			_sprite->Draw(
-				// •`‰æ‚ÉŽg—p‚·‚éƒeƒNƒXƒ`ƒƒ
+				// æç”»ã«ä½¿ç”¨ã™ã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£
 				_texture->GetTextureData(),
-				// ‰æ‘œ‚Ì•`‰æ”ÍˆÍ
+				// ç”»åƒã®æç”»ç¯„å›²
 				&_rects[_number],	
-				// ƒT[ƒtƒFƒCƒX‚Ì’†S
+				// ã‚µãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã®ä¸­å¿ƒ
 				(D3DXVECTOR3*)&_centerPosition,
-				// •`‰æÀ•W(s—ñ‚Å§Œä‚·‚é‚Ì‚Å0, 0, 0‚ÅOK)
+				// æç”»åº§æ¨™(è¡Œåˆ—ã§åˆ¶å¾¡ã™ã‚‹ã®ã§0, 0, 0ã§OK)
 				&D3DXVECTOR3(0,0,0),
-				// F
+				// è‰²
 				D3DCOLOR_ARGB((int)(_colorRGBA.w * 255), (int)(_colorRGBA.x * 255), (int)(_colorRGBA.y * 255), (int)(_colorRGBA.z * 255)));
 
-			// ‰ÁŽZØ‚è‘Ö‚¦
+			// åŠ ç®—åˆ‡ã‚Šæ›¿ãˆ
 			_sprite->End();
-			// •`‰æI—¹
+			// æç”»çµ‚äº†
 			V(GraphicsManager::_device->EndScene());
 		}
 	}

@@ -1,4 +1,4 @@
-#include "DXUT.h"
+ï»¿#include "DXUT.h"
 #include "Line.h"
 
 #include "../GraphicsManager.h"
@@ -8,10 +8,10 @@ namespace KMT {
 
 	LineSP Line::Create(const Vector3& positionA, const Vector3& positionB, DWORD color)
 	{
-		// ¶¬‚·‚é
+		// ç”Ÿæˆã™ã‚‹
 		Line* object = new Line();
 
-		// ’¸“_ƒf[ƒ^‚Ìì¬
+		// é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿ã®ä½œæˆ
 		object->_vertices[0]._x = positionA.x;
 		object->_vertices[0]._y = positionA.y;
 		object->_vertices[0]._z = positionA.z;
@@ -25,36 +25,36 @@ namespace KMT {
 		return LineSP(object);
 	}
 
-	void Line::Render(const CCamera* _camera)
+	void Line::Render(const Camera* _camera)
 	{
 		HRESULT hr;
 
-		// ƒJƒƒ‰Ý’è
-		GraphicsManager::_device->SetTransform(D3DTS_VIEW, &_camera->getMatrix(CViewBehavior::VIEW));
-		GraphicsManager::_device->SetTransform(D3DTS_PROJECTION, &_camera->getMatrix(CViewBehavior::PROJECTION));
+		// ã‚«ãƒ¡ãƒ©è¨­å®š
+		GraphicsManager::_device->SetTransform(D3DTS_VIEW, &_camera->GetMatrix(ViewBehavior::VIEW));
+		GraphicsManager::_device->SetTransform(D3DTS_PROJECTION, &_camera->GetMatrix(ViewBehavior::PROJECTION));
 
-		// ƒ‰ƒCƒ“‚Ì•`‰æ
+		// ãƒ©ã‚¤ãƒ³ã®æç”»
 		{
 			GraphicsManager::_device->SetFVF(D3DFVF_XYZ | D3DFVF_DIFFUSE);
 
-			// ƒ[ƒ‹ƒhƒ}ƒgƒŠƒNƒXÝ’è
+			// ãƒ¯ãƒ¼ãƒ«ãƒ‰ãƒžãƒˆãƒªã‚¯ã‚¹è¨­å®š
 			D3DXMATRIX SclMtx, RotMtx, PosMtx, WldMtx ;
 			D3DXMatrixScaling(&SclMtx, 1, 1, 1);
 			D3DXMatrixIdentity(&RotMtx);
 			D3DXMatrixTranslation(&PosMtx, 0, 0, 0);
 			WldMtx = SclMtx * RotMtx * PosMtx;
 
-			// ’Êí‡¬
+			// é€šå¸¸åˆæˆ
 			//GraphicsManager::m_pd3dDevice->SetTextureStageState( 0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE ) ;
 			//GraphicsManager::m_pd3dDevice->SetTextureStageState( 0, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1 ) ;
 			//GraphicsManager::m_pd3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE ) ;
 			//GraphicsManager::m_pd3dDevice->SetRenderState( D3DRS_SRCBLEND, D3DBLEND_SRCALPHA ) ;	
 			//GraphicsManager::m_pd3dDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA ) ;
 
-			// ƒeƒNƒXƒ`ƒƒ‚ÍŽg‚í‚È‚¢
+			// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã¯ä½¿ã‚ãªã„
 			GraphicsManager::_device->SetTexture(0, NULL);
 
-			//ƒ‰ƒCƒeƒBƒ“ƒOOFF
+			//ãƒ©ã‚¤ãƒ†ã‚£ãƒ³ã‚°OFF
 			GraphicsManager::_device->SetRenderState(D3DRS_LIGHTING, FALSE);
 			GraphicsManager::_device->LightEnable(0, FALSE);
 			GraphicsManager::_device->SetTransform(D3DTS_WORLD, &WldMtx);

@@ -1,4 +1,4 @@
-#include "DXUT.h"
+ï»¿#include "DXUT.h"
 #include "ViewBehavior.h"
 
 #include "../../Extension.h"
@@ -7,17 +7,17 @@ namespace KMT {
 
 	tag_Perspective::tag_Perspective() : Angle(D3DX_PI / 4.0f), Aspect((float)SCREEN_WIDTH / SCREEN_HEIGHT), Near(1), Far(10000) { }
 
-	CViewBehavior::CViewBehavior()
+	ViewBehavior::ViewBehavior()
 	{
-		ZeroMemory(viewFrustum, sizeof(PlaneVolume) * FRUSTUM_MAX);
-		ZeroMemory(Matrix, sizeof(CMatrix) * VIEW_OR_PROJECTION);
+		ZeroMemory(_viewFrustum, sizeof(PlaneVolume) * FRUSTUM_MAX);
+		ZeroMemory(_matrices, sizeof(Matrix) * ViewOrProjection);
 	}
 
-	CViewBehavior::~CViewBehavior() { }
+	ViewBehavior::~ViewBehavior() { }
 
-	void CViewBehavior::calculateViewFructum()
+	void ViewBehavior::CalculateViewFrustum()
 	{
-		// ƒXƒNƒŠ[ƒ“À•Wã‚Ì‹‘ä‚ÌŠe’¸“_À•W
+		// ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ä¸Šã®è¦–éŒå°ã®å„é ‚ç‚¹åº§æ¨™
 		Vector4 nearTL(-1, 1, 0, 1);
 		Vector4 nearTR(1, 1, 0, 1);
 		Vector4 nearBL(-1, -1, 0, 1);
@@ -27,12 +27,12 @@ namespace KMT {
 		Vector4 farBL(-1, -1, 1, 1);
 		Vector4 farBR(1, -1, 1, 1);
 
-		// ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ‚Ì‹ts—ñ‚ğ‹‚ß‚é
-		CMatrix MVP = Matrix[VIEW] * Matrix[PROJECTION];
-		CMatrix invMVP;
+		// ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ã®é€†è¡Œåˆ—ã‚’æ±‚ã‚ã‚‹
+		Matrix MVP = _matrices[VIEW] * _matrices[PROJECTION];
+		Matrix invMVP;
 		D3DXMatrixInverse(&invMVP, NULL, &MVP);
 
-		// ƒ[ƒ‹ƒhÀ•Wã‚Ì‹‘ä‚ÌŠe’¸“_‚ğ‹‚ß‚é
+		// ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ä¸Šã®è¦–éŒå°ã®å„é ‚ç‚¹ã‚’æ±‚ã‚ã‚‹
 		nearTL.Transform(invMVP);
 		nearTR.Transform(invMVP);
 		nearBL.Transform(invMVP);
@@ -42,7 +42,7 @@ namespace KMT {
 		farBL.Transform(invMVP);
 		farBR.Transform(invMVP);
 
-		// w‚ÅœZ
+		// wã§é™¤ç®—
 		nearTL /= nearTL.w;
 		nearTR /= nearTR.w;
 		nearBL /= nearBL.w;
@@ -52,19 +52,19 @@ namespace KMT {
 		farBL /= farBL.w;
 		farBR /= farBR.w;
 
-		viewFrustum[TOP] = PlaneVolume(nearTL, nearTR, farTL);
-		viewFrustum[BOTTOM] = PlaneVolume(nearBL, farBL, nearBR);
-		viewFrustum[LEFT] = PlaneVolume(nearBL, nearTL, farTL);
-		viewFrustum[RIGHT] = PlaneVolume(nearBR, farBR, nearTR);
-		viewFrustum[FRONT] = PlaneVolume(nearBL, nearBR, nearTL);
-		viewFrustum[BACK] = PlaneVolume(farTL, farTR, farBL);
+		_viewFrustum[TOP] = PlaneVolume(nearTL, nearTR, farTL);
+		_viewFrustum[BOTTOM] = PlaneVolume(nearBL, farBL, nearBR);
+		_viewFrustum[LEFT] = PlaneVolume(nearBL, nearTL, farTL);
+		_viewFrustum[RIGHT] = PlaneVolume(nearBR, farBR, nearTR);
+		_viewFrustum[FRONT] = PlaneVolume(nearBL, nearBR, nearTL);
+		_viewFrustum[BACK] = PlaneVolume(farTL, farTR, farBL);
 	}
 
-	const bool CViewBehavior::isCullingFrustum(const SphereVolume& sphere) const
+	const bool ViewBehavior::CullsFrustum(const SphereVolume& sphere) const
 	{
 		for(int i = 0; i < FRUSTUM_MAX; i++){
-			// ‘ÎÛ‚Æ•½–Ê‚Ì‹——£‚ğZo
-			float dist = Dot(sphere.Position, viewFrustum[i].Normal) - viewFrustum[i].Distance;
+			// å¯¾è±¡ã¨å¹³é¢ã®è·é›¢ã‚’ç®—å‡º
+			float dist = Dot(sphere.Position, _viewFrustum[i].Normal) - _viewFrustum[i].Distance;
 			if(dist < -sphere.Radius)
 				return true;
 		}

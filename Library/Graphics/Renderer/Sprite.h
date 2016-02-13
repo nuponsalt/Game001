@@ -1,5 +1,5 @@
-//*********************************************
-// ƒXƒvƒ‰ƒCƒg•`‰æƒNƒ‰ƒX
+ï»¿//*********************************************
+// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»ã‚¯ãƒ©ã‚¹
 // Last Update : 2013.11.29
 // Yuta Komatsu
 //*********************************************
@@ -20,34 +20,34 @@ namespace KMT {
 	class Sprite : public GraphicBehavior, public Animation
 	{
 	public :
-		// ‰æ‘œ‚Ì‚Ç‚Ì”ÍˆÍ‚ğ•`‰æ‚·‚é‚©
+		// ç”»åƒã®ã©ã®ç¯„å›²ã‚’æç”»ã™ã‚‹ã‹
 		RECT _rect;
 		
-		// ƒfƒXƒgƒ‰ƒNƒ^
+		// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		~Sprite();
 
-		// ƒeƒNƒXƒ`ƒƒ‚Ìİ’è
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®è¨­å®š
 		void SetTexture(const TextureSP &texture);
-		//* ¶¬ *//
+		//* ç”Ÿæˆ *//
 		static SpriteSP Create();
-		// ˆê–‡ƒeƒNƒXƒ`ƒƒ
-		// path : ƒeƒNƒXƒ`ƒƒ[‚Ìƒtƒ@ƒCƒ‹ƒpƒX
+		// ä¸€æšãƒ†ã‚¯ã‚¹ãƒãƒ£
+		// path : ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
 		static SpriteSP CreateFromFile(const std::string &path);
-		// ƒAƒjƒ[ƒVƒ‡ƒ“ƒeƒNƒXƒ`ƒƒ
-		// path : ƒeƒNƒXƒ`ƒƒ[‚Ìƒtƒ@ƒCƒ‹ƒpƒX
-		// width : ‰¡•ªŠ„
-		// height : c•ªŠ„
+		// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ†ã‚¯ã‚¹ãƒãƒ£
+		// path : ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ã®ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
+		// width : æ¨ªåˆ†å‰²
+		// height : ç¸¦åˆ†å‰²
 		static SpriteSP CreateFromFile(const std::string& path, const int &width, const int &height);
-		//* •`‰æ *//
-		void Render(const CCamera* camera = NULL);
+		//* æç”» *//
+		void Render(const Camera* camera = NULL);
 		
 	private :
-		// DirectX3DƒXƒvƒ‰ƒCƒg
+		// DirectX3Dã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
 		LPD3DXSPRITE _sprite;
-		// ”½“]—p“ñŸŒ³ƒxƒNƒgƒ‹
+		// åè»¢ç”¨äºŒæ¬¡å…ƒãƒ™ã‚¯ãƒˆãƒ«
 		Vector2 _turnVector;
 		
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		Sprite();
 
 	};

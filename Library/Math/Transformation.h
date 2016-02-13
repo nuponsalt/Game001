@@ -1,5 +1,5 @@
-//*********************************************************************
-// À•WE‰ñ“]EŠgk‚ÌŠÇ—ƒNƒ‰ƒX(ƒŠƒ“ƒNƒ‰ƒCƒuƒ‰ƒŠ‚Æ‚µ‚Ä‚Ì‹@”\À‘•—\’è)
+ï»¿//*********************************************************************
+// åº§æ¨™ãƒ»å›è»¢ãƒ»æ‹¡ç¸®ã®ç®¡ç†ã‚¯ãƒ©ã‚¹(ãƒªãƒ³ã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¨ã—ã¦ã®æ©Ÿèƒ½å®Ÿè£…äºˆå®š)
 // Last Update : 2013.12.11
 // Yuta Komatsu
 //*********************************************************************
@@ -10,47 +10,84 @@
 #include "Matrix.h"
 #include "Quaternion.h"
 
-namespace KMT {
-
+namespace KMT
+{
 	class Vector3;
-	class CMatrix;
-	class CQuaternion;
+	class Matrix;
+	class Quaternion;
 
 	class Transformation;
 	typedef std::shared_ptr<Transformation> CTransformationSP;
 	typedef std::weak_ptr<Transformation> CTransformationWP;
 
-	// ‰ñ“]ƒ^ƒCƒv
-	enum ROTATE_TYPE
+	// å›è»¢ã‚¿ã‚¤ãƒ—
+	enum RotationType
 	{
-			XYZ,
-			MATRIX,
-			QUATERNION
+		XYZ,
+		MATRIX,
+		QUATERNION
 	};
 
 	class Transformation
 	{
-	public :
-		//* À•W *//
-		Vector3 Position;
-		//* ‰ñ“] *//
-		// ƒxƒNƒgƒ‹
-		Vector3 vRotation;
-		// s—ñ
-		CMatrix mRotationX, mRotationY, mRotationZ, mRotationWorld;
-		// ƒNƒH[ƒ^ƒjƒIƒ“
-		CQuaternion qRotation;
-		//* Šgk *//
-		Vector3 Scale ;
+	public:
+		//* åº§æ¨™ *//
+		Vector3 _position;
+		//* å›è»¢ *//
+		// ãƒ™ã‚¯ãƒˆãƒ«
+		Vector3 _eulerAngles;
 
-		// Œ»İ‚Ì‰ñ“]ƒ^ƒCƒv
-		ROTATE_TYPE CurrentRotateType;
+		// è¡Œåˆ—
+		enum RotationMatrixType
+		{
+			// Xè»¸å›è»¢
+			X,
+			// Yè»¸å›è»¢
+			Y,
+			// Zè»¸å›è»¢
+			Z,
+			// è¦ç´ æ•°
+			ElementAll
+		};
+		Matrix _rotationMatrices[RotationMatrixType::ElementAll];
 
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ãƒ¯ãƒ¼ãƒ«ãƒ‰å›è»¢è¡Œåˆ—
+		Matrix _worldRotationMatrix;
+
+		// ã‚¯ã‚©ãƒ¼ã‚¿ãƒ‹ã‚ªãƒ³
+		Quaternion _rotation;
+
+		//* æ‹¡ç¸® *//
+		Vector3 _scale;
+
+		// ç¾åœ¨ã®å›è»¢ã‚¿ã‚¤ãƒ—
+		RotationType CurrentRotateType;
+
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		Transformation();
-		// ƒfƒXƒgƒ‰ƒNƒ^
+		// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		virtual ~Transformation() { }
-	
-};
+
+		// å„è¡Œåˆ—è¨ˆç®—
+		void Evaluate()
+		{
+			auto XAxis = _rotationMatrices[RotationMatrixType::X];
+			auto YAsix = _rotationMatrices[RotationMatrixType::Y];
+			auto ZAxis = _rotationMatrices[RotationMatrixType::Z];
+
+			switch (CurrentRotateType)
+			{
+			case RotationType::QUATERNION:
+				D3DXMatrixRotationQuaternion(&_worldRotationMatrix, &_rotation);
+				break;
+			case RotationType::MATRIX:
+				_worldRotationMatrix = XAxis * YAsix * ZAxis;
+				break;
+			case RotationType::XYZ:
+				D3DXMatrixRotationYawPitchRoll(&_worldRotationMatrix, _eulerAngles.y, _eulerAngles.x, _eulerAngles.z);
+				break;
+			}
+		}
+	};
 
 }

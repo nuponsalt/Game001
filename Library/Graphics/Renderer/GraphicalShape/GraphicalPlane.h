@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #pragma warning( disable:4018 )
 #pragma warning( disable:4244 )
@@ -15,46 +15,46 @@ namespace KMT
 	typedef class GraphicalPlane : public GraphicBehavior, public Animation
 	{
 	public :
-		// ƒTƒCƒY
+		// ã‚µã‚¤ã‚º
 		Vector3 _size;
 
-		// ƒfƒXƒgƒ‰ƒNƒ^
+		// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		~GraphicalPlane(){}
-		// ¶¬
-		// width : ‰¡•ƒTƒCƒY
-		// height : c•ƒTƒCƒY
-		// texture : ƒeƒNƒXƒ`ƒƒ[(‹ó‚Å‚È‚¢‚Æƒ_ƒ‚Èó‘Ô)
+		// ç”Ÿæˆ
+		// width : æ¨ªå¹…ã‚µã‚¤ã‚º
+		// height : ç¸¦å¹…ã‚µã‚¤ã‚º
+		// texture : ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼(ç©ºã§ãªã„ã¨ãƒ€ãƒ¡ãªçŠ¶æ…‹)
 		static GraphicalPlaneSP Create(const int &width, const int &height, const TextureSP &texture = NULL) ;
-		// ƒeƒNƒXƒ`ƒƒ[‚ÌƒTƒCƒY‚É‡‚í‚¹‚½”Âƒ|ƒŠƒSƒ“‚Ì¶¬
-		// path : ƒeƒNƒXƒ`ƒƒ[‚ÌƒpƒX
-		// divisionX, divisionY : •ªŠ„—Ê
-		// sizeX, sizeY : ƒTƒCƒY
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ã®ã‚µã‚¤ã‚ºã«åˆã‚ã›ãŸæ¿ãƒãƒªã‚´ãƒ³ã®ç”Ÿæˆ
+		// path : ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ã®ãƒ‘ã‚¹
+		// divisionX, divisionY : åˆ†å‰²é‡
+		// sizeX, sizeY : ã‚µã‚¤ã‚º
 		static GraphicalPlaneSP CreateFromTexture(const std::string &path, 
 			const int &divisionX = 1, const int &divisionY = 1, const int &sizeX = 0, const int &sizeY = 0) ;
 		static GraphicalPlaneSP CreateFromTexture(const TextureSP &texture, 
 			const int &divisionX = 1, const int &divisionY = 1, const int &sizeX = 0, const int &sizeY = 0) ;
-		// •`‰æ
-		void Render(const CCamera* camera);
+		// æç”»
+		void Render(const Camera* camera);
 
 	private :
-		// ƒeƒNƒXƒ`ƒƒ[‚ÌƒTƒCƒY
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ã®ã‚µã‚¤ã‚º
 		Vector3 _textureSize;
-		// ‘O‚ÌƒAƒjƒ[ƒVƒ‡ƒ“”Ô†
+		// å‰ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ç•ªå·
 		int _previousNumber;
-		// ”Âƒ|ƒŠ‚Ì¶¬ƒJƒEƒ“ƒg
+		// æ¿ãƒãƒªã®ç”Ÿæˆã‚«ã‚¦ãƒ³ãƒˆ
 		static size_t _createCount;
 
-		// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+		// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 		GraphicalPlane();
-		// ”Âƒ|ƒŠƒSƒ“‚Ìì¬
-		// width : ‰¡•ƒTƒCƒY
-		// height : c•ƒTƒCƒY
-		// texture : ƒeƒNƒXƒ`ƒƒ[
+		// æ¿ãƒãƒªã‚´ãƒ³ã®ä½œæˆ
+		// width : æ¨ªå¹…ã‚µã‚¤ã‚º
+		// height : ç¸¦å¹…ã‚µã‚¤ã‚º
+		// texture : ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼
 		bool GenerateBoard(const std::string& path, const int &width, const int &height, const TextureSP &texture = NULL) ;
-		// ƒeƒNƒXƒ`ƒƒ‚ÌƒTƒCƒY‚É‡‚í‚¹‚½”Âƒ|ƒŠ‚ğ¶¬‚·‚é
-		// path : ƒeƒNƒXƒ`ƒƒ‚ÌƒpƒX
-		// divisionX, divisionY : ‰æ‘œ‚Ì•ªŠ„î•ñ
-		// sizeX, sizeY : ”Âƒ|ƒŠ‚Ì‘å‚«‚³w’è
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ã‚µã‚¤ã‚ºã«åˆã‚ã›ãŸæ¿ãƒãƒªã‚’ç”Ÿæˆã™ã‚‹
+		// path : ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ãƒ‘ã‚¹
+		// divisionX, divisionY : ç”»åƒã®åˆ†å‰²æƒ…å ±
+		// sizeX, sizeY : æ¿ãƒãƒªã®å¤§ãã•æŒ‡å®š
 		void LoadTexture (const std::string &path, const int &divisionX = 1, const int &divisionY = 1, const int &sizeX = 0, const int &sizeY = 0);
 		void LoadTexture (const TextureSP& texture, const int &divisionX = 1,const int &divisionY = 1, const int &sizeX = 0, const int &sizeY = 0);
 
